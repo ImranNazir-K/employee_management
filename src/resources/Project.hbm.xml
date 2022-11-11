@@ -1,0 +1,20 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+    <class name = "com.ideas2it.employeemanagement.model.Project" table = "projects">
+        <id name = "projectId" type = "int" column = "project_id">
+            <generator class="increment"/>
+        </id>
+      
+        <property name = "projectName" column = "name"/>
+        <property name = "projectDomain" column = "domain"/>
+        <property name = "projectDescription" column = "description"/>
+
+        <bag name = "employeeList" table = "employee_project" cascade = "merge">
+            <key column = "project_id"/>
+            <many-to-many class = "com.ideas2it.employeemanagement.model.Employee" column = "employee_id"/>
+        </bag>
+   </class>
+</hibernate-mapping>
