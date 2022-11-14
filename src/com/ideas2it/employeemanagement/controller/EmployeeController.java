@@ -10,8 +10,8 @@
 package com.ideas2it.employeemanagement.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
@@ -107,7 +107,7 @@ public class EmployeeController {
     /**
      * Retrieves all the employees from the database.
      *
-     * @return list of employees as List<EmployeeDTO>.
+     * @return all employees as List<EmployeeDTO>.
      */
     public List<EmployeeDTO> getAllEmployees() {
         return employeeService.getAllEmployees();

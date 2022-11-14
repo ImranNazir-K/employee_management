@@ -9,8 +9,8 @@
 
 package com.ideas2it.employeemanagement.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.ideas2it.employeemanagement.model.Employee;
 
@@ -30,7 +30,7 @@ public class Project {
     private String projectDescription;
     private String projectDomain;    
     private String projectName;
-    private List<Employee> employeeList = new ArrayList<Employee>();
+    private Set<Employee> employeeList = new HashSet<Employee>();
 
     public Project() {
     }
@@ -75,11 +75,11 @@ public class Project {
         return this.projectDescription;
     }
 
-    public void setEmployeeList(List<Employee> employeeList) {
+    public void setEmployeeList(Set<Employee> employeeList) {
         this.employeeList = employeeList;
     }
 
-    public List<Employee> getEmployeeList() {
+    public Set<Employee> getEmployeeList() {
         return this.employeeList;
     }
 

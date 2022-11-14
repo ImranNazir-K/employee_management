@@ -9,9 +9,8 @@
 
 package com.ideas2it.employeemanagement.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
@@ -74,7 +73,7 @@ public interface ProjectService {
     /**
      * Retrieves all the projects from the database.
      *
-     * @return list of project as List<ProjectDTO>.
+     * @return all the projects as List<ProjectDTO>.
      */
     List<ProjectDTO> getAllProjects();
 
@@ -134,14 +133,15 @@ public interface ProjectService {
     boolean isEmployeeDbIsEmpty();
 
     /**
-     * Checks whether the Employee database is empty.
-     *
-     * @return true if the database is empty.
+     * Retrieves all the employees from the database.
+     * 
+     * @return all the employees as List<EmployeeDTO>.
      */
     List<EmployeeDTO> getAllEmployees();
 
     /**
-     * 
+     * checks whether the project is already assigned to that
+     * employee.
      *
      * @param employeeId as int.
      * @param projectId as int.

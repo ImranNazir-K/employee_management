@@ -18,7 +18,9 @@
 
         <property name = "hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
-        <property name = "hibernate.enable_lazy_load_no_trans">true</property>
+        <property name = "show_sql">true</property>
+
+        <property name = "format_sql">true</property>
   
         <mapping resource = "resources/Employee.hbm.xml"/>
         <mapping resource = "resources/Project.hbm.xml"/>

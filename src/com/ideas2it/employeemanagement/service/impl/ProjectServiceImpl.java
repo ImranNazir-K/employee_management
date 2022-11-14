@@ -81,12 +81,12 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public List<ProjectDTO> getAllProjects() {
-        List<ProjectDTO> projectDtoList = new ArrayList<ProjectDTO>();
+        List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 
         for (Project project : projectDao.getAllProjects()) {
-            projectDtoList.add(Mapper.projectEmployeeToDto(project));
+            projects.add(Mapper.projectEmployeeToDto(project));
         }
-        return  projectDtoList;
+        return  projects;
     }
 
     /** 

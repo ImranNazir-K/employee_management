@@ -83,7 +83,7 @@ public interface EmployeeService {
     /**
      * Retrieves all the employees from the database.
      * 
-     * @return list of employees as List<EmployeeDTO>.
+     * @return all the employees as List<EmployeeDTO>.
      */
     List<EmployeeDTO> getAllEmployees();
 
@@ -101,7 +101,7 @@ public interface EmployeeService {
      *
      * @return true if the database is empty.
      */
-    public boolean isDbIsEmpty();
+    boolean isDbIsEmpty();
 
     /**
      * checks whether the employee id is present in the database.
@@ -182,7 +182,7 @@ public interface EmployeeService {
     /**
      * Gets all the projects available in the database.
      *
-     * @return list of projects as List<ProjectDTO>.
+     * @return all the projects as List<ProjectDTO>.
      */
     List<ProjectDTO> getAllProjects();
 

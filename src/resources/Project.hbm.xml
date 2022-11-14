@@ -8,13 +8,15 @@
             <generator class="increment"/>
         </id>
       
-        <property name = "projectName" column = "name"/>
-        <property name = "projectDomain" column = "domain"/>
-        <property name = "projectDescription" column = "description"/>
+        <property name = "projectName" type = "string" column = "name" not-null = "true"/>
 
-        <bag name = "employeeList" table = "employee_project" cascade = "merge">
-            <key column = "project_id"/>
+        <property name = "projectDomain" type = "string" column = "domain" not-null = "true"/>
+
+        <property name = "projectDescription" type = "string" column = "description" not-null = "true"/>
+
+        <set name = "employeeList" table = "employee_project" lazy = "true" fetch = "select">
+            <key column = "project_id" not-null = "true"/>
             <many-to-many class = "com.ideas2it.employeemanagement.model.Employee" column = "employee_id"/>
-        </bag>
+        </set>
    </class>
 </hibernate-mapping>

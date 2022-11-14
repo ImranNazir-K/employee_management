@@ -11,9 +11,6 @@ package com.ideas2it.employeemanagement.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.HibernateException; 
-import org.hibernate.Session; 
-import org.hibernate.Transaction;
 
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
 import com.ideas2it.employeemanagement.model.Project;
@@ -40,7 +37,7 @@ public interface ProjectDAO {
     /**
      * gets all the project id.
      *
-     * @return list of project id as List<Integer>.
+     * @return all the project id as List<Integer>.
      */
     List<Integer> getAllProjectId();
 

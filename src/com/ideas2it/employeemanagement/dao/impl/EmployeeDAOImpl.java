@@ -65,17 +65,19 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     public List<Employee> getAllEmployees() {
         Transaction transaction = null;
-        List<Employee> employeeList = new ArrayList<Employee>();
+        List<Employee> employees = new ArrayList<Employee>();
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
             transaction = session.beginTransaction();
-            employeeList = session.createQuery("FROM Employee").list();
+            employees = session.createQuery("SELECT DISTINCT e FROM Employee"
+                    + " e LEFT JOIN FETCH e.projectList",
+                    Employee.class).list();
             transaction.commit();
         } catch (HibernateException hiberateException) {
             hiberateException.printStackTrace();
         }
-        return employeeList;
+        return employees;
     }
 
     /**
@@ -83,13 +85,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
      */
     @Override
     public Employee getParticularEmployee (int employeeId) {
-        Employee employee = null;
+        Employee employee = new Employee();
         Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
             transaction = session.beginTransaction();
-            employee = session.get(Employee.class, employeeId);
+            employee = (Employee) session.createQuery("SELECT e FROM Employee "
+                    + "e LEFT JOIN FETCH e.projectList WHERE e.employeeId =:id")
+                    .setParameter("id", employeeId).uniqueResult();
             transaction.commit();
         } catch (HibernateException hiberateException) {
             hiberateException.printStackTrace();
@@ -124,6 +128,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public List<Integer> getAllEmployeeId() {
         Transaction transaction = null;
         List<Integer> employeeIds = new ArrayList<Integer>();
+
         String hqlQuery = "select E.employeeId from Employee E";
 
         try (Session session = HibernateConnection.getFactory()
@@ -147,6 +152,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public List<Long> getContactNumber(int employeeId) {
         Transaction transaction = null;
         List<Long> contactNumbers = new ArrayList<Long>();
+
         String hqlQuery = "select E.employeeContactNumber from Employee E"
                 + " where E.employeeId !=: id";
 
@@ -172,6 +178,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public List<String> getMailId(int employeeId) {
         Transaction transaction = null;
         List<String> mailIds = new ArrayList<String>();
+
         String hqlQuery = "select E.employeeMailId from Employee E where "
                 + "E.employeeId !=: id";
 

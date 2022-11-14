@@ -9,8 +9,8 @@
 
 package com.ideas2it.employeemanagement.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
@@ -114,7 +114,7 @@ public class Mapper {
      */
     public static EmployeeDTO employeeProjectToDto(Employee employee) {
         EmployeeDTO employeeDto = toEmployeeDto(employee);
-        List<ProjectDTO> projectDtoList = new ArrayList<ProjectDTO>();
+        Set<ProjectDTO> projectDtoList = new HashSet<ProjectDTO>();
 
         if (! (employee.getProjectList().isEmpty())) {
             for (Project project : employee.getProjectList()) {
@@ -135,7 +135,7 @@ public class Mapper {
      */
     public static Employee dtoToEmployeeProject(EmployeeDTO employeeDto) {
         Employee employee = toEmployee(employeeDto);
-        List<Project> projectList = new ArrayList<Project>();
+        Set<Project> projectList = new HashSet<Project>();
 
         if (! (employeeDto.getProjectList().isEmpty())) {
             for (ProjectDTO projectDto : employeeDto.getProjectList()) {
@@ -155,7 +155,7 @@ public class Mapper {
      * @return projectDto as ProjectDTO object. 
      */
     public static ProjectDTO projectEmployeeToDto(Project project) {
-        List<EmployeeDTO> employeeDtoList = new ArrayList<EmployeeDTO>();
+        Set<EmployeeDTO> employeeDtoList = new HashSet<EmployeeDTO>();
         ProjectDTO projectDto = toProjectDto(project);
 
         if (! (project.getEmployeeList().isEmpty())) {
@@ -177,7 +177,7 @@ public class Mapper {
      */
     public static Project dtoToProjectEmployee(ProjectDTO projectDto) {
         Project project = toProject(projectDto);
-        List<Employee> employeeList = new ArrayList<Employee>();
+        Set<Employee> employeeList = new HashSet<Employee>();
 
         if (! (projectDto.getEmployeeList().isEmpty())) {
             for (EmployeeDTO employeeDto : projectDto.getEmployeeList()) {

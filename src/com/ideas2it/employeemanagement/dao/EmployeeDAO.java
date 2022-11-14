@@ -9,7 +9,6 @@
 
 package com.ideas2it.employeemanagement.dao;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public interface EmployeeDAO {
     /**
      * Retrieves all the employees From the database.
      *
-     * @return all the employees as List.
+     * @return all the employees as List<Employee>.
      */
     List<Employee> getAllEmployees();
 
@@ -65,7 +64,7 @@ public interface EmployeeDAO {
      *
      * @param employeeId as int.
      *
-     * @return list of contact number as List<Long>.
+     * @return all the contact number as List<Long>.
      */
     List<Long> getContactNumber(int employeeId);
 
@@ -75,14 +74,14 @@ public interface EmployeeDAO {
      *
      * @param employeeId as int.
      *
-     * @return list of mail id as List<String>.
+     * @return all the mail id as List<String>.
      */
     List<String> getMailId(int employeeId);
 
     /**
      * gets all the employee id.
      *
-     * @return list of employee id as List<Integer>.
+     * @return all the employee id as List<Integer>.
      */
     List<Integer> getAllEmployeeId();
 

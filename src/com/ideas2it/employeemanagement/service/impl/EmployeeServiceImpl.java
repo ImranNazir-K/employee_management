@@ -128,12 +128,12 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public List<EmployeeDTO> getAllEmployees() {
-        List<EmployeeDTO> employeeDtoList = new ArrayList<EmployeeDTO>();
+        List<EmployeeDTO> employees = new ArrayList<EmployeeDTO>();
 
         for (Employee employee : employeeDao.getAllEmployees()) {
-            employeeDtoList.add(Mapper.employeeProjectToDto(employee));
+            employees.add(Mapper.employeeProjectToDto(employee));
         }
-        return employeeDtoList;
+        return employees;
     }
 
     /**

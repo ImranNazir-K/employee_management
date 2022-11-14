@@ -9,8 +9,8 @@
 
 package com.ideas2it.employeemanagement.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -31,7 +31,7 @@ public class Employee {
     private double employeeSalary;
     private String employeeName;
     private String employeeMailId;
-    private List<Project> projectList = new ArrayList<Project>();
+    private Set<Project> projectList = new HashSet<Project>();
     private LocalDate employeeDateOfBirth;
 
     public Employee() {
@@ -47,7 +47,7 @@ public class Employee {
     }
 
     public Employee(int id, String name, String mailId,
-            long contactNumber, double salary, LocalDate birthDate, List<Project> projectList) {
+            long contactNumber, double salary, LocalDate birthDate, Set<Project> projectList) {
         this.employeeId = id;
         this.employeeName = name;
         this.employeeMailId = mailId;
@@ -105,11 +105,11 @@ public class Employee {
         return this.employeeDateOfBirth;
     }
 
-    public void setProjectList(List<Project> projectList) {
+    public void setProjectList(Set<Project> projectList) {
         this.projectList = projectList;
     }
 
-    public List<Project> getProjectList() {
+    public Set<Project> getProjectList() {
         return this.projectList;
     }
 

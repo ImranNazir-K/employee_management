@@ -11,8 +11,8 @@ package com.ideas2it.employeemanagement.view;
 
 import org.hibernate.HibernateException;
 import java.lang.NumberFormatException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.controller.EmployeeController;
@@ -181,7 +181,7 @@ public class ProjectView {
             isValid = projectController.validateProjectDomain(projectDomain);
 
             if (!isValid) {
-                System.out.println("\n-----Enter a valid Name-----\n");
+                System.out.println("\n-----Enter a valid Domain-----\n");
             } 
         } while (!isValid);
         return (projectDomain.toUpperCase());
@@ -204,7 +204,7 @@ public class ProjectView {
                     .validateProjectDescription(projectDescription);
 
             if (!isValid) {
-                System.out.println("\n-----Enter a valid Name-----\n");
+                System.out.println("\n-----Enter a valid Description-----\n");
             } 
         } while (!isValid);
         return projectDescription;
@@ -294,8 +294,8 @@ public class ProjectView {
      * Displays all the projects available in the Database.
      */
     public void displayAllProjects() {
-        for (ProjectDTO projectDto : projectController
-                .getAllProjects()) {
+        System.out.println(projectController.getAllProjects());
+        for (ProjectDTO projectDto : projectController.getAllProjects()) {
             System.out.println(projectDto);
             displayEmployees(projectDto);
             System.out.println("\n----------------------------\n");
@@ -646,7 +646,7 @@ public class ProjectView {
         boolean isPresent= false;
 
         do {
-            displayEmployees();
+            displayAvailableEmployees();
             employeeId = getEmployeeId();
                 
             if (projectController.isAlreadyAssigned(projectId, employeeId)) {
@@ -667,7 +667,7 @@ public class ProjectView {
      * @param employeeId as int.
      */
     private void assignProjectToEmployee(int projectId, int employeeId) {
-        List<EmployeeDTO> employees = new ArrayList<EmployeeDTO>();
+        Set<EmployeeDTO> employees = new HashSet<EmployeeDTO>();
 
         EmployeeDTO employeeDto = projectController
                 .getParticularEmployee(employeeId);
@@ -743,7 +743,7 @@ public class ProjectView {
 
         ProjectDTO projectDto = projectController
                 .getParticularProject(projectId);
-        List<EmployeeDTO> employees = projectDto.getEmployeeList();
+        Set<EmployeeDTO> employees = projectDto.getEmployeeList();
 
         do { 
             System.out.println("\n--- Employees ----\n");
@@ -782,7 +782,7 @@ public class ProjectView {
 
         try {
             projectController.updateProject(projectDto);
-            System.out.println("\n---Employee Assinged Successfully---\n");
+            System.out.println("\n---Employee Un-Assinged Successfully---\n");
             isUnAssigned = true;
         } catch(HibernateException hibernateException) {
             System.out.println(hibernateException.getMessage());
@@ -805,7 +805,7 @@ public class ProjectView {
     /**
      * Displays all the employees available in the database.
      */
-    private void displayEmployees() {
+    private void displayAvailableEmployees() {
         System.out.println("\n---Available Employees---\n");
 
         for (EmployeeDTO employee : projectController.getAllEmployees()) {

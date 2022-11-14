@@ -9,8 +9,8 @@
 
 package com.ideas2it.employeemanagement.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 
@@ -28,7 +28,7 @@ public class ProjectDTO {
     private String description;
     private String domain;    
     private String projectName;
-    List<EmployeeDTO> employeeList = new ArrayList<EmployeeDTO>();
+    Set<EmployeeDTO> employeeList = new HashSet<EmployeeDTO>();
 
     public ProjectDTO() {
     }
@@ -73,11 +73,11 @@ public class ProjectDTO {
         return this.description;
     }
 
-    public void setEmployeeList(List<EmployeeDTO> employeeList) {
+    public void setEmployeeList(Set<EmployeeDTO> employeeList) {
         this.employeeList = employeeList;
     }
 
-    public List<EmployeeDTO> getEmployeeList() {
+    public Set<EmployeeDTO> getEmployeeList() {
         return this.employeeList;
     }
 

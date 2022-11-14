@@ -62,6 +62,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     public List<Integer> getAllProjectId() {
         Transaction transaction = null;
         List<Integer> projectIds = new ArrayList<Integer>();
+
         String hqlQuery = "select E.projectId from Project E";
 
         try (Session session = HibernateConnection.getFactory()
@@ -83,15 +84,20 @@ public class ProjectDAOImpl implements ProjectDAO {
      */
     @Override
     public List<Project> getAllProjects() {
-        List<Project> projectList = new ArrayList<Project>();        
+        Transaction transaction = null;
+        List<Project> projects = new ArrayList<Project>();    
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
-            projectList = session.createQuery("FROM Project").list();
+            transaction = session.beginTransaction();
+            projects = session.createQuery("SELECT DISTINCT p FROM Project"
+                    + " p LEFT JOIN FETCH p.employeeList",
+                    Project.class).list();
+            transaction.commit();  
         } catch (HibernateException hiberateException) {
             hiberateException.printStackTrace();
-        }       
-        return projectList;
+        }
+        return projects;
     }    
 
     /**
@@ -104,7 +110,9 @@ public class ProjectDAOImpl implements ProjectDAO {
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
-            project = (Project)session.get(Project.class, projectId);
+            project = (Project)session.createQuery("SELECT p FROM Project p"
+                    + " LEFT JOIN FETCH p.employeeList WHERE p.projectId =:id")
+                    .setParameter("id", projectId).uniqueResult();
         } catch (HibernateException hiberateException) {
             hiberateException.printStackTrace();
         }

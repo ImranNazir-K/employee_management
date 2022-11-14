@@ -9,6 +9,7 @@
 
 package com.ideas2it.employeemanagement.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
@@ -88,7 +89,7 @@ public class ProjectController {
     /**
      * Retrieves all the projects from the database.
      *
-     * @return list of all projects as List<ProjectDTO>.
+     * @return all the projects as List<ProjectDTO>.
      */
     public List<ProjectDTO> getAllProjects() {
         return projectService.getAllProjects();
@@ -172,7 +173,7 @@ public class ProjectController {
     /**
      * Retrieves all the employees from the database.
      *
-     * @return list of employees as List<EmployeeDTO>.
+     * @return all the employees as List<EmployeeDTO>.
      */
     public List<EmployeeDTO> getAllEmployees() {
         return projectService.getAllEmployees();

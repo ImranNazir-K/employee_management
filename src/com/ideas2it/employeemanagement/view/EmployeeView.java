@@ -12,8 +12,8 @@ package com.ideas2it.employeemanagement.view;
 import org.hibernate.HibernateException; 
 import java.lang.NumberFormatException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.controller.EmployeeController;
@@ -726,7 +726,7 @@ public class EmployeeView {
 
                 if (employeeController.isMailIdExists(mailId,
                         employeeId)) {
-                    System.out.print("\n---" + mailId + "Already Exists" );
+                    System.out.print("\n---" + mailId + " Already Exists" );
                     System.out.println(" Try Another Mail Id---\n");
                     isValid = false;
                 } else {
@@ -843,7 +843,7 @@ public class EmployeeView {
      * @param projectId as int.
      */
     private void assignEmployeeToProject(int employeeId, int projectId) {
-        List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+        Set<ProjectDTO> projects = new HashSet<ProjectDTO>();
 
         EmployeeDTO employeeDto = employeeController
                 .getParticularEmployee(employeeId);
@@ -918,7 +918,7 @@ public class EmployeeView {
 
         EmployeeDTO employeeDto = employeeController
                 .getParticularEmployee(employeeId);
-        List<ProjectDTO> projects = employeeDto.getProjectList();
+        Set<ProjectDTO> projects = employeeDto.getProjectList();
 
         do {            
             System.out.println("\n---Projects ----\n");

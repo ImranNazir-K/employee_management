@@ -9,8 +9,8 @@
 
 package com.ideas2it.employeemanagement.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -31,7 +31,7 @@ public class EmployeeDTO {
     private double employeeSalary;
     private String employeeName;
     private String employeeMailId;
-    private List<ProjectDTO> projectList = new ArrayList<ProjectDTO>();
+    private Set<ProjectDTO> projectList = new HashSet<ProjectDTO>();
     private LocalDate employeeDateOfBirth;
 
     public EmployeeDTO() {
@@ -93,11 +93,11 @@ public class EmployeeDTO {
         return this.employeeDateOfBirth;
     } 
 
-    public void setProjectList(List<ProjectDTO> projectList) {
+    public void setProjectList(Set<ProjectDTO> projectList) {
         this.projectList = projectList;
     }
 
-    public List<ProjectDTO> getProjectList() {
+    public Set<ProjectDTO> getProjectList() {
         return this.projectList;
     }
 
