@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -12,6 +13,7 @@ package com.ideas2it.employeemanagement.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.model.Project;
 
@@ -32,14 +34,14 @@ public interface EmployeeDAO {
      *
      * @return employeeId generated as int.
      */
-    int insertEmployee(Employee employee);
+    int insertEmployee(Employee employee) throws EMSException;
 
     /**
      * Retrieves all the employees From the database.
      *
      * @return all the employees as List<Employee>.
      */
-    List<Employee> getAllEmployees();
+    List<Employee> getAllEmployees() throws EMSException;
 
 
     /**
@@ -49,14 +51,14 @@ public interface EmployeeDAO {
      *
      * @return particular employee as Employee object.
      */
-    Employee getParticularEmployee(int employeeId);
+    Employee getParticularEmployee(int employeeId) throws EMSException;
 
     /**
      * updates the employee.
      *
      * @param employee as Employee object.
      */
-    void updateEmployee(Employee employee);
+    void updateEmployee(Employee employee) throws EMSException;
 
     /**
      * gets all the contact number except the contact number of that
@@ -66,7 +68,7 @@ public interface EmployeeDAO {
      *
      * @return all the contact number as List<Long>.
      */
-    List<Long> getContactNumber(int employeeId);
+    List<Long> getContactNumber(int employeeId) throws EMSException;
 
     /**
      * gets all the mail id except the mail id of that
@@ -76,26 +78,17 @@ public interface EmployeeDAO {
      *
      * @return all the mail id as List<String>.
      */
-    List<String> getMailId(int employeeId);
-
-    /**
-     * gets all the employee id.
-     *
-     * @return all the employee id as List<Integer>.
-     */
-    List<Integer> getAllEmployeeId();
+    List<String> getMailId(int employeeId) throws EMSException;
 
     /**
      * Deletes all the employees in the database.
-     *
-     * @return number of rows affected as int.
      */
-    int deleteAllEmployees();
+    void deleteAllEmployees() throws EMSException;
 
     /**
      * Deletes Particular employee user wants to delete from the Map
      *
      * @param  employeeId as int.
      */
-    void deleteParticularEmployee(int employeeId);
+    void deleteParticularEmployee(int employeeId) throws EMSException;
 }

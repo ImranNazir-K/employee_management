@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -16,12 +17,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Session; 
 import org.hibernate.Transaction;
 
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.dao.EmployeeDAO;
-import com.ideas2it.employeemanagement.dao.impl.ProjectDAOImpl;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.hibernateconnection.HibernateConnection;
-import com.ideas2it.employeemanagement.mapper.Mapper;
 import com.ideas2it.employeemanagement.model.Employee;
-import com.ideas2it.employeemanagement.model.Project;
 
 
 /**
@@ -41,9 +41,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
      * {@inheritDoc}
      */
     @Override
-    public int insertEmployee(Employee employee) {
-        Transaction transaction = null;
+    public int insertEmployee(Employee employee) throws EMSException {
         int employeeId = 0;
+        Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
@@ -51,10 +51,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             employeeId = (Integer)session.save(employee);
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            hiberateException.printStackTrace();
+            throw new EMSException(Constants.CREATE_EMPLOYEE_EXCEPTION);
         }       
         return employeeId;
     }
@@ -63,9 +64,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
      * {@inheritDoc}
      */
     @Override
-    public List<Employee> getAllEmployees() {
-        Transaction transaction = null;
+    public List<Employee> getAllEmployees() throws EMSException {
         List<Employee> employees = new ArrayList<Employee>();
+        Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
@@ -75,7 +76,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                     Employee.class).list();
             transaction.commit();
         } catch (HibernateException hiberateException) {
-            hiberateException.printStackTrace();
+
+            if (null != transaction) {
+                transaction.rollback();
+            }
+            throw new EMSException(Constants.DISPLAY_EMPLOYEES_EXCEPTION);
         }
         return employees;
     }
@@ -84,7 +89,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
      *{@inheritDoc}
      */
     @Override
-    public Employee getParticularEmployee (int employeeId) {
+    public Employee getParticularEmployee (int employeeId) throws EMSException {
         Employee employee = new Employee();
         Transaction transaction = null;
 
@@ -96,7 +101,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                     .setParameter("id", employeeId).uniqueResult();
             transaction.commit();
         } catch (HibernateException hiberateException) {
-            hiberateException.printStackTrace();
+
+            if (null != transaction) {
+                transaction.rollback();
+            }
+            throw new EMSException(Constants.DISPLAY_EMPLOYEE_EXCEPTION);
         }
         return employee;
     }
@@ -105,7 +114,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
      * {@inheritDoc}
      */
     @Override
-    public void updateEmployee(Employee employee) {
+    public void updateEmployee(Employee employee) throws EMSException {
         Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
@@ -114,10 +123,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             session.saveOrUpdate(employee);
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            throw new HibernateException("\n--Error in Updating Employee--\n");
+            throw new EMSException(Constants.UPDATE_EMPLOYEE_EXCEPTION);
         }
     }
 
@@ -125,33 +135,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
      * {@inheritDoc}
      */
     @Override
-    public List<Integer> getAllEmployeeId() {
-        Transaction transaction = null;
-        List<Integer> employeeIds = new ArrayList<Integer>();
-
-        String hqlQuery = "select E.employeeId from Employee E";
-
-        try (Session session = HibernateConnection.getFactory()
-                .openSession()) {
-            transaction = session.beginTransaction();
-            employeeIds = session.createQuery(hqlQuery).list();
-            transaction.commit();
-        } catch (HibernateException hiberateException) {
-            if (null != transaction) {
-                transaction.rollback();
-            }
-            hiberateException.printStackTrace();
-        }
-        return employeeIds;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Long> getContactNumber(int employeeId) {
-        Transaction transaction = null;
+    public List<Long> getContactNumber(int employeeId) throws EMSException {
         List<Long> contactNumbers = new ArrayList<Long>();
+        Transaction transaction = null;
 
         String hqlQuery = "select E.employeeContactNumber from Employee E"
                 + " where E.employeeId !=: id";
@@ -163,10 +149,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                     employeeId).list();
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            hiberateException.printStackTrace();
+            throw new EMSException(Constants.CONTACT_NUMBER_ERROR);
         }
         return contactNumbers;
     }
@@ -175,10 +162,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
      * {@inheritDoc}
      */
     @Override
-    public List<String> getMailId(int employeeId) {
-        Transaction transaction = null;
+    public List<String> getMailId(int employeeId) throws EMSException {
         List<String> mailIds = new ArrayList<String>();
-
+        Transaction transaction = null;
         String hqlQuery = "select E.employeeMailId from Employee E where "
                 + "E.employeeId !=: id";
 
@@ -189,10 +175,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                     employeeId).list();
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            hiberateException.printStackTrace();
+            throw new EMSException(Constants.MAILID_ERROR);
         }
         return mailIds;
     }
@@ -201,44 +188,44 @@ public class EmployeeDAOImpl implements EmployeeDAO {
      * {@inheritDoc}
      */
     @Override
-    public int deleteAllEmployees() {
-        Transaction transaction = null;
-        int result = 0;
+    public void deleteAllEmployees() throws EMSException {
         String hqlQuery = "DELETE FROM Employee";
+        Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
             transaction = session.beginTransaction();
-            result = session.createQuery(hqlQuery).executeUpdate();
+            session.createQuery(hqlQuery).executeUpdate();
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            hiberateException.printStackTrace();
-        } 
-        return result;
+            throw new EMSException(Constants.DELETE_EMPLOYEES_EXCEPTION);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void deleteParticularEmployee(int employeeId) {
+    public void deleteParticularEmployee(int employeeId) throws EMSException {
         Employee employee = null;
         Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
             transaction = session.beginTransaction();
-            employee = (Employee)session.get(Employee.class, employeeId);
+            employee = (Employee)session.load(Employee.class, employeeId);
             session.delete(employee);
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            throw new HibernateException("\n-Error in Deleting Employee-\n");
+            throw new EMSException(Constants.DELETE_EMPLOYEE_EXCEPTION);
         }
     }
 }   

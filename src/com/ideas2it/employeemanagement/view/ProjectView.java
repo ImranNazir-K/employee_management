@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -15,10 +16,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Scanner;
 
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.controller.EmployeeController;
 import com.ideas2it.employeemanagement.controller.ProjectController;
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
+import com.ideas2it.employeemanagement.logger.LoggerFactory;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Contains all the statments to be shown to the users.
@@ -31,8 +36,9 @@ import com.ideas2it.employeemanagement.dto.ProjectDTO;
  */
 public class ProjectView {
 
-    private ProjectController projectController = new ProjectController();
-    private Scanner scanner = new Scanner(System.in);
+    private static final Logger logger = LoggerFactory.getFactory();
+    private static final ProjectController projectController = new ProjectController();
+    private static final Scanner scanner = new Scanner(System.in);
 
     public ProjectView() {
     }
@@ -46,7 +52,7 @@ public class ProjectView {
         boolean isValid = false; 
 
         do {
-            showUserMenu();
+            logger.info(Constants.PROJECT_USER_MENU);
             choice = getChoice();
 
             switch (choice) {
@@ -71,24 +77,9 @@ public class ProjectView {
                     break;
 
                 default:
-                    System.out.println("\n-----Invalid choice-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
             }
         } while (!isValid); 
-    }
-
-    /**
-     * Displays Menu to the users to choose the operations like
-     * create, Update, Display, Delete operations.
-     */
-    private void showUserMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\n*************************")
-                .append("*************************************\n************")
-                .append("****** PROJECT MANGEMENT ********************\n***")
-                .append("***************************************************")
-                .append("******\n 1. CREATE\n 2. DISPLAY\n 3. UPDATE\n")
-                .append(" 4. DELETE\n 5. EXIT\n"));
     }
 
     /**
@@ -100,7 +91,7 @@ public class ProjectView {
 
         do {
             createProjects();
-            viewCreateMenu();
+            logger.info(Constants.PROJECT_CREATE_MENU);
             choice = getChoice();
 
             switch (choice) {
@@ -113,7 +104,7 @@ public class ProjectView {
                     break;
              
                 default:
-                    System.out.print("\n-----Invalid Choice-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
                     isContinue = true;
             }
         } while (isContinue);
@@ -128,21 +119,12 @@ public class ProjectView {
         ProjectDTO projectDto = new ProjectDTO(getProjectName(),
                 getProjectDomain(), getProjectDescription());
 
-        projectId = projectController.insertProject(projectDto);
-            System.out.print("\n---Project Created with Id : ");
-            System.out.println(projectId + "---\n");
-    }
-
-    /**
-     * Displays menu to continue for creating Project or to stop
-     * creating Project.
-     */
-    private void viewCreateMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append(" Do you want to \n")
-                .append("Continue ?\n-> PRESS 1 to Create Another Project")
-                .append("\n-> PRESS 2 to Main Menu"));
+        try {
+            projectId = projectController.insertProject(projectDto);
+            logger.info(Constants.PROJECT_CREATED + projectId);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
     }
 
     /**
@@ -155,12 +137,12 @@ public class ProjectView {
         boolean isValid = false;
 
         do {
-            System.out.print("\nEnter the Project Name\t\t\t\t: ");
+            logger.info(Constants.ENTER_PROJECT_NAME);
             projectName = scanner.nextLine();
             isValid = projectController.validateProjectName(projectName);
 
             if (!isValid) {
-                System.out.println("\n-----Enter a valid Name-----\n");
+                logger.warn(Constants.INVALID_PROJECT_NAME);
             } 
         } while (!isValid);
         return (projectName.toUpperCase());
@@ -172,16 +154,16 @@ public class ProjectView {
      * @return validated Project Domain.
      */
     private String getProjectDomain() {
-        String projectDomain = new String();
         boolean isValid = false;
+        String projectDomain = new String();
 
         do {
-            System.out.print("Enter the Project Domain\t\t\t: ");
+            logger.info(Constants.ENTER_PROJECT_DOMAIN);
             projectDomain = scanner.nextLine();
             isValid = projectController.validateProjectDomain(projectDomain);
 
             if (!isValid) {
-                System.out.println("\n-----Enter a valid Domain-----\n");
+                logger.warn(Constants.INVALID_PROJECT_DOMAIN);
             } 
         } while (!isValid);
         return (projectDomain.toUpperCase());
@@ -193,18 +175,18 @@ public class ProjectView {
      * @return validated Project Name.
      */
     private String getProjectDescription() {
-        String projectDescription = new String();
         boolean isValid = false;
+        String projectDescription = new String();
 
         do {
-            System.out.print("Enter the Project Description\t\t\t: ");
+            logger.info(Constants.ENTER_PROJECT_DESCRIPTION);
             projectDescription = scanner.nextLine();
 
             isValid = projectController
                     .validateProjectDescription(projectDescription);
 
             if (!isValid) {
-                System.out.println("\n-----Enter a valid Description-----\n");
+                logger.warn(Constants.INVALID_PROJECT_DESCRIPTION);
             } 
         } while (!isValid);
         return projectDescription;
@@ -217,18 +199,19 @@ public class ProjectView {
      */
     private int getProjectId() {
         boolean isValid = false;
-        Integer projectId = 0;
+        int projectId = 0;
 
-        do {
-            try {   
-                System.out.print("\nEnter the Project ID\t\t\t\t: ");
+        try {
+ 
+            do {  
+                logger.info(Constants.ENTER_PROJECT_ID );
                 projectId = Integer.parseInt(scanner.nextLine());
                 isValid = true;
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("\n-----Invalid Input Format-----\n");
-                isValid = true;
-            }
-        } while (!isValid);
+            } while (!isValid);
+        } catch (NumberFormatException numberFormatException) {
+            logger.error(Constants.INVALID_FORMAT);
+            isValid = true;
+        }
         return projectId ;
     }
 
@@ -238,10 +221,15 @@ public class ProjectView {
      * displays the projects available in the database.
      */
     private void displayProject() {
-        if (projectController.isDbIsEmpty()) {
-            System.out.println("\n-----No Projects Available-----\n");
-        } else {
+        try {
+
+            if (projectController.isDbIsEmpty()) {
+                logger.info(Constants.NO_PROJECTS);
+            } else {
             performDisplayProject();
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -253,7 +241,7 @@ public class ProjectView {
         boolean isValid = false;
 
         do {
-            viewDisplayMenu();
+            logger.info(Constants.PROJECT_DISPLAY_MENU);
             choice = getChoice();
 
             switch (choice) {
@@ -271,34 +259,26 @@ public class ProjectView {
                     break;
 
                 default:
-                    System.out.print("\n-----Invalid Input-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
                     isValid = true;
             }
         } while (isValid);
     }	
 
     /**
-     * Displays Menu for displaying particular project or all project.
-     */
-    private void viewDisplayMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\n --> PRESS 1 to ")
-                .append("print ALL Project Details,")
-                .append("\n --> PRESS 2 to print ")
-                .append(" Particular Project Detail, ")
-                .append("\n --> PRESS 3 to Main Menu\n"));
-    }
-
-    /**
      * Displays all the projects available in the Database.
      */
     public void displayAllProjects() {
-        System.out.println(projectController.getAllProjects());
-        for (ProjectDTO projectDto : projectController.getAllProjects()) {
-            System.out.println(projectDto);
-            displayEmployees(projectDto);
-            System.out.println("\n----------------------------\n");
+
+        try {
+
+            for (ProjectDTO projectDto : projectController.getAllProjects()) {
+                logger.info(projectDto);
+                displayEmployees(projectDto);
+                logger.info(Constants.LINE);
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -310,25 +290,29 @@ public class ProjectView {
      * @return true when it displays particular Project. 
      */
     private boolean displayParticularProject(boolean isValid) {
-        ProjectDTO projectDto = null;
         boolean isContinue = false;
         int projectId = 0;
+        ProjectDTO projectDto = null;
 
-        do {
-            projectId = getProjectId();
-            isValid = projectController.isIdExists(projectId); 
+        try {
 
-            if (isValid) {          
-                projectDto = projectController.getParticularProject(projectId);
-                System.out.println(projectDto);
-                displayEmployees(projectDto);
-                isValid = true;
-                isContinue = true;
-            } else {
-                System.out.print("\n---Project ID : " + projectId + " not ");
-                System.out.print("found Try Another Project ID---\n");
-            }
-        } while (!isContinue);
+            do {
+                projectId = getProjectId();
+                isValid = projectController.isIdExists(projectId); 
+
+                if (isValid) {
+                    projectDto = projectController
+                            .getParticularProject(projectId);
+                    logger.info(projectDto);
+                    displayEmployees(projectDto);
+                    isContinue = true;
+                } else {
+                    logger.info(projectId + Constants.ID_NOT_FOUND);
+                }
+            } while (!isContinue);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
         return isValid;
     }
 
@@ -337,12 +321,12 @@ public class ProjectView {
      */
     private void displayEmployees(ProjectDTO projectDto) {
         if (projectDto.getEmployeeList().isEmpty()) {
-            System.out.println(" Employees\t     : NOT ASSIGNED");
+            logger.info(Constants.EMPLOYEE_NOT_ASSIGNED);
         } else {
-            System.out.print("\n---Employees---\n");
+            logger.info(Constants.EMPLOYEES);
 
             for (EmployeeDTO employee : projectDto.getEmployeeList()) {
-                System.out.println(employee);
+                logger.info(employee);
             }
         } 
     }
@@ -355,14 +339,19 @@ public class ProjectView {
     private void updateProject() {
         boolean isContinue = false;
 
-        if (projectController.isDbIsEmpty()) {
-            System.out.println("\n-----No Projects Available-----\n");
-        } else {
+        try {
 
-            do {
-                performUpdateProject();
-                isContinue = continueUpdate();
-            } while (isContinue); 
+            if (projectController.isDbIsEmpty()) {
+                logger.info(Constants.NO_PROJECTS);
+            } else {
+
+                do {
+                    performUpdateProject();
+                    isContinue = continueUpdate();
+                } while (isContinue); 
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -376,78 +365,70 @@ public class ProjectView {
         boolean isValid = false;
         boolean isExists = false;
 
-        do {
-            projectId = getProjectId();
+        try {
 
-            if (projectController.isIdExists(projectId)) {
+            do {
+                projectId = getProjectId();
 
-                do {
-                    viewUpdateMenu();
-                    choice = getChoice();
+                if (projectController.isIdExists(projectId)) {
 
-                    switch (choice) {
-                        case 1:
-                            updateAllFields(projectId);
-                            break;
+                    do {
+                        logger.info(Constants.PROJECT_UPDATE_MENU);
+                        choice = getChoice();
 
-                        case 2:
-                            updateParticularField(projectId);
-                            break;
+                        switch (choice) {
+                            case 1:
+                                updateAllFields(projectId);
+                                break;
 
-                        case 3:
-                            assignEmployee(projectId);
-                            break;
+                            case 2:
+                                updateParticularField(projectId);
+                                break;
 
-                        case 4:
-                            unAssignEmployee(projectId);
-                            break;
+                            case 3:
+                                assignEmployee(projectId);
+                                break;
 
-                        case 5:
-                            isValid = true;
-                            isExists = false;
-                            break;
+                            case 4:
+                                unAssignEmployee(projectId);
+                                break;
 
-                        default:
-                            System.out.println("\n-----Invalid Choice-----\n");
-                    }
-                } while (!isValid);
-            } else {
-                System.out.print("\n---Project ID " + projectId);
-                System.out.println(" does not exists---\n");
-                isExists = true;
-            }
-        } while (isExists);
-    }
+                            case 5:
+                                isValid = true;
+                                isExists = false;
+                                break;
 
-    /**
-     * Displays menu for updating all the details of an particular 
-     * project or to update single detail of an particular project.
-     */
-    private void viewUpdateMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.print(stringBuilder.append("\n --> PRESS 1 to UPDATE ALL")
-                .append(" FIELDS \n --> PRESS 2 to UPDATE PARTICULAR FIELD:")
-                .append("\n --> PRESS 3 to ASSIGN EMPLOYEE\n --> PRESS 4 to ")
-                .append("UNASSIGN EMPLOYEE \n --> PRESS 5 to Main Menu \n"));
+                            default:
+                                logger.warn(Constants.INVALID_CHOICE);
+                        }
+                    } while (!isValid);
+                } else {
+                    logger.info(projectId + Constants.ID_NOT_FOUND);
+                    isExists = true;
+                }
+            } while (isExists);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
     }
 
     /**
      * updates all the fields of an Project.
      */
     private void updateAllFields(int projectId) {
-        ProjectDTO projectDto = projectController
-                .getParticularProject(projectId);
-
-        projectDto.setProjectName(getProjectName());
-        projectDto.setProjectDomain(getProjectDomain());
-        projectDto.setProjectDescription(getProjectDescription());
+        ProjectDTO projectDto = null;
 
         try {
+            projectDto = projectController
+                .getParticularProject(projectId);
+            projectDto.setProjectName(getProjectName());
+            projectDto.setProjectDomain(getProjectDomain());
+            projectDto.setProjectDescription(getProjectDescription());
+
             projectController.updateProject(projectDto);
-            System.out.println("\n-----Project Details Updated-----\n");
-        } catch(HibernateException hibernateException) {
-            System.out.println(hibernateException.getMessage());
+            logger.info(Constants.PROJECT_UPDATED);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -457,29 +438,20 @@ public class ProjectView {
     private void updateParticularField(int projectId) {
         byte field;
         boolean isContinue = false;
+        ProjectDTO projectDto = null;
 
-        ProjectDTO projectDto = projectController
-                .getParticularProject(projectId);
+        try {
+            projectDto = projectController
+                    .getParticularProject(projectId);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
 
         do {
-            viewParticularUpdateMenu();
+            logger.info(Constants.PARTICULAR_PROJECT_UPDATE_MENU);
             field = getChoice();
             isContinue = selectUpdateField(field, projectDto);
         } while (isContinue);
-    }
-
-    /**
-     * Displays Menu to update the particular Field of an particular
-     * project.
-     */
-    private void viewParticularUpdateMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\nEnter\n  -->")
-                .append(" 1 for PROJECT NAME. \n")
-                .append("  --> 2 for PROJECT DOMAIN.\n")
-                .append("  --> 3 for PROJECT DESCRIPTION.\n")
-                .append("  --> 4 to EXIT."));
     }
 
     /**
@@ -512,15 +484,15 @@ public class ProjectView {
             case 4:
                 try {
                     projectController.updateProject(projectDto);
-                    System.out.println("\n---Project Details Updated---\n");
-                } catch(HibernateException hibernateException) {
-                    System.out.println(hibernateException.getMessage());
+                    logger.info(Constants.PROJECT_UPDATED);
+                } catch (EMSException exception) {
+                    logger.error(exception.getMessage());
                 }
                 isContinue = false;
                 break;
 
             default:
-                System.out.println("\n-----Invalid Choice-----\n"); 
+                logger.warn(Constants.INVALID_CHOICE); 
                 isContinue = true;              
                 break;
         }
@@ -569,7 +541,7 @@ public class ProjectView {
         boolean isValid = false;
 
         do {
-            viewUpdateMenuToContinue();
+            logger.info(Constants.PROJECT_UPDATE_MENU_TO_CONTINUE);
             choice = getChoice();
 
             switch (choice) {
@@ -585,22 +557,11 @@ public class ProjectView {
                    isContinue = true;
 
                 default:
-                    System.out.println("\n-----Invalid Input-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
                     isValid = false;
             }
         } while (!isValid);
         return isContinue;
-    }
-
-    /**
-     * Displays menu to the user to continue updating Project or to
-     * stop updating employee.
-     */
-    private void viewUpdateMenuToContinue() {
-        StringBuilder stringBuilder = new StringBuilder();
-        System.out.println(stringBuilder.append("\nDo You want to ")
-                .append("Update Another Project?\n--> PRESS 1 to ")
-                .append("CONTINUE.\n--> PRESS 2 to STOP."));
     }
 
     /**
@@ -610,29 +571,34 @@ public class ProjectView {
         byte choice;
         boolean isContinue = false;
 
-        if (projectController.isEmployeeDbIsEmpty()) {
-            System.out.println("\n---No Employees Available---\n");
-        } else {
+        try {
 
-            do {
-                assignEmployees(projectId);
-                viewContinueAssignEmployee();
-                choice = getChoice();
+            if (projectController.isEmployeeDbIsEmpty()) {
+                logger.info(Constants.NO_EMPLOYEES);
+            } else {
 
-                switch (choice) {
-                    case 1:
-                        isContinue = true;
-                        break;
+                do {
+                    assignEmployees(projectId);
+                    logger.info(Constants.CONTINUE_ASSIGN_EMPLOYEES);
+                    choice = getChoice();
 
-                    case 2:
-                        isContinue = false;
-                        break;
+                    switch (choice) {
+                        case 1:
+                            isContinue = true;
+                            break;
+
+                        case 2:
+                            isContinue = false;
+                            break;
     
-                    default:
-                        System.out.println("\n---Invalid Input---\n");
-                       isContinue = true;
-                }
-            } while (isContinue);
+                        default:
+                            logger.warn(Constants.INVALID_CHOICE);
+                            isContinue = true;
+                    }
+                } while (isContinue);
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -643,21 +609,26 @@ public class ProjectView {
      */
     private void assignEmployees(int projectId) {
         int employeeId;
-        boolean isPresent= false;
+        boolean isPresent = false;
 
-        do {
-            displayAvailableEmployees();
-            employeeId = getEmployeeId();
+        try {
+
+            do {
+                displayAvailableEmployees();
+                employeeId = getEmployeeId();
                 
-            if (projectController.isAlreadyAssigned(projectId, employeeId)) {
-                System.out.print("\n---Employee Already Assigned Try");
-                System.out.println(" Another Employee---\n");
-                isPresent = true;
-            } else {
-                assignProjectToEmployee(projectId, employeeId);
-                isPresent = false;
-            }
-        } while (isPresent);
+                if (projectController.isAlreadyAssigned(projectId,
+                        employeeId)) {
+                    logger.info(Constants.EMPLOYEE_ALREADY_ASSIGNED);
+                    isPresent = true;
+                } else {
+                    assignProjectToEmployee(projectId, employeeId);
+                    isPresent = false;
+                }
+            } while (isPresent);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
     }
 
     /**
@@ -667,34 +638,24 @@ public class ProjectView {
      * @param employeeId as int.
      */
     private void assignProjectToEmployee(int projectId, int employeeId) {
+        EmployeeDTO employeeDto = null;
+        ProjectDTO projectDto = null;
         Set<EmployeeDTO> employees = new HashSet<EmployeeDTO>();
 
-        EmployeeDTO employeeDto = projectController
-                .getParticularEmployee(employeeId);
-        ProjectDTO projectDto = projectController
-                .getParticularProject(projectId);
-
-        employees = projectDto.getEmployeeList();
-        employees.add(employeeDto);
-        projectDto.setEmployeeList(employees);
-
         try {
+            employeeDto = projectController
+                    .getParticularEmployee(employeeId);
+            projectDto = projectController
+                    .getParticularProject(projectId);
+            employees = projectDto.getEmployeeList();
+            employees.add(employeeDto);
+            projectDto.setEmployeeList(employees);
+
             projectController.updateProject(projectDto);
-            System.out.println("\n---Employee Assinged Successfully---\n");
-        } catch(HibernateException hibernateException) {
-            System.out.println(hibernateException.getMessage());
+            logger.info(Constants.EMPLOYEE_ASSIGNED);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
-    }
-
-    /**
-     * Displays menu for continue Assigning Project.
-     */
-    private void viewContinueAssignEmployee() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\n Do you want to Continue ?")
-                .append("\n-> PRESS 1 to Assign Another Employee to Project")
-                .append("\n-> PRESS 2 to Main Menu"));
     }
 
     /**
@@ -706,29 +667,34 @@ public class ProjectView {
         byte choice;
         boolean isContinue = false;
 
-        if (projectController.isDbIsEmpty()) {
-            System.out.println("\n---No Projects Available---\n");
-        } else {
+        try {
 
-            do {
-                unAssignEmployees(projectId);
-                viewContinueUnAssignEmployee();
-                choice = getChoice();
+            if (projectController.isDbIsEmpty()) {
+                logger.info(Constants.NO_PROJECTS);
+            } else {
 
-                switch (choice) {
-                    case 1:
-                        isContinue = true;
-                        break;
+                do {
+                    unAssignEmployees(projectId);
+                    logger.info(Constants.CONTINUE_UNASSIGN_EMPLOYEES);
+                    choice = getChoice();
 
-                    case 2:
-                        isContinue = false;
-                        break;
+                    switch (choice) {
+                        case 1:
+                            isContinue = true;
+                            break;
+
+                        case 2:
+                            isContinue = false;
+                            break;
     
-                    default:
-                        System.out.println("\n---Invalid Input---\n");
-                       isContinue = true;
-                }
-            } while (isContinue);
+                        default:
+                            logger.warn(Constants.INVALID_CHOICE);
+                            isContinue = true;
+                    }
+                } while (isContinue);
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -740,36 +706,42 @@ public class ProjectView {
     private void unAssignEmployees(int projectId) {
         boolean isPresent = false;
         int employeeId = 0;
+        ProjectDTO projectDto = null;
+        Set<EmployeeDTO> employees = new HashSet<EmployeeDTO>();
 
-        ProjectDTO projectDto = projectController
-                .getParticularProject(projectId);
-        Set<EmployeeDTO> employees = projectDto.getEmployeeList();
+        try {
+            projectDto = projectController
+                    .getParticularProject(projectId);
+            employees = projectDto.getEmployeeList();
 
-        do { 
-            System.out.println("\n--- Employees ----\n");
-
-            for (EmployeeDTO employee : employees) {
-                System.out.println(employee);
-            }
-            employeeId = getEmployeeId();
-
-            if (projectController.isAlreadyAssigned(projectId, employeeId)) {
+            do { 
+                logger.info(Constants.EMPLOYEES);
 
                 for (EmployeeDTO employee : employees) {
-
-                    if (employeeId == employee.getEmployeeId()) {
-                        employees.remove(employee);
-                        break;
-                    }
+                    logger.info(employee);
                 }
-                projectDto.setEmployeeList(employees);
-                isPresent = unAssignProjectFromEmployee(projectDto);
-            } else {
-                System.out.print("\n---Employee Already Assigned Try");
-                System.out.println(" Another Employee---\n");
-                isPresent = false;
-            }
-        } while (!isPresent);
+                employeeId = getEmployeeId();
+
+                if (projectController.isAlreadyAssigned(projectId,
+                        employeeId)) {
+
+                    for (EmployeeDTO employee : employees) {
+
+                        if (employeeId == employee.getEmployeeId()) {
+                            employees.remove(employee);
+                            break;
+                        }
+                    }
+                    projectDto.setEmployeeList(employees);
+                    isPresent = unAssignProjectFromEmployee(projectDto);
+                } else {
+                    logger.info(Constants.EMPLOYEE_ALREADY_ASSIGNED);
+                    isPresent = false;
+                }
+            } while (!isPresent);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
     }
 
     /**
@@ -782,34 +754,27 @@ public class ProjectView {
 
         try {
             projectController.updateProject(projectDto);
-            System.out.println("\n---Employee Un-Assinged Successfully---\n");
+            logger.info(Constants.EMPLOYEE_UNASSIGNED);
             isUnAssigned = true;
-        } catch(HibernateException hibernateException) {
-            System.out.println(hibernateException.getMessage());
-            isUnAssigned  = false;
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
         return isUnAssigned;
-    }
-
-    /**
-     * Displays menu for continue Assigning Project.
-     */
-    private void viewContinueUnAssignEmployee() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\n Do you want to Continue ?")
-                .append("\n-> PRESS 1 to UnAssign Another Employee")
-                .append("\n-> PRESS 2 to Main Menu"));
     }
 
     /**
      * Displays all the employees available in the database.
      */
     private void displayAvailableEmployees() {
-        System.out.println("\n---Available Employees---\n");
+        logger.info(Constants.AVAILABLE_EMPLOYEES);
 
-        for (EmployeeDTO employee : projectController.getAllEmployees()) {
-            System.out.println(employee);
+        try {
+
+            for (EmployeeDTO employee : projectController.getAllEmployees()) {
+                logger.info(employee);
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }   
     }
 
@@ -819,26 +784,28 @@ public class ProjectView {
      * @return employeeId.
      */
     private int getEmployeeId() {
-        int employeeId = 0;
         boolean isValid = false;
+        int employeeId = 0;
 
-        do {
-            try {   
-                System.out.print("\nEnter the Employee ID\t\t\t\t: ");
+        try {
+
+            do {
+                logger.info(Constants.ENTER_EMPLOYEE_ID);
                 employeeId = Integer.parseInt(scanner.nextLine());
 
                 if (projectController.isEmployeeIdExists(employeeId)) {
                     isValid = true;
                 } else {
-                    System.out.print("\n---Employee Id " + employeeId);
-                    System.out.println(" does not exists---\n");
+                    logger.info(employeeId + Constants.ID_NOT_FOUND);
                     isValid = false;
                 }
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("\n-----Invalid Input Format-----\n");
-                isValid = false;
-            }
-        } while (!isValid);
+            } while (!isValid);
+        } catch (NumberFormatException numberFormatException) {
+            logger.warn(Constants.INVALID_FORMAT);
+            isValid = false;
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
         return employeeId;
     }
 
@@ -848,10 +815,15 @@ public class ProjectView {
      * Deletes Project from the Database.
      */
     private void deleteProject() {
-        if (projectController.isDbIsEmpty()) {
-            System.out.println("\n-----No Employees Available-----\n");
-        } else {
-            performDeleteProject();
+        try {
+
+            if (projectController.isDbIsEmpty()) {
+                logger.info(Constants.NO_EMPLOYEES);
+            } else {
+                performDeleteProject();
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -862,17 +834,18 @@ public class ProjectView {
         boolean isValid = false;
 
         do {
-            viewDeleteMenu();
+            logger.info(Constants.PROJECT_DELETE_MENU);
             byte choice = getChoice();
 
             switch (choice) {
                 case 1:
-                    if (projectController.deleteAllProjects()) {
-                        System.out.println("\n-----Projects Cleared-----\n");
-                    } else {
-                        System.out.println("\n-Error in Deleting Project-\n");
+                    try {
+                        projectController.deleteAllProjects();
+                        logger.info(Constants.PROJECTS_DELETED);
+                        isValid = true;
+                    } catch (EMSException exception) {
+                        logger.error(exception.getMessage());
                     }
-                    isValid = true;
                     break;
 
                 case 2:
@@ -884,7 +857,7 @@ public class ProjectView {
                     break;
 
                 default:
-                    System.out.print("\n-----Invalid Choice-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
                     isValid = false;
             }
         } while (!isValid);
@@ -901,39 +874,25 @@ public class ProjectView {
         int projectId;
         boolean isContinue = false;
 
-        do {
-            projectId = getProjectId();
+        try {
 
-            if (projectController.isIdExists(projectId)) {
+            do {
+                projectId = getProjectId();
 
-                try {
+                if (projectController.isIdExists(projectId)) {
                     projectController.deleteParticularProject(projectId);
-                    System.out.println("\n---Project ID " + projectId);
-                    System.out.println(" Deleted---\n");
+                    logger.info(projectId + Constants.PROJECT_DELETED);
                     isValid = true;
                     isContinue = true;
-                } catch (HibernateException hibernateException) {
-                    System.out.println(hibernateException.getMessage());
+                } else {
+                     logger.info(projectId + Constants.ID_NOT_FOUND);
+                     isValid = true;
                 }
-            } else {
-                 System.out.print("\n---Project ID " + projectId);
-                 System.out.print(" - Id not found Try another ID---\n");
-                 isValid = true;
-            }
-        } while (!isContinue);
+            } while (!isContinue);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
         return isValid;
-    }
-
-    /**
-     * Displays Menu for Deleting all projects or particular project.
-     */
-    private void viewDeleteMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.print(stringBuilder.append("\n --> PRESS 1 ")
-                .append("to Delete All Project Details ")
-                .append("\n --> PRESS 2 to Delete Particular Project ")
-                .append("Detail: \n --> Press 3 to Main Menu \n"));
     }
 
     /**
@@ -945,7 +904,7 @@ public class ProjectView {
         byte choice = 0;
 
         try {
-            System.out.print("Enter the choice: ");
+            logger.info(Constants.ENTER_CHOICE);
             choice = Byte.parseByte(scanner.nextLine());
         } catch (NumberFormatException numberFormatException ) {
         }

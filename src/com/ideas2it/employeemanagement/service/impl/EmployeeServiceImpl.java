@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -15,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.dao.EmployeeDAO;
 import com.ideas2it.employeemanagement.dao.impl.EmployeeDAOImpl;
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.mapper.Mapper;
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.model.Project;
@@ -36,7 +39,7 @@ import com.ideas2it.employeemanagement.service.ProjectService;
  */
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeDAO employeeDao = new EmployeeDAOImpl();
+    private static final EmployeeDAO employeeDao = new EmployeeDAOImpl();
 
     /**
      * Empty Constructor.
@@ -49,8 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */ 
     @Override
     public boolean validateEmployeeName (String employeeName) {
-        return (Pattern.matches("((([A-Za-z]{2,}([ ]?)){1,}))((([.]?)"
-                + "([a-zA-Z]{1})){1,})", employeeName));
+        return (Pattern.matches(Constants.VALIDATE_EMPLOYEE_NAME, employeeName));
     }
 
     /**
@@ -58,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public boolean validateEmployeeContactNumber (String contactNumber) {
-        return (Pattern.matches("([6-9]{1}[0-9]{9})",
+        return (Pattern.matches(Constants.VALIDATE_EMPLOYEE_CONTACT_NUMBER,
                 contactNumber));
     }
 
@@ -67,8 +69,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public boolean validateEmployeeSalary (String employeeSalary) {
-        return (Pattern.matches("([1-9]{1})([0-9]{1,8})((([.])"
-                + "([0-9]{1,2}))?)", employeeSalary));
+        return (Pattern.matches(Constants.VALIDATE_EMPLOYEE_SALARY,
+                employeeSalary));
     }
 
     /**
@@ -76,9 +78,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public boolean validateEmployeeMailId (String employeeMailId) {
-        return (Pattern.matches("((([A-Za-z0-9]{1,})([.]?)){1,})"
-                + "([a-z]{0,}?)([@]{1})(([a-z])*)((([.])([a-z]{2,3}))"
-                + "{1,2})", employeeMailId));
+        return (Pattern.matches(Constants.VALIDATE_EMPLOYEE_MAILID,
+                employeeMailId));
     }  
 
     /**
@@ -111,7 +112,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public int insertEmployee(EmployeeDTO employeeDto) {
+    public int insertEmployee(EmployeeDTO employeeDto) throws EMSException {
         return employeeDao.insertEmployee(Mapper.toEmployee(employeeDto));
     }
 
@@ -119,7 +120,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isDbIsEmpty() {
+    public boolean isDbIsEmpty() throws EMSException{
          return (getAllEmployees().isEmpty());
     }
 
@@ -127,7 +128,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployees() throws EMSException {
         List<EmployeeDTO> employees = new ArrayList<EmployeeDTO>();
 
         for (Employee employee : employeeDao.getAllEmployees()) {
@@ -140,7 +141,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public EmployeeDTO getParticularEmployee(int employeeId) {
+    public EmployeeDTO getParticularEmployee(int employeeId) 
+            throws EMSException {
         return Mapper.employeeProjectToDto(employeeDao
                 .getParticularEmployee(employeeId));
     }
@@ -149,15 +151,11 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isIdExists(int employeeId) {
+    public boolean isIdExists(int employeeId) throws EMSException {
         boolean isPresent = false;
 
-        for (Integer id : employeeDao.getAllEmployeeId()) {
-
-            if (employeeId == id) {
-                isPresent = true;
-                break;
-            }
+        if (null != getParticularEmployee(employeeId)) {
+           isPresent = true;
         }
         return isPresent;
     }
@@ -166,7 +164,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isMailIdExists(String mailId) {
+    public boolean isMailIdExists(String mailId) throws EMSException {
         boolean isPresent = false;
 
         for (EmployeeDTO employee : getAllEmployees()) {
@@ -183,7 +181,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isContactNumberExists(String contactNumber) {
+    public boolean isContactNumberExists(String contactNumber)
+            throws EMSException {
         boolean isPresent = false;
 
         for (EmployeeDTO employee : getAllEmployees()) {
@@ -201,7 +200,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public void updateEmployee(EmployeeDTO employeeDto) {
+    public void updateEmployee(EmployeeDTO employeeDto) throws EMSException {
         employeeDao.updateEmployee(Mapper.dtoToEmployeeProject(employeeDto));
     }
 
@@ -209,7 +208,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isContactNumberExists(long contactNumber, int employeeId) {
+    public boolean isContactNumberExists(long contactNumber, int employeeId) 
+            throws EMSException {
         boolean isPresent = false;
 
        for (Long phoneNumber : employeeDao
@@ -229,7 +229,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isMailIdExists(String mailId, int employeeId) {
+    public boolean isMailIdExists(String mailId, int employeeId) 
+            throws EMSException {
         boolean isPresent = false;
 
         for (String mail : employeeDao.getMailId(employeeId)) {
@@ -248,20 +249,15 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean deleteAllEmployees() {
-        boolean isDeleted = false;
-
-        if (0 < (employeeDao.deleteAllEmployees())) {
-            isDeleted = true;
-        }
-        return isDeleted;
+    public void deleteAllEmployees() throws EMSException {
+        employeeDao.deleteAllEmployees();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void deleteParticularEmployee(int employeeId) {
+    public void deleteParticularEmployee(int employeeId) throws EMSException {
         employeeDao.deleteParticularEmployee(employeeId);
     }
 
@@ -269,7 +265,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public List<ProjectDTO> getAllProjects() {
+    public List<ProjectDTO> getAllProjects() throws EMSException {
         ProjectService projectService = new ProjectServiceImpl();
         return projectService.getAllProjects();
     }
@@ -278,7 +274,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isProjectIdExists(int projectId) {
+    public boolean isProjectIdExists(int projectId) throws EMSException {
         ProjectService projectService = new ProjectServiceImpl();
         return projectService.isIdExists(projectId);
     }
@@ -287,7 +283,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-   public boolean isProjectDbIsEmpty() {
+   public boolean isProjectDbIsEmpty() throws EMSException {
         ProjectService projectService = new ProjectServiceImpl();
         return projectService.isDbIsEmpty();
     }
@@ -296,7 +292,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isAlreadyAssigned(int employeeId, int projectId) {
+    public boolean isAlreadyAssigned(int employeeId, int projectId)
+            throws EMSException {
         boolean isAlreadyAssigned = false;
 
         EmployeeDTO employee = getParticularEmployee(employeeId);
@@ -316,7 +313,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO getParticularProject(int projectId) {
+    public ProjectDTO getParticularProject(int projectId) throws EMSException {
         ProjectService projectService = new ProjectServiceImpl();
         return projectService.getParticularProject(projectId);
     }

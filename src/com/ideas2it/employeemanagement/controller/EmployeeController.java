@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -15,6 +16,7 @@ import java.util.List;
 
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.service.EmployeeService;
 import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImpl;
@@ -29,7 +31,7 @@ import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImpl;
  */
 public class EmployeeController {
 
-    private EmployeeService employeeService = new EmployeeServiceImpl();
+    private static final EmployeeService employeeService = new EmployeeServiceImpl();
 
     public EmployeeController() {
     }
@@ -100,7 +102,7 @@ public class EmployeeController {
      *
      * @param employeeDto as EmployeeDTO object.
      */
-    public int insertEmployee(EmployeeDTO employeeDto) {
+    public int insertEmployee(EmployeeDTO employeeDto) throws EMSException {
         return employeeService.insertEmployee(employeeDto);
     }
 
@@ -109,7 +111,7 @@ public class EmployeeController {
      *
      * @return all employees as List<EmployeeDTO>.
      */
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployees() throws EMSException {
         return employeeService.getAllEmployees();
     }
 
@@ -120,7 +122,8 @@ public class EmployeeController {
      *
      * @return particular employee as EmployeeDTO object.
      */
-    public EmployeeDTO getParticularEmployee(int employeeId) {
+    public EmployeeDTO getParticularEmployee(int employeeId)
+                throws EMSException {
         return employeeService.getParticularEmployee(employeeId);
     }
 
@@ -129,7 +132,7 @@ public class EmployeeController {
      *
      * @return true if the database is Empty.
      */
-    public boolean isDbIsEmpty() {
+    public boolean isDbIsEmpty() throws EMSException {
         return employeeService.isDbIsEmpty();
     }
 
@@ -141,7 +144,7 @@ public class EmployeeController {
      * @return true if the Database contains that particular 
      * employee Id.
      */
-    public boolean isIdExists(int employeeId) {
+    public boolean isIdExists(int employeeId) throws EMSException {
         return employeeService.isIdExists(employeeId);
     }
 
@@ -153,7 +156,8 @@ public class EmployeeController {
      *
      * @return true if the contact number is present in the Database.
      */
-    public boolean isContactNumberExists(String contactNumber) {
+    public boolean isContactNumberExists(String contactNumber)
+            throws EMSException {
         return employeeService.isContactNumberExists(contactNumber);
     }
 
@@ -165,7 +169,7 @@ public class EmployeeController {
      *
      * @return true if the MailId is present in the database.
      */
-    public boolean isMailIdExists(String employeeMailId) {
+    public boolean isMailIdExists(String employeeMailId) throws EMSException {
         return employeeService.isMailIdExists(employeeMailId);
     }
 
@@ -174,7 +178,7 @@ public class EmployeeController {
      *
      * @param employeeDto as EmployeeDTO object.
      */
-    public void updateEmployee(EmployeeDTO employeeDto) {
+    public void updateEmployee(EmployeeDTO employeeDto) throws EMSException {
         employeeService.updateEmployee(employeeDto);
     }
 
@@ -188,7 +192,8 @@ public class EmployeeController {
      * @return true if the contact number is present int the
      * database.
      */
-    public boolean isContactNumberExists(long contactNumber, int employeeId) {
+    public boolean isContactNumberExists(long contactNumber, int employeeId) 
+            throws EMSException {
         return employeeService.isContactNumberExists(contactNumber,
                 employeeId);
     }
@@ -203,17 +208,16 @@ public class EmployeeController {
      *
      * @return true if the MailId is present in the database.
      */
-    public boolean isMailIdExists(String mailId, int employeeId) {
+    public boolean isMailIdExists(String mailId, int employeeId) 
+            throws EMSException {
         return employeeService.isMailIdExists(mailId, employeeId); 
     }
 
     /**
      * delete All Employees in the Database.
-     *
-     * @return true if all the employees were deleted.
      */
-    public boolean deleteAllEmployees() {
-        return employeeService.deleteAllEmployees();
+    public void deleteAllEmployees() throws EMSException {
+        employeeService.deleteAllEmployees();
     }
 
     /**
@@ -223,7 +227,7 @@ public class EmployeeController {
      *
      * @return true if that particular employee was deleted.
      */
-    public void deleteParticularEmployee(int employeeId) {
+    public void deleteParticularEmployee(int employeeId) throws EMSException {
         employeeService.deleteParticularEmployee(employeeId);
     }
 
@@ -232,7 +236,7 @@ public class EmployeeController {
      *
      * @return all the projects as List<ProjectDTO>.
      */
-    public List<ProjectDTO> getAllProjects() {
+    public List<ProjectDTO> getAllProjects() throws EMSException {
         return employeeService.getAllProjects();
     }
 
@@ -242,7 +246,7 @@ public class EmployeeController {
      * @return true if that particular project id is present in the
      * database.
      */
-    public boolean isProjectIdExists(int projectId) {
+    public boolean isProjectIdExists(int projectId) throws EMSException {
         return employeeService.isProjectIdExists(projectId);
     }
 
@@ -251,7 +255,7 @@ public class EmployeeController {
      *
      * @return true if the project database is empty.
      */
-    public boolean isProjectDbIsEmpty() {
+    public boolean isProjectDbIsEmpty() throws EMSException {
         return employeeService.isProjectDbIsEmpty();
     }
     
@@ -264,7 +268,8 @@ public class EmployeeController {
      *
      * @return true if the Project is already assigned.
      */
-    public boolean isAlreadyAssigned(int employeeId, int projectId) {
+    public boolean isAlreadyAssigned(int employeeId, int projectId)
+            throws EMSException {
         return employeeService.isAlreadyAssigned(employeeId, projectId); 
     }
 
@@ -275,7 +280,7 @@ public class EmployeeController {
      *
      * @return particular project as ProjectDTO object.
      */
-    public ProjectDTO getParticularProject(int projectId) {
+    public ProjectDTO getParticularProject(int projectId) throws EMSException {
         return employeeService.getParticularProject(projectId);
     }
 }

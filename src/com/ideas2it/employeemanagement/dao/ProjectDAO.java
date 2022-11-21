@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.model.Project;
 
 /**
@@ -32,21 +34,14 @@ public interface ProjectDAO {
      *
      * @return generated project id as int.
      */
-    int insertProject(Project project);
-
-    /**
-     * gets all the project id.
-     *
-     * @return all the project id as List<Integer>.
-     */
-    List<Integer> getAllProjectId();
+    int insertProject(Project project) throws EMSException;
 
     /**
      * Retrives All the projects from the Database.
      *
      * @return all the projects as List<Project>
      */
-    List<Project> getAllProjects();
+    List<Project> getAllProjects() throws EMSException;
 
     /**
      * Retrives the particular project from the Database.
@@ -55,26 +50,24 @@ public interface ProjectDAO {
      *
      * @return particular project as Project object
      */
-    Project getParticularProject(int projectId);
+    Project getParticularProject(int projectId) throws EMSException;
 
     /**
      * updates the projects.
      *
      * @param project as Project object.
      */
-    void updateProject(Project project);
+    void updateProject(Project project) throws EMSException;
 
     /**
      * Deletes all the projects in the database.
-     *
-     * @return number of rows affected as int.
      */
-    int deleteAllProjects();
+    void deleteAllProjects() throws EMSException;
 
     /**
      * Deletes the particular project in the database.
      *
      * @param projectId as int.
      */
-    void deleteParticularProject(int projectId);
+    void deleteParticularProject(int projectId) throws EMSException;
 }

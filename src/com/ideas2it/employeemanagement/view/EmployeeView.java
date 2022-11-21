@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022, Ideas2it, Inc. All Rights Reserved.
  *
@@ -16,12 +17,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Scanner;
 
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.controller.EmployeeController;
 import com.ideas2it.employeemanagement.controller.ProjectController;
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
-import com.ideas2it.employeemanagement.model.Employee;
-import com.ideas2it.employeemanagement.view.ProjectView;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
+import com.ideas2it.employeemanagement.logger.LoggerFactory;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Contains all the statements to be shown to the users.
@@ -31,12 +34,12 @@ import com.ideas2it.employeemanagement.view.ProjectView;
  * @author IMRAN NAZIR K
  *
  * @version 4.0
- *
  */
 public class EmployeeView {
 
-    private EmployeeController employeeController = new EmployeeController();
-    private Scanner scanner = new Scanner(System.in);
+    private static final EmployeeController employeeController = new EmployeeController();
+    private static final Logger logger = LoggerFactory.getFactory();
+    private static final Scanner scanner = new Scanner(System.in);
 
     public EmployeeView() {
     }
@@ -50,7 +53,7 @@ public class EmployeeView {
         boolean isValid = false; 
 
         do {
-            showUserMenu();
+            logger.info(Constants.EMPLOYEE_USER_MENU);
             choice = getChoice();
 
             switch (choice) {
@@ -75,24 +78,9 @@ public class EmployeeView {
                     break;
 
                 default:
-                    System.out.println("\n-----Invalid choice-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
             }
         } while (!isValid); 
-    }
-
-    /**
-     * Displays menu to the users to choose the operations like
-     * create, update, display, delete operations.
-     */
-    private void showUserMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\n*************************")
-                .append("*************************************\n************")
-                .append("****** EMPLOYEE MANGEMENT ********************\n***")
-                .append("***************************************************")
-                .append("******\n 1. CREATE\n 2. DISPLAY\n 3. UPDATE\n")
-                .append(" 4. DELETE\n 5. EXIT\n"));
     }
 
     /**
@@ -104,7 +92,7 @@ public class EmployeeView {
 
         do {
             createEmployees();
-            viewCreateMenu();
+            logger.info(Constants.CREATE_MENU);
             choice = getChoice();
 
             switch (choice) {
@@ -117,22 +105,10 @@ public class EmployeeView {
                     break;
              
                 default:
-                    System.out.print("\n-----Invalid Choice-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
                     isContinue = true;
             }
         } while (isContinue);
-    }
-
-    /**
-     * Displays menu for continuing creating employee or
-     * to stop creating employee.
-     */
-    private void viewCreateMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append(" Do you want to Continue ?")
-                .append("\n-> PRESS 1 to Create Another Employee")
-                .append("\n-> PRESS 2 to Main Menu"));
     }
 
     /**
@@ -145,9 +121,12 @@ public class EmployeeView {
                 getEmployeeMailId(), getEmployeeContactNumber(),
                 getEmployeeSalary(), getEmployeeBirthDate());
 
-        employeeId = employeeController.insertEmployee(employeeDto);
-            System.out.print("\n---Employee Created with Id : ");
-            System.out.println(employeeId + "---\n");
+        try {
+            employeeId = employeeController.insertEmployee(employeeDto);
+            logger.info(Constants.CREATED_ID + employeeId);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
     }
 
     /**
@@ -160,12 +139,12 @@ public class EmployeeView {
         String employeeName = new String();
 
         do {
-            System.out.print("Enter the Employee Name\t\t\t\t: ");
+            logger.info(Constants.ENTER_NAME);
             employeeName = scanner.nextLine();
             isValid = employeeController.validateEmployeeName(employeeName);
 
             if (!isValid) {
-                System.out.println("\n-----Enter a valid Name-----\n");
+                logger.warn(Constants.INVALID_NAME);
             } 
         } while (!isValid);
         return (employeeName.toUpperCase());
@@ -177,25 +156,30 @@ public class EmployeeView {
      * @return the validated employee's mail Id.
      */
     private String getEmployeeMailId() {
-        String employeeMailId = new String();
         boolean isValid = false;
+        String employeeMailId = new String();
 
         do {
-            System.out.print("Enter the Employee Mail ID\t\t\t: ");
+            logger.info(Constants.ENTER_MAIL_ID);
             employeeMailId = scanner.nextLine();
 
             isValid = employeeController
                     .validateEmployeeMailId(employeeMailId);
 
             if (!isValid) {
-                System.out.println("\n-----Enter Valid Email ID-----\n");
+                logger.warn(Constants.INVALID_MAIL);
             } 
  
-            if (employeeController.isMailIdExists(employeeMailId)) {
-                System.out.print("\n" + employeeMailId);
-                System.out.println(" Already Exists Try Another MailId\n");
-                isValid = false;
+            try {
+
+                if (employeeController.isMailIdExists(employeeMailId)) {
+                    logger.warn(employeeMailId + Constants.EXISTING_MAIL);
+                    isValid = false;
+                }
+            } catch (EMSException exception) {
+                logger.error(exception.getMessage());
             }
+    
         } while (!isValid);
         return (employeeMailId.toLowerCase());
     } 
@@ -210,19 +194,24 @@ public class EmployeeView {
         String employeeContactNumber = new String();
 
         do {
-            System.out.print("Enter the Employee Contact Number\t\t: ");
+            logger.info(Constants.ENTER_CONTACT_NUMBER);
             employeeContactNumber = scanner.nextLine();
 
             isValid = employeeController
                     .validateEmployeeContactNumber(employeeContactNumber);
 
-            if (!isValid) {
-                System.out.println("\n----Enter a valid Contact Number----\n");
-            } else if (employeeController
-                    .isContactNumberExists(employeeContactNumber)) {
-                System.out.print("\n" + employeeContactNumber);
-                System.out.println(" Already Exists Try Another Number\n");
-                isValid = false;
+            try {
+
+                if (!isValid) {
+                    logger.warn(Constants.INVALID_CONTACT_NUMBER );
+                } else if (employeeController
+                        .isContactNumberExists(employeeContactNumber)) {
+                    logger.warn(employeeContactNumber 
+                            + Constants.EXISTING_CONTACT_NUMBER);
+                    isValid = false;
+                }
+            } catch (EMSException exception) {
+                logger.error(exception.getMessage());
             }
         } while (!isValid);
         return Long.parseLong(employeeContactNumber);
@@ -238,14 +227,14 @@ public class EmployeeView {
         String employeeSalary = new String();
 
         do {
-            System.out.print("Enter the Employee Salary\t\t\t: ");
+            logger.info(Constants.ENTER_SALARY);
             employeeSalary = scanner.nextLine();
 
             isValid = employeeController
                     .validateEmployeeSalary(employeeSalary);
 
             if (!isValid) {
-                System.out.println("\n-----Enter a valid salary-----\n");
+                logger.warn(Constants.INVALID_SALARY);
             }
         } while (!isValid);
         return Double.parseDouble(employeeSalary);
@@ -261,14 +250,14 @@ public class EmployeeView {
         String dateOfBirth = new String();
 
         do {
-            System.out.print("Enter the Date Of Birth\t\t\t\t: ");
+            logger.info(Constants.ENTER_DATE_OF_BIRTH);
             dateOfBirth = scanner.nextLine();
 
             isValid = employeeController
                     .validateEmployeeBirthDate(dateOfBirth);
 
             if (!isValid) {
-                System.out.println("\n-----Enter a valid date-----\n");
+                logger.warn(Constants.INVALID_DATE_OF_BIRTH);
             }
         } while (!isValid);
         return LocalDate.parse(dateOfBirth);
@@ -278,10 +267,15 @@ public class EmployeeView {
      * checks whether the database is empty.
      */
     private void displayEmployee() {
-        if (employeeController.isDbIsEmpty()) {
-            System.out.println("\n-----No Employee Available-----\n");
-        } else {
-            performDisplayEmployee();
+        try {
+
+            if (employeeController.isDbIsEmpty()) {
+                logger.info(Constants.NO_EMPLOYEES);
+            } else {
+                performDisplayEmployee();
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -293,7 +287,7 @@ public class EmployeeView {
         boolean isValid = false;
 
         do {
-            viewDisplayMenu();
+            logger.info(Constants.DISPLAY_MENU);
             choice = getChoice();
 
             switch (choice) {
@@ -311,7 +305,7 @@ public class EmployeeView {
                     break;
 
                 default:
-                    System.out.print("\n-----Invalid Input-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
                     isValid = true;
             }
         } while (isValid);
@@ -321,25 +315,17 @@ public class EmployeeView {
      * Displays All Employees available in the Database.
      */ 
     private void displayAllEmployees() {
-        for (EmployeeDTO employee : employeeController
-                .getAllEmployees()) {
-            System.out.println(employee);
-            displayProjects(employee);
-            System.out.println("\n----------------------------\n");
+        try {
+
+            for (EmployeeDTO employee : employeeController
+                    .getAllEmployees()) {
+                logger.info(employee);
+                displayProjects(employee);
+                logger.info(Constants.LINE);
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
-    }
-
-    /**
-     * Displays Menu to user to display particular or all employees.
-     */
-    private void viewDisplayMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\n --> PRESS 1 to ")
-                .append("print ALL Employee Details,")
-                .append("\n --> PRESS 2 to print")
-                .append(" Particular Employee Detail: ")
-                .append("\n --> PRESS 3 to Main Menu\n"));
     }
 
     /**
@@ -350,25 +336,29 @@ public class EmployeeView {
      * @return true when it displays particular Employee. 
      */
     private boolean displayParticularEmployee(boolean isValid) {
-        EmployeeDTO employeeDto = null;
         boolean isContinue = false;
         int employeeId = 0;
+        EmployeeDTO employeeDto = null;
 
-        do {
-            employeeId = getEmployeeId();
-            isValid = employeeController.isIdExists(employeeId); 
+        try {
 
-            if (isValid) {          
-                employeeDto = employeeController
-                        .getParticularEmployee(employeeId);
-                System.out.println(employeeDto);
-                displayProjects(employeeDto);
-                isContinue = true;
-            } else {
-                System.out.print("\n---Employee ID : " + employeeId);
-                System.out.print(" not found Try Another Employee ID---\n");
-            }
-        } while (!isContinue);
+            do {
+                employeeId = getEmployeeId(); 
+                isValid = employeeController.isIdExists(employeeId);
+
+                if (isValid) {
+                    employeeDto = employeeController
+                            .getParticularEmployee(employeeId);
+                    logger.info(employeeDto);
+                    displayProjects(employeeDto);
+                    isContinue = true;
+                } else {
+                    logger.info(employeeId + Constants.ID_NOT_FOUND);
+                }
+            } while (!isContinue);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
         return isValid;
     }
 
@@ -381,16 +371,17 @@ public class EmployeeView {
         boolean isValid = false;
         int employeeId = 0;
 
-        do {
-            try {   
-                System.out.print("\nEnter the Employee ID\t\t\t\t: ");
+        try { 
+
+            do {  
+                logger.info(Constants.ENTER_EMPLOYEE_ID);
                 employeeId = Integer.parseInt(scanner.nextLine());
                 isValid = true;
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("\n-----Invalid Input Format-----\n");
-                isValid = true;
-            }
-        } while (!isValid);
+            } while (!isValid);
+        } catch (NumberFormatException numberFormatException) {
+            logger.warn(Constants.INVALID_FORMAT);
+            isValid = true;
+        }
         return employeeId;
     }
 
@@ -401,12 +392,12 @@ public class EmployeeView {
      */
     private void displayProjects(EmployeeDTO employee) {
         if (employee.getProjectList().isEmpty()) {
-            System.out.println(" Projects\t     : NOT ASSIGNED");
+            logger.info(Constants.PROJECTS_NULL);
         } else {
-            System.out.print("\n---Projects---\n");
+            logger.info(Constants.PROJECTS);
 
             for (ProjectDTO project : employee.getProjectList()) {
-                System.out.println(project);
+                logger.info(project);
             }
         }
     }
@@ -419,14 +410,19 @@ public class EmployeeView {
     private void updateEmployee() {
         boolean isContinue = false;
 
-        if (employeeController.isDbIsEmpty()) {
-            System.out.println("\n-----No Employees Available-----\n");
-        } else {
+        try {
 
-            do {
-                performUpdateEmployee();
-                isContinue = continueUpdate();
-            } while (isContinue); 
+            if (employeeController.isDbIsEmpty()) {
+                logger.info(Constants.NO_EMPLOYEES);
+            } else {
+
+                do {
+                    performUpdateEmployee();
+                    isContinue = continueUpdate();
+                } while (isContinue); 
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -440,80 +436,74 @@ public class EmployeeView {
         boolean isValid = false;
         boolean isExists = false;
 
-        do {
-            employeeId = getEmployeeId();
 
-            if (employeeController.isIdExists(employeeId)) {
+        try {
 
-                do {
-                    viewUpdateMenu();
-                    choice = getChoice();
+            do {
+                employeeId = getEmployeeId();
 
-                    switch (choice) {
-                        case 1:
-                            updateAllFields(employeeId);
-                            break;
+                if (employeeController.isIdExists(employeeId)) {
 
-                        case 2:
-                            updateParticularField(employeeId);
-                            break;
+                    do {
+                        logger.info(Constants.UPDATE_MENU);
+                        choice = getChoice();
 
-                        case 3:
-                            assignProject(employeeId);
-                            break;
+                        switch (choice) {
+                            case 1:
+                                updateAllFields(employeeId);
+                                break;
 
-                        case 4:
-                            unAssignProject(employeeId);
-                            break;
+                            case 2:
+                                updateParticularField(employeeId);
+                                break;
 
-                        case 5:
-                            isValid = true;
-                            break;
+                            case 3:
+                                assignProject(employeeId);
+                                break;
 
-                        default:
-                            System.out.println("\n-----Invalid Choice-----\n");
-                    }
-                } while (!isValid);
-            } else {
-                System.out.print("\n---Employee ID " + employeeId);
-                System.out.println(" does not exists---\n");
-                isExists = true;
-            }
-        } while (isExists);
-    }
+                            case 4:
+                                unAssignProject(employeeId);
+                                break;
 
-    /**
-     * Displays menu to update all the details of an
-     * employee or to update single field of an employee.
-     */
-    private void viewUpdateMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
+                            case 5:
+                                isValid = true;
+                                break;
 
-        System.out.print(stringBuilder.append("\n --> PRESS 1 to UPDATE ALL")
-                .append(" FIELDS\n --> PRESS 2 to UPDATE PARTICULAR FIELD: ")
-                .append("\n --> PRESS 3 to ASSIGN PROJECT\n --> PRESS 4 to ")
-                .append("UNASSIGN PROJECT \n --> PRESS 5 to Main Menu \n"));
+                            default:
+                                logger.warn(Constants.INVALID_CHOICE);
+                        }
+                    } while (!isValid);
+                } else {
+                    logger.info(employeeId + Constants.ID_NOT_FOUND);
+                    isExists = true;
+                }
+            } while (isExists);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
     }
 
     /**
      * Updates all the fields of an Employee.
      */
     private void updateAllFields(int employeeId) {
-        EmployeeDTO employeeDto = employeeController
-                .getParticularEmployee(employeeId);
-                       
-        employeeDto.setEmployeeName(getEmployeeName());
-        employeeDto.setEmployeeMailId(getEmployeeMailId(employeeId));
-        employeeDto.setEmployeeContactNumber
-                (getEmployeeContactNumber(employeeId));
-        employeeDto.setEmployeeSalary(getEmployeeSalary());
-        employeeDto.setEmployeeDateOfBirth(getEmployeeBirthDate());
+        EmployeeDTO employeeDto = null;
 
         try {
+            employeeDto = employeeController
+                    .getParticularEmployee(employeeId);
+                       
+            employeeDto.setEmployeeName(getEmployeeName());
+            employeeDto.setEmployeeMailId(getEmployeeMailId(employeeId));
+            employeeDto.setEmployeeContactNumber
+                    (getEmployeeContactNumber(employeeId));
+            employeeDto.setEmployeeSalary(getEmployeeSalary());
+            employeeDto.setEmployeeDateOfBirth(getEmployeeBirthDate());
+
             employeeController.updateEmployee(employeeDto);
-            System.out.println("\n---Employee Details Updated---\n");
-        } catch(HibernateException hibernateException) {
-            System.out.println(hibernateException.getMessage());
+            logger.info(Constants.EMPLOYEE_UPDATED);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -523,31 +513,20 @@ public class EmployeeView {
     private void updateParticularField(int employeeId) {
         byte field;
         boolean isContinue = false;
+        EmployeeDTO employeeDto = null;
 
-        EmployeeDTO employeeDto = employeeController.
-                getParticularEmployee(employeeId);
+        try {
+            employeeDto = employeeController.
+                    getParticularEmployee(employeeId);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
 
         do {
-            viewParticularUpdateMenu();
+            logger.info(Constants.PARTICULAR_UPDATE_MENU);
             field = getChoice();
             isContinue = selectUpdateField(field, employeeDto, employeeId);
         } while (isContinue);
-    }
-
-    /**
-     * Displays the fields to update the particular Field of an 
-     * employee.
-     */
-    private void viewParticularUpdateMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\nEnter\n  -->")
-                .append(" 1 for NAME. \n")
-                .append("  --> 2 for MAIL ID. \n")
-                .append("  --> 3 for CONTACT NUMBER. \n")
-                .append("  --> 4 for SALARY. \n")
-                .append("  --> 5 for DATE OF BIRTH ")
-                .append("\n  --> 6 to Exit "));
     }
 
     /**
@@ -593,15 +572,15 @@ public class EmployeeView {
             case 6:
                 try {
                     employeeController.updateEmployee(employeeDto);
-                    System.out.println("\n---Employee Details Updated---\n");
-                } catch(HibernateException hibernateException) {
-                    System.out.println(hibernateException.getMessage());
+                    logger.info(Constants.EMPLOYEE_UPDATED);
+                } catch (EMSException exception) {
+                    logger.error(exception.getMessage());
                 } 
                 isContinue = false;
                 break;
 
             default:
-                System.out.println("\n-----Invalid Choice-----\n");  
+                logger.warn(Constants.INVALID_CHOICE);  
                 isContinue = true;              
                 break;
         }
@@ -673,7 +652,7 @@ public class EmployeeView {
         boolean isValid = false;
 
         do {
-            viewUpdateMenuToContinue();
+            logger.info(Constants.UPDATE_MENU_TO_CONTINUE);
             choice = getChoice();
 
             switch (choice) {
@@ -688,22 +667,11 @@ public class EmployeeView {
                     break;
 
                 default:
-                    System.out.println("\n-----Invalid Input-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
                     isValid = false;
             }
         } while (!isValid);
         return isContinue;
-    }
-
-    /**
-     * Displays menu to continue updating Employee or to stop
-     * updating employee.
-     */
-    private void viewUpdateMenuToContinue() {
-        StringBuilder stringBuilder = new StringBuilder();
-        System.out.println(stringBuilder.append("\nDo You want to ")
-                .append("Update Another Employee?\n--> PRESS 1 to ")
-                .append("CONTINUE.\n--> PRESS 2 to STOP."));
     }
 
     /**
@@ -719,21 +687,26 @@ public class EmployeeView {
         boolean isValid = false;
 
         do {
-            System.out.print("Enter the Employee Mail ID\t\t\t: ");
+            logger.info(Constants.ENTER_MAIL_ID);
             mailId = scanner.nextLine();
 
             if (employeeController.validateEmployeeMailId(mailId)) {
 
-                if (employeeController.isMailIdExists(mailId,
-                        employeeId)) {
-                    System.out.print("\n---" + mailId + " Already Exists" );
-                    System.out.println(" Try Another Mail Id---\n");
+                try {
+
+                    if (employeeController.isMailIdExists(mailId,
+                            employeeId)) {
+                        logger.info(mailId + Constants.EXISTING_MAIL);
+                        isValid = false;
+                    } else {
+                        isValid = true;
+                    }
+                } catch (EMSException exception) {
+                    logger.error(exception.getMessage());
                     isValid = false;
-                } else {
-                    isValid = true;
                 }
             } else {
-                System.out.println("\n----Invalid Email Id----\n");
+                logger.warn(Constants.INVALID_MAIL);
                 isValid = false;
             }
         } while (!isValid);
@@ -753,22 +726,28 @@ public class EmployeeView {
         boolean isValid = false;
 
         do {
-            System.out.print("Enter the Employee Contact Number\t\t: ");
+            logger.info(Constants.ENTER_CONTACT_NUMBER);
             contactNumber = scanner.nextLine();
 
             if (employeeController
                     .validateEmployeeContactNumber(contactNumber)) {
 
-                if (employeeController.isContactNumberExists(Long
-                        .parseLong(contactNumber), employeeId)) {
-                    System.out.print("\n" + contactNumber + " Already Exists");
-                    System.out.println(" Try Another Number\n");
+                try {
+
+                    if (employeeController.isContactNumberExists(Long
+                            .parseLong(contactNumber), employeeId)) {
+                        logger.info(contactNumber 
+                               + Constants.EXISTING_CONTACT_NUMBER);
+                        isValid = false;
+                    } else {
+                        isValid = true;
+                    }
+                } catch (EMSException exception) {
+                    logger.error(exception.getMessage());
                     isValid = false;
-                } else {
-                    isValid = true;
                 }
             } else {
-                System.out.println("\n----Enter a Valid Contact Number---\n");
+                logger.error(Constants.INVALID_CONTACT_NUMBER);
                 isValid = false;
             }
         } while (!isValid);
@@ -784,30 +763,35 @@ public class EmployeeView {
         byte choice;
         boolean isContinue = false;
 
-        if (employeeController.isProjectDbIsEmpty()) {
-            System.out.println("\n---No Projects Available---\n");
-        } else {
+        try {
 
-            do {
-                assignProjects(employeeId);
-                viewContinueAssignProject();
+            if (employeeController.isProjectDbIsEmpty()) {
+                logger.info(Constants.NO_PROJECTS);
+            } else {
 
-                choice = getChoice();
+                do {
+                    assignProjects(employeeId);
+                    logger.info(Constants.CONTINUE_ASSIGN_PROJECTS);
 
-                switch (choice) {
-                    case 1:
-                        isContinue = true;
-                        break;
+                    choice = getChoice();
 
-                    case 2:
-                        isContinue = false;
-                        break;
+                    switch (choice) {
+                        case 1:
+                            isContinue = true;
+                            break;
 
-                    default:
-                        System.out.println("\n---Invalid Input---\n");
-                        isContinue = true;
-                }
-            } while (isContinue);
+                        case 2:
+                            isContinue = false;
+                            break;
+
+                        default:
+                            logger.warn(Constants.INVALID_CHOICE);
+                            isContinue = true;
+                    }
+                } while (isContinue);
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -817,23 +801,25 @@ public class EmployeeView {
      * @param employeeId as int.
      */
     private void assignProjects(int employeeId) {
-        boolean isPresent = false;
+        boolean isAssigned = false;
         int projectId;
 
-        do {
-            displayProjects();
-            projectId = getProjectId();
+        try {
+            do {
+                displayProjects();
+                projectId = getProjectId();
 
-            if (employeeController.isAlreadyAssigned(employeeId, projectId)) {
-                System.out.print("\n---Project Already Assigned Try");
-                System.out.println(" Another Project---\n");
-                isPresent = true;
-              System.out.println("in assign");
-            } else {
-                assignEmployeeToProject(employeeId, projectId);
-                isPresent = false;
-            }
-        } while (isPresent);
+                if (employeeController.isAlreadyAssigned(employeeId,
+                        projectId)) {
+                    logger.info(Constants.PROJECT_ALREADY_ASSIGNED);
+                } else {
+                    assignEmployeeToProject(employeeId, projectId);
+                    isAssigned = true;
+                }
+            } while (!isAssigned);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
     }
 
     /**
@@ -843,34 +829,25 @@ public class EmployeeView {
      * @param projectId as int.
      */
     private void assignEmployeeToProject(int employeeId, int projectId) {
+        EmployeeDTO employeeDto = null;
+        ProjectDTO projectDto = null;
         Set<ProjectDTO> projects = new HashSet<ProjectDTO>();
 
-        EmployeeDTO employeeDto = employeeController
-                .getParticularEmployee(employeeId);
-        ProjectDTO projectDto = employeeController
-                .getParticularProject(projectId);
+        try {
+            employeeDto = employeeController
+                    .getParticularEmployee(employeeId);
+            projectDto = employeeController
+                    .getParticularProject(projectId);
 
-        projects = employeeDto.getProjectList();
-        projects.add(projectDto);
-        employeeDto.setProjectList(projects);
-
-        try {            
+            projects = employeeDto.getProjectList();
+            projects.add(projectDto);
+            employeeDto.setProjectList(projects);
+          
             employeeController.updateEmployee(employeeDto);
-            System.out.println("\n---Project Assinged Successfully---\n");
-        } catch(HibernateException hibernateException) {
-            System.out.println(hibernateException.getMessage());
+            logger.info(Constants.PROJECT_ASSIGNED);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
-    }
-
-    /**
-     * Displays menu to continue Assigning Project.
-     */
-    private void viewContinueAssignProject() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append(" Do you want to Continue ?")
-                .append("\n-> PRESS 1 to Assign Another Project to Employee")
-                .append("\n-> PRESS 2 to Main Menu"));
     }
 
     /**
@@ -882,28 +859,33 @@ public class EmployeeView {
         byte choice;
         boolean isContinue = false;
 
-        if (employeeController.isProjectDbIsEmpty()) {
-            System.out.println("\n---No Projects Available---\n");
-        } else {
+        try {
 
-            do {
-                unAssignProjects(employeeId);
-                viewContinueUnAssignProject();
-                choice = getChoice();
+            if (employeeController.isProjectDbIsEmpty()) {
+                logger.info(Constants.NO_PROJECTS);
+            } else {
 
-                switch (choice) {
-                    case 1:
-                        isContinue = true;
-                        break;
+                do {
+                    unAssignProjects(employeeId);
+                    logger.info(Constants.CONTINUE_UNASSIGN_PROJECTS);
+                    choice = getChoice();
 
-                    case 2:
-                       isContinue = false;
-                       break;
+                    switch (choice) {
+                        case 1:
+                            isContinue = true;
+                            break;
 
-                    default:
-                       System.out.println("\n---Invalid Input---\n");
-                }
-            } while (isContinue);
+                        case 2:
+                           isContinue = false;
+                           break;
+
+                        default:
+                           logger.warn(Constants.INVALID_CHOICE);
+                    }
+                } while (isContinue);
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -913,80 +895,74 @@ public class EmployeeView {
      * @param employeeId as int.
      */
     private void unAssignProjects(int employeeId) {
-        boolean isPresent = false;
+        boolean isUnassigned = false;
         int projectId = 0;
+        EmployeeDTO employeeDto = null;
+        Set<ProjectDTO> projects = new HashSet<ProjectDTO>();
 
-        EmployeeDTO employeeDto = employeeController
-                .getParticularEmployee(employeeId);
-        Set<ProjectDTO> projects = employeeDto.getProjectList();
+        try {
+            employeeDto = employeeController
+                    .getParticularEmployee(employeeId);
+            projects = employeeDto.getProjectList();
 
-        do {            
-            System.out.println("\n---Projects ----\n");
-
-            for (ProjectDTO project : projects) {
-                 System.out.println(project);
-            }
-            projectId = getProjectId();
-
-            if (employeeController.isAlreadyAssigned(employeeId, projectId)) {
+            do {            
+                logger.info(Constants.PROJECTS);
 
                 for (ProjectDTO project : projects) {
-
-                    if (projectId == project.getProjectId()) {
-                        projects.remove(project);
-                        break;
-                    }
+                    logger.info(project);
                 }
-                employeeDto.setProjectList(projects);
-                isPresent = unAssignEmployeeFromProject(employeeDto);
-            } else {
-                System.out.print("\n---Project Not Assigned Try");
-                System.out.println(" Another Project---\n");
-                isPresent = false;
-            }
-        } while (!isPresent);       
+                projectId = getProjectId();
+
+                if (employeeController.isAlreadyAssigned(employeeId,
+                        projectId)) {
+
+                    for (ProjectDTO project : projects) {
+
+                        if (projectId == project.getProjectId()) {
+                            projects.remove(project);
+                            break;
+                        }
+                    }
+                    employeeDto.setProjectList(projects);
+                    unAssignEmployeeFromProject(employeeDto);
+                    isUnassigned = true;
+                } else {
+                    logger.info(Constants.PROJECT_NOT_ASSIGNED);
+                }
+            } while (!isUnassigned); 
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }      
     }
 
     /**
      * Displays menu to continue Assigning Project.
      *
      * @param employeeDto as EmployeeDTO object.
-     *
-     * @return true if project is un-assigned.
      */
-    private boolean unAssignEmployeeFromProject(EmployeeDTO employeeDto) {
-        boolean isUnAssigned = false;
+    private void unAssignEmployeeFromProject(EmployeeDTO employeeDto) {
 
         try {
             employeeController.updateEmployee(employeeDto);
-            System.out.println("\n---Project UnAssinged Successfully---\n");
-            isUnAssigned = true;
-        } catch(HibernateException hibernateException) {
-            System.out.println(hibernateException.getMessage());
-            isUnAssigned  = false;
+            logger.info(Constants.PROJECT_UNASSIGNED);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
-        return isUnAssigned;
-    }
-
-    /**
-     * Displays menu to continue Assigning Project.
-     */
-    private void viewContinueUnAssignProject() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append(" Do you want to Continue ?")
-                .append("\n-> PRESS 1 to UnAssign Another Project")
-                .append("\n-> PRESS 2 to Main Menu"));
     }
 
     /**
      * Displays all the project available in the database.
      */
     private void displayProjects() {
-        System.out.println("\n---Available Projects---\n");
-                
-        for (ProjectDTO project : employeeController.getAllProjects()) {
-            System.out.println(project);
+        logger.info(Constants.AVAILABLE_PROJECTS);
+
+        try {
+
+            for (ProjectDTO project : employeeController.getAllProjects()) {
+                logger.info(project);
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -999,23 +975,24 @@ public class EmployeeView {
         int projectId = 0;
         boolean isValid = false;
 
-        do {
-            try {   
-                System.out.print("\nEnter the Project ID\t\t\t\t: ");
+        try {
+            do {   
+                logger.info(Constants.ENTER_PROJECT_ID);
                 projectId = Integer.parseInt(scanner.nextLine());
 
                 if (employeeController.isProjectIdExists(projectId)) {
                     isValid = true;
                 } else {
-                    System.out.print("\n---Project Id " + projectId);
-                    System.out.println(" does not exists---\n");
+                    logger.info(projectId + Constants.ID_NOT_FOUND);
                     isValid = false;
                 }
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("\n-----Invalid Input Format-----\n");
-                isValid = false;
-            }
-        } while (!isValid);
+            } while (!isValid);
+        } catch (NumberFormatException  numberFormatException) {
+            logger.warn(Constants.INVALID_FORMAT);
+            isValid = false;
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
         return projectId;
     }
 
@@ -1025,10 +1002,14 @@ public class EmployeeView {
      * Deletes Employee from the Database.
      */
     private void deleteEmployee() {
-        if (employeeController.isDbIsEmpty()) {
-            System.out.println("\n-----No Employees Available-----\n");
-        } else {
-            performDeleteEmployee();
+        try {
+            if (employeeController.isDbIsEmpty()) {
+                logger.info(Constants.NO_EMPLOYEES);
+            } else {
+                performDeleteEmployee();
+            }
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
         }
     }
 
@@ -1040,17 +1021,18 @@ public class EmployeeView {
         boolean isValid = false;
 
         do {
-            viewDeleteMenu();
+            logger.info(Constants.DELETE_MENU);
             byte choice = getChoice();
 
             switch (choice) {
                 case 1:
-                    if (employeeController.deleteAllEmployees()) {
-                        System.out.println("\n-----Employees Cleared-----\n");
-                    } else {
-                        System.out.println("\n-Error in Deleting Employee-\n");
+                    try {
+                        employeeController.deleteAllEmployees();
+                        logger.info(Constants.EMPLOYEES_DELETED);
+                        isValid = true;
+                    } catch (EMSException exception) {
+                        logger.error(exception.getMessage());
                     }
-                    isValid = true;
                     break;
 
                 case 2:
@@ -1062,7 +1044,7 @@ public class EmployeeView {
                     break;
 
                 default:
-                    System.out.print("\n-----Invalid Choice-----\n");
+                    logger.warn(Constants.INVALID_CHOICE);
                     isValid = false;
             }
         } while (!isValid);
@@ -1079,39 +1061,24 @@ public class EmployeeView {
         int employeeId;
         boolean isContinue = false;
 
-        do {
-            employeeId = getEmployeeId();
+        try {
 
-            if (employeeController.isIdExists(employeeId)) {
+            do {
+                employeeId = getEmployeeId();
 
-                try {
+                if (employeeController.isIdExists(employeeId)) {
                     employeeController.deleteParticularEmployee(employeeId);
-                    System.out.print("\n---Employee ID " + employeeId);
-                    System.out.println(" Deleted---\n");
+                    logger.info(employeeId + Constants.EMPLOYEE_DELETED);
                     isValid = true;
                     isContinue = true;
-                } catch (HibernateException hibernateException) {
-                    System.out.println(hibernateException.getMessage());
+                } else {
+                    logger.info(employeeId + Constants.ID_NOT_FOUND);
                 }
-            } else {
-                 System.out.print("\n---Employee ID " + employeeId + " - Id");
-                 System.out.print(" not found Try another ID---\n");
-            }
-        } while (!isContinue);
+            } while (!isContinue);
+        } catch (EMSException exception) {
+            logger.error(exception.getMessage());
+        }
         return isValid;
-    }
-
-    /**
-     * Displays Menu for Deleting All employees or particular
-     * Employee to the user.
-     */
-    private void viewDeleteMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.print(stringBuilder.append("\n --> PRESS 1 ")
-                .append("to Delete All Employee Details ")
-                .append("\n --> PRESS 2 to Delete Particular Employee ")
-                .append("Detail: \n --> Press 3 to Main Menu \n"));
     }
 
     /**
@@ -1123,7 +1090,7 @@ public class EmployeeView {
         byte choice = 0;
 
         try {
-            System.out.print("Enter the choice: ");
+            logger.info(Constants.ENTER_CHOICE);
             choice = Byte.parseByte(scanner.nextLine());
         } catch (NumberFormatException numberFormatException ) {
         }

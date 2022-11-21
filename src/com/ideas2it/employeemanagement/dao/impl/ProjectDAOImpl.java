@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -15,9 +16,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session; 
 import org.hibernate.Transaction;
 
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.dao.ProjectDAO;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.hibernateconnection.HibernateConnection;
-import com.ideas2it.employeemanagement.dto.ProjectDTO;
 import com.ideas2it.employeemanagement.model.Project;
 
 /**
@@ -37,9 +39,9 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public int insertProject(Project project) {
-        Transaction transaction = null;
+    public int insertProject(Project project) throws EMSException {
         int projectId = 0;
+        Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
@@ -47,10 +49,11 @@ public class ProjectDAOImpl implements ProjectDAO {
             projectId = (Integer) session.save(project);
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            hiberateException.printStackTrace();
+            throw new EMSException(Constants.CREATE_PROJECT_EXCEPTION);
         }       
         return projectId;
     }
@@ -59,33 +62,9 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public List<Integer> getAllProjectId() {
-        Transaction transaction = null;
-        List<Integer> projectIds = new ArrayList<Integer>();
-
-        String hqlQuery = "select E.projectId from Project E";
-
-        try (Session session = HibernateConnection.getFactory()
-                .openSession()) {
-            transaction = session.beginTransaction();
-            projectIds = session.createQuery(hqlQuery).list();
-            transaction.commit();
-        } catch (HibernateException hiberateException) {
-            if (null != transaction) {
-                transaction.rollback();
-            }
-            hiberateException.printStackTrace();
-        }
-        return projectIds;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Project> getAllProjects() {
-        Transaction transaction = null;
-        List<Project> projects = new ArrayList<Project>();    
+    public List<Project> getAllProjects() throws EMSException {
+        List<Project> projects = new ArrayList<Project>(); 
+        Transaction transaction = null;   
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
@@ -95,7 +74,11 @@ public class ProjectDAOImpl implements ProjectDAO {
                     Project.class).list();
             transaction.commit();  
         } catch (HibernateException hiberateException) {
-            hiberateException.printStackTrace();
+
+            if (null != transaction) {
+                transaction.rollback();
+            }
+            throw new EMSException(Constants.DISPLAY_PROJECTS_EXCEPTION );
         }
         return projects;
     }    
@@ -104,17 +87,23 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public Project getParticularProject (int projectId) {
+    public Project getParticularProject (int projectId) throws EMSException {
         Project project = null;
         Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
+            transaction = session.beginTransaction();
             project = (Project)session.createQuery("SELECT p FROM Project p"
                     + " LEFT JOIN FETCH p.employeeList WHERE p.projectId =:id")
                     .setParameter("id", projectId).uniqueResult();
+            transaction.commit();
         } catch (HibernateException hiberateException) {
-            hiberateException.printStackTrace();
+
+            if (null != transaction) {
+                transaction.rollback();
+            }
+            throw new EMSException(Constants.DISPLAY_PROJECT_EXCEPTION );
         }
         return project;
     }
@@ -123,7 +112,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public void updateProject(Project project) {
+    public void updateProject(Project project) throws EMSException {
         Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
@@ -132,10 +121,11 @@ public class ProjectDAOImpl implements ProjectDAO {
             session.saveOrUpdate(project);
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            throw new HibernateException("\n--Error in Updating project--\n");
+            throw new EMSException(Constants.UPDATE_PROJECT_EXCEPTION);
         }
     }
 
@@ -143,30 +133,29 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public int deleteAllProjects() {
-        Transaction transaction = null;
+    public void deleteAllProjects() throws EMSException {
         int result = 0;
         String hqlQuery = "DELETE FROM Project";
+        Transaction transaction = null;
 
         try (Session session = HibernateConnection.getFactory()
                 .openSession()) {
             transaction = session.beginTransaction();
-            result = session.createQuery(hqlQuery).executeUpdate();
+            session.createQuery(hqlQuery).executeUpdate();
             transaction.commit();
         } catch (HibernateException hiberateException) {
             if (null != transaction) {
                 transaction.rollback();
             }
-            hiberateException.printStackTrace();
+            throw new EMSException(Constants.DELETE_PROJECTS_EXCEPTION);
         }
-        return result;
     }
 
     /*
      * {@inheritDoc}
      */
     @Override
-    public void deleteParticularProject(int projectId) {
+    public void deleteParticularProject(int projectId) throws EMSException {
         Project project = null;
         Transaction transaction = null;
 
@@ -177,10 +166,11 @@ public class ProjectDAOImpl implements ProjectDAO {
             session.delete(project);
             transaction.commit();
         } catch (HibernateException hiberateException) {
+
             if (null != transaction) {
                 transaction.rollback();
             }
-            throw new HibernateException("\n-Error in Deleting Employee-\n");
+            throw new EMSException(Constants.DELETE_PROJECT_EXCEPTION );
         }
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" name="logger">
+    <Appenders>
+        <RollingFile name="RollingFile"
+            fileName="E:\employee_management\logs\app.log"
+            filePattern="logs/$${date:yyyy-MM}/app-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c [%t] %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+    </Appenders>
+   <Loggers>
+      <Root level="info">
+         <AppenderRef ref="RollingFile"/>
+         <AppenderRef ref="STDOUT"/>
+      </Root>
+   </Loggers>
+</Configuration>

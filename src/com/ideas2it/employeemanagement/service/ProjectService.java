@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -14,6 +15,7 @@ import java.util.List;
 
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.model.Project;
 
 /**
@@ -61,21 +63,21 @@ public interface ProjectService {
      *
      * @return generated projectId as int.
      */
-    int insertProject(ProjectDTO projectDto);
+    int insertProject(ProjectDTO projectDto) throws EMSException;
 
     /**
      * checks the database whether the database is empty.
      *
      * @return true if the database is empty.
      */
-    boolean isDbIsEmpty();
+    boolean isDbIsEmpty() throws EMSException;
 
     /**
      * Retrieves all the projects from the database.
      *
      * @return all the projects as List<ProjectDTO>.
      */
-    List<ProjectDTO> getAllProjects();
+    List<ProjectDTO> getAllProjects() throws EMSException;
 
     /** 
      * Retrieves the particular project from the database.
@@ -84,7 +86,7 @@ public interface ProjectService {
      *
      * @return particular project as ProjectDTO object.
      */
-    ProjectDTO getParticularProject(int projectId);
+    ProjectDTO getParticularProject(int projectId) throws EMSException;
 
     /**
      * checks whether the Id is present in the database.
@@ -94,28 +96,26 @@ public interface ProjectService {
      * @return true if the database contains that particular 
      * project Id.
      */
-    boolean isIdExists(int projectId);
+    boolean isIdExists(int projectId) throws EMSException;
 
     /**
      * Updates the project.
      *
      * @param projectDto as ProjectDTO object.
      */
-    void updateProject(ProjectDTO projectDto);
+    void updateProject(ProjectDTO projectDto) throws EMSException;
 
     /**
      * Deletes all the projects in the database.
-     *
-     * @return true if all the project is deleted.
      */
-    boolean deleteAllProjects();
+    void deleteAllProjects() throws EMSException;
 
     /**
      * Deletes the particular project in the database.
      *
      * @param projectId as int.
      */
-    void deleteParticularProject(int projectId);
+    void deleteParticularProject(int projectId) throws EMSException;
 
     /**
      * checks whether the employee id is present in the database.
@@ -125,19 +125,19 @@ public interface ProjectService {
      * @return true if the Database contains that particular 
      * employee Id. 
      */
-    boolean isEmployeeIdExists(int employeeId);
+    boolean isEmployeeIdExists(int employeeId) throws EMSException;
 
     /**
      * Checks whether the employee database is empty or not.
      */
-    boolean isEmployeeDbIsEmpty();
+    boolean isEmployeeDbIsEmpty() throws EMSException;
 
     /**
      * Retrieves all the employees from the database.
      * 
      * @return all the employees as List<EmployeeDTO>.
      */
-    List<EmployeeDTO> getAllEmployees();
+    List<EmployeeDTO> getAllEmployees() throws EMSException;
 
     /**
      * checks whether the project is already assigned to that
@@ -148,7 +148,8 @@ public interface ProjectService {
      *
      * @return true if the project is assigned to an employee.
      */
-    boolean isAlreadyAssigned(int projectId, int employeeId);
+    boolean isAlreadyAssigned(int projectId, int employeeId)
+            throws EMSException;
 
     /**
      * Gets the particular employee from the database.
@@ -157,5 +158,5 @@ public interface ProjectService {
      *
      * @return particular employee as EmployeeDTO object.
      */
-    EmployeeDTO getParticularEmployee(int employeeId);
+    EmployeeDTO getParticularEmployee(int employeeId) throws EMSException;
 }

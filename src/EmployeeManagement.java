@@ -9,8 +9,10 @@
 
 import java.util.Scanner;
 
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.view.EmployeeView;
 import com.ideas2it.employeemanagement.view.ProjectView;
+//import org.apache.log4j.xml.DOMConfigurator;
 
 /**
  * performs CRUD operations for employees and projects.
@@ -24,11 +26,12 @@ public class EmployeeManagement {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String args[]) {
+   //     DOMConfigurator.configure("resources/log4j.xml");
 
         boolean isContinue = false;
 
         do {
-            showUserMenu();
+            System.out.println(Constants.USER_MENU);
 
             switch(getChoice()) {
                 case 1:
@@ -42,26 +45,14 @@ public class EmployeeManagement {
                     break;
 
                 case 3:
-                    System.out.println("\n-----Thank You-----");
+                    System.out.println(Constants.THANK_YOU);
                     isContinue = true;
                     break;
 
                 default:
-                    System.out.print("\n-----Invalid Choice-----\n");
+                    System.out.print(Constants.INVALID_CHOICE);
             }
         } while (!isContinue);  
-    }
-
-    /**
-     * Displays Menu to the users to choose the employee portal
-     * or project portal.
-     */
-    private static void showUserMenu() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        System.out.println(stringBuilder.append("\n--> PRESS 1 FOR EMPLOYEE")
-                .append(" PORTAL.\n--> PRESS 2 FOR PROJECT PORTAL.")
-                .append("\n--> PRESS 3 TO EXIT."));
     }
 
     /**
@@ -73,7 +64,7 @@ public class EmployeeManagement {
         byte choice = 0;
 
         try {
-            System.out.print("Enter the choice: ");
+            System.out.print(Constants.ENTER_CHOICE);
             choice = Byte.parseByte(scanner.nextLine());
         } catch (NumberFormatException numberFormatException ) {
         }

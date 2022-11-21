@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -14,6 +15,7 @@ import java.util.List;
 
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.service.impl.ProjectServiceImpl;
 import com.ideas2it.employeemanagement.service.ProjectService;
 
@@ -27,7 +29,7 @@ import com.ideas2it.employeemanagement.service.ProjectService;
  */
 public class ProjectController {
 
-    private ProjectService projectService = new ProjectServiceImpl();
+    private static final ProjectService projectService = new ProjectServiceImpl();
 
     public ProjectController() {
     }
@@ -73,7 +75,7 @@ public class ProjectController {
      *
      * @return generated project Id as int.
      */
-    public int insertProject(ProjectDTO projectDto) {
+    public int insertProject(ProjectDTO projectDto) throws EMSException {
         return projectService.insertProject(projectDto);
     }
 
@@ -82,7 +84,7 @@ public class ProjectController {
      *
      * @return true if the database is empty.
      */
-    public boolean isDbIsEmpty() {
+    public boolean isDbIsEmpty() throws EMSException {
         return projectService.isDbIsEmpty();
     }
 
@@ -91,7 +93,7 @@ public class ProjectController {
      *
      * @return all the projects as List<ProjectDTO>.
      */
-    public List<ProjectDTO> getAllProjects() {
+    public List<ProjectDTO> getAllProjects() throws EMSException {
         return projectService.getAllProjects();
     }
 
@@ -102,7 +104,7 @@ public class ProjectController {
      *
      * @return particular project as ProjectDTO object.
      */
-    public ProjectDTO getParticularProject(int projectId) {
+    public ProjectDTO getParticularProject(int projectId) throws EMSException {
         return projectService.getParticularProject(projectId);
     }
 
@@ -114,7 +116,7 @@ public class ProjectController {
      * @return true if the Database contains that particular 
      * project Id.
      */
-    public boolean isIdExists(int projectId) {
+    public boolean isIdExists(int projectId) throws EMSException {
         return projectService.isIdExists(projectId);
     }
 
@@ -125,17 +127,15 @@ public class ProjectController {
      *
      * @return true if the project is updated.
      */
-    public void updateProject(ProjectDTO projectDto) {
+    public void updateProject(ProjectDTO projectDto) throws EMSException {
         projectService.updateProject(projectDto);
     }
 
     /**
      * Deletes All project in the database.
-     *
-     * @return true if all the projects were deleted.
      */
-    public boolean deleteAllProjects() {
-        return projectService.deleteAllProjects();
+    public void deleteAllProjects() throws EMSException {
+        projectService.deleteAllProjects();
     }
 
     /**
@@ -145,7 +145,7 @@ public class ProjectController {
      *
      * @return true if the particular project was deleted.
      */
-    public void deleteParticularProject(int projectId) {
+    public void deleteParticularProject(int projectId) throws EMSException {
         projectService.deleteParticularProject(projectId);
     }
 
@@ -157,7 +157,7 @@ public class ProjectController {
      * @return true if the Database contains that particular 
      * employee Id.
      */
-    public boolean isEmployeeIdExists(int employeeId) {
+    public boolean isEmployeeIdExists(int employeeId) throws EMSException {
         return projectService.isEmployeeIdExists(employeeId);
     }
 
@@ -166,7 +166,7 @@ public class ProjectController {
      *
      * @return true if the database is Empty.
      */
-    public boolean isEmployeeDbIsEmpty() {
+    public boolean isEmployeeDbIsEmpty() throws EMSException {
         return projectService.isEmployeeDbIsEmpty();
     }
 
@@ -175,7 +175,7 @@ public class ProjectController {
      *
      * @return all the employees as List<EmployeeDTO>.
      */
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployees() throws EMSException {
         return projectService.getAllEmployees();
     }
 
@@ -188,7 +188,8 @@ public class ProjectController {
      *
      * @return true if the project is assigned to an employee.
      */
-    public boolean isAlreadyAssigned(int projectId, int employeeId) {
+    public boolean isAlreadyAssigned(int projectId, int employeeId)
+        throws EMSException {
         return projectService.isAlreadyAssigned(projectId, employeeId);
     }
 
@@ -199,7 +200,8 @@ public class ProjectController {
      *
      * @return particular employee as EmployeeDTO object.
      */
-    public EmployeeDTO getParticularEmployee(int employeeId) {
+    public EmployeeDTO getParticularEmployee(int employeeId) 
+            throws EMSException {
         return projectService.getParticularEmployee(employeeId);
     }
 }

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 Ideas2it, Inc. All Rights Reserved.
  *
@@ -13,10 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.dao.ProjectDAO;
 import com.ideas2it.employeemanagement.dao.impl.ProjectDAOImpl;
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
+import com.ideas2it.employeemanagement.exceptions.EMSException;
 import com.ideas2it.employeemanagement.mapper.Mapper;
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.model.Project;
@@ -28,7 +31,7 @@ import com.ideas2it.employeemanagement.service.ProjectService;
  */
 public class ProjectServiceImpl implements ProjectService {
 
-    private ProjectDAO projectDao = new ProjectDAOImpl();
+    private static final ProjectDAO projectDao = new ProjectDAOImpl();
 
     public ProjectServiceImpl() {
     }
@@ -38,8 +41,8 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public boolean validateProjectName(String projectName) {
-        return Pattern.matches("((([a-zA-Z0-9]{3,})(([ ])([a-zA-Z0-9])"
-                + "{3,})?){1,})", projectName);
+        return Pattern.matches(Constants.VALIDATE_PROJECT_NAME,
+                projectName);
     }
 
     /**
@@ -47,8 +50,8 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public boolean validateProjectDomain(String projectDomain) {
-        return Pattern.matches("((([A-Za-z]{1,}([ ]?)){1,}))((([.]?)"
-                + "([a-zA-Z]{1})){1,})", projectDomain);
+        return Pattern.matches(Constants.VALIDATE_PROJECT_DOMAIN,
+                projectDomain);
     }
 
     /**
@@ -56,15 +59,15 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public boolean validateProjectDescription(String projectDescription) {
-        return Pattern.matches("((([A-Za-z]{1,}([ ]?)){1,}))((([.]?)"
-                + "([a-zA-Z]{1})){1,})", projectDescription);
+        return Pattern.matches(Constants.VALIDATE_PROJECT_DESCRIPTION,
+                projectDescription);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int insertProject(ProjectDTO projectDto) {
+    public int insertProject(ProjectDTO projectDto) throws EMSException {
         return projectDao.insertProject(Mapper.toProject(projectDto));
     }
 
@@ -72,7 +75,7 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isDbIsEmpty() {
+    public boolean isDbIsEmpty() throws EMSException {
          return (getAllProjects().isEmpty());
     }
 
@@ -80,7 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public List<ProjectDTO> getAllProjects() {
+    public List<ProjectDTO> getAllProjects() throws EMSException {
         List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 
         for (Project project : projectDao.getAllProjects()) {
@@ -93,7 +96,7 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO getParticularProject(int projectId) {       
+    public ProjectDTO getParticularProject(int projectId) throws EMSException {
         return Mapper.projectEmployeeToDto(projectDao
                 .getParticularProject(projectId));
     }
@@ -102,14 +105,11 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isIdExists(int projectId) {
+    public boolean isIdExists(int projectId) throws EMSException {
         boolean isPresent = false;
 
-        for (int id : projectDao.getAllProjectId()) {
-            if (projectId == id) {
-                isPresent = true;
-                break;
-            } 
+        if (null != getParticularProject(projectId)) {
+            isPresent = true;
         }
         return isPresent;
     }
@@ -118,7 +118,7 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public void updateProject(ProjectDTO projectDto) {
+    public void updateProject(ProjectDTO projectDto) throws EMSException {
         projectDao.updateProject(Mapper.dtoToProjectEmployee(projectDto));
     }
 
@@ -126,20 +126,15 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public boolean deleteAllProjects() {
-        boolean isDeleted = false;
-
-        if (0 < (projectDao.deleteAllProjects())) {
-            isDeleted = true;
-        }
-        return isDeleted;
+    public void deleteAllProjects() throws EMSException {
+        projectDao.deleteAllProjects();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void deleteParticularProject(int projectId) {
+    public void deleteParticularProject(int projectId) throws EMSException {
         projectDao.deleteParticularProject(projectId);
     }
 
@@ -147,7 +142,7 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isEmployeeDbIsEmpty() {
+    public boolean isEmployeeDbIsEmpty() throws EMSException {
         EmployeeService employeeService = new EmployeeServiceImpl();
         return employeeService.isDbIsEmpty();
     }
@@ -156,7 +151,7 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isEmployeeIdExists(int employeeId) {
+    public boolean isEmployeeIdExists(int employeeId) throws EMSException {
         EmployeeService employeeService = new EmployeeServiceImpl();
         return employeeService.isIdExists(employeeId);
     }
@@ -164,7 +159,7 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * 
      */
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployees() throws EMSException {
         EmployeeService employeeService = new EmployeeServiceImpl();
         return employeeService.getAllEmployees();
     }
@@ -173,7 +168,8 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isAlreadyAssigned(int projectId, int employeeId) {
+    public boolean isAlreadyAssigned(int projectId, int employeeId)
+            throws EMSException {
         boolean isAlreadyAssigned = false;
 
         ProjectDTO project = getParticularProject(projectId);
@@ -193,7 +189,8 @@ public class ProjectServiceImpl implements ProjectService {
      * {@inheritDoc}
      */
     @Override
-    public EmployeeDTO getParticularEmployee(int employeeId) {
+    public EmployeeDTO getParticularEmployee(int employeeId)
+                throws EMSException {
         EmployeeService employeeService = new EmployeeServiceImpl();
         return employeeService.getParticularEmployee(employeeId);
     }
