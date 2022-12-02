@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+
+    <servlet>
+        <servlet-name>EmployeeController</servlet-name>
+        <servlet-class>com.ideas2it.employeemanagement.controller.EmployeeController</servlet-class>
+    </servlet>
+
+	<servlet>
+        <servlet-name>ProjectController</servlet-name>
+        <servlet-class>com.ideas2it.employeemanagement.controller.ProjectController</servlet-class>
+    </servlet> 
+       
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/getEmployeeForm</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/createEmployee</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/displayEmployee</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/displayAllEmployees</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/displayEmployeeProject</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/displayParticularEmployee</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/updateEmployee</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/getEmployeeToUpdate</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/updateAllDetails</url-pattern>
+    </servlet-mapping>
+
+	<servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/getAssignProjectForm</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/getUnAssignProjectForm</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/assignProject</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/unAssignProject</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/deleteEmployee</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/deleteAllEmployees</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/deleteParticularEmployee</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/getProjectForm</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/createProject</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/displayProject</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/displayAllProjects</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    
+    <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/displayParticularProject</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/displayProjectEmployee</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/updateProject</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/getProjectToUpdate</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/getAssignEmployeeForm</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/getUnAssignEmployeeForm</url-pattern>
+    </servlet-mapping>
+
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/updateProjectDetails</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/assignEmployee</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/unAssignEmployee</url-pattern>
+    </servlet-mapping>
+    
+	<servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/deleteProject</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/deleteAllProjects</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ProjectController</servlet-name>
+        <url-pattern>/deleteParticularProject</url-pattern>
+    </servlet-mapping>
+
+</web-app>
