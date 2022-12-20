@@ -24,17 +24,15 @@ import com.ideas2it.employeemanagement.model.Project;
  *
  * @author IMRAN NAZIR K
  *
- * @version 4.0
+ * @version 6.0
  */
 public class Mapper {
-
-    public Mapper() {
-    }
 
     /**
      * Converts EmployeeDTO object into Employee object.
      *
-     * @param employeeDto as EmployeeDTO object.
+     * @param employeeDto as EmployeeDTO object that contains an
+     *      employee.
      *
      * @return employee as Employee object.
      */
@@ -44,17 +42,19 @@ public class Mapper {
         employee.setEmployeeId(employeeDto.getEmployeeId());
         employee.setEmployeeContactNumber(employeeDto
                 .getEmployeeContactNumber());
-        employee.setEmployeeSalary(employeeDto.getEmployeeSalary());
-        employee.setEmployeeName(employeeDto.getEmployeeName());
-        employee.setEmployeeMailId(employeeDto.getEmployeeMailId());
-        employee.setEmployeeDateOfBirth(employeeDto.getEmployeeDateOfBirth().toString());
+        employee.setEmployeeSalary(Double.parseDouble(employeeDto.
+                getEmployeeSalary()));
+        employee.setEmployeeName(employeeDto.getEmployeeName().toUpperCase());
+        employee.setEmployeeMailId(employeeDto.getEmployeeMailId().toLowerCase());
+        employee.setEmployeeDateOfBirth(employeeDto.getEmployeeDateOfBirth());
         return employee;
     }
 
     /**
      * Converts EmployeeDTO object into Employee object.
      *
-     * @param employee as Employee object.
+     * @param employee as Employee object that contains an
+     *      employee.
      *
      * @return employeeDto as EmployeeDTO object.
      */
@@ -62,19 +62,21 @@ public class Mapper {
         EmployeeDTO employeeDto = new EmployeeDTO();
 				
         employeeDto.setEmployeeId(employee.getEmployeeId());
-        employeeDto.setEmployeeContactNumber(employee
-                .getEmployeeContactNumber());
-        employeeDto.setEmployeeSalary(employee.getEmployeeSalary());
+        employeeDto.setEmployeeContactNumber(employee.
+                getEmployeeContactNumber());
+        employeeDto.setEmployeeSalary(String.valueOf(employee.
+                getEmployeeSalary()));
         employeeDto.setEmployeeName(employee.getEmployeeName());
         employeeDto.setEmployeeMailId(employee.getEmployeeMailId());
-        employeeDto.setEmployeeDateOfBirth(employee.getEmployeeDateOfBirth().toString());
+        employeeDto.setEmployeeDateOfBirth(employee.getEmployeeDateOfBirth());
         return employeeDto;
     }
 
     /**
      * Converts ProjectDTO object into Project object.
      *
-     * @param projectDto as ProjectDTO object
+     * @param projectDto as ProjectDTO object that contains an
+     *      project.
      *
      * @return project as Project object.
      */
@@ -82,7 +84,7 @@ public class Mapper {
         Project project = new Project();
 
         project.setProjectId(projectDto.getProjectId());
-        project.setProjectName(projectDto.getProjectName());
+        project.setProjectName(projectDto.getProjectName().toUpperCase());
         project.setProjectDomain(projectDto.getProjectDomain());
         project.setProjectDescription(projectDto.getProjectDescription());
         return project;
@@ -91,7 +93,8 @@ public class Mapper {
     /**
      * Converts Project object into ProjectDTO object.
      *
-     * @param project as Project object.
+     * @param project as Project object that contains an
+     *      project.
      *
      * @return projectDto as ProjectDTO object.
      */
@@ -109,7 +112,8 @@ public class Mapper {
      * Converts Employee object into EmployeeDTO object and Project
      * object into ProjectDTO object.
      *
-     * @param employee as Employee object.
+     * @param employee as Employee object that contains an
+     *      employee.
      *
      * @return employeeDto as EmployeeDTO object.
      */
@@ -117,8 +121,8 @@ public class Mapper {
         EmployeeDTO employeeDto = toEmployeeDto(employee);
         Set<ProjectDTO> projectDtoList = new HashSet<ProjectDTO>();
 
-        if (! (employee.getProjects().isEmpty())) {
-            for (Project project : employee.getProjects()) {
+        if (null != employee.getProject()) {
+            for (Project project : employee.getProject()) {
                 projectDtoList.add(toProjectDto(project));
             }
         }
@@ -130,7 +134,8 @@ public class Mapper {
      * Converts EmployeeDTO object into Employee object and
      * ProjectDTO object int Project object.
      *
-     * @param employeeDto as EmployeeDTO object.
+     * @param employeeDto as EmployeeDTO object that contains an
+     *      employee.
      *
      * @return employee as Employee object.
      */
@@ -138,12 +143,12 @@ public class Mapper {
         Employee employee = toEmployee(employeeDto);
         Set<Project> projects = new HashSet<Project>();
 
-        if (! (employeeDto.getProjects().isEmpty())) {
+        if (null != employeeDto.getProjects()) {
             for (ProjectDTO projectDto : employeeDto.getProjects()) {
                 projects.add(toProject(projectDto));
             }
         }
-        employee.setProjects(projects);
+        employee.setProject(projects);
         return employee;
     }
 
@@ -151,7 +156,8 @@ public class Mapper {
      * Converts Project object into ProjectDTO object and Employee
      * object into EmployeeDTO object
      *
-     * @param project as Project object.
+     * @param project as Project object that contains an
+     *      project.
      *
      * @return projectDto as ProjectDTO object. 
      */
@@ -159,8 +165,8 @@ public class Mapper {
         Set<EmployeeDTO> employeeDtoList = new HashSet<EmployeeDTO>();
         ProjectDTO projectDto = toProjectDto(project);
 
-        if (! (project.getEmployees().isEmpty())) {
-            for (Employee employee : project.getEmployees()) {
+        if (null != project.getEmployee()) {
+            for (Employee employee : project.getEmployee()) {
                 employeeDtoList.add(Mapper.toEmployeeDto(employee));
             }
         }  
@@ -172,7 +178,8 @@ public class Mapper {
      * Converts ProjectDTO object into Project object and EmployeeDTO
      * as Employee object.
      *
-     * @param projectDto as ProjectDTO object
+     * @param projectDto as ProjectDTO object that contains an
+     *      project.
      *
      * @return project as Project object.
      */
@@ -180,12 +187,12 @@ public class Mapper {
         Project project = toProject(projectDto);
         Set<Employee> employees = new HashSet<Employee>();
 
-        if (! (projectDto.getEmployees().isEmpty())) {
+        if (null != projectDto.getEmployees()) {
             for (EmployeeDTO employeeDto : projectDto.getEmployees()) {
                 employees.add(toEmployee(employeeDto));
             }
         }  
-        project.setEmployees(employees);
+        project.setEmployee(employees);
         return project;
     }
 }

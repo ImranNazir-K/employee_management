@@ -11,81 +11,39 @@
 package com.ideas2it.employeemanagement.dto;
 
 import java.util.Set;
+import javax.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
+
+import com.ideas2it.employeemanagement.constants.Constants;
+
 
 /**
- * Contains Private variables of project like name,
- * domain, description.
+ * Contains variables for project like name, domain and description.
  *
  * @author IMRAN NAZIR K
  *
- * @version 4.0
+ * @version 6.0
  */
+@Component
+@Getter
+@Setter
 public class ProjectDTO {
 
-    private int id;
-    private String description;
-    private String domain;    
+    private int projectId;
+    
+    @Pattern(regexp = Constants.VALIDATE_PROJECT_DESCRIPTION,
+            message = "Enter a valid Description")
+    private String projectDescription;
+    
+    @Pattern(regexp = Constants.VALIDATE_PROJECT_DOMAIN,
+            message = "Enter a valid Domain")
+    private String projectDomain;
+    
+    @Pattern(regexp = Constants.VALIDATE_PROJECT_NAME,
+            message = "Enter a valid ProjectName")
     private String projectName;
+    
     Set<EmployeeDTO> employees;
-
-    public ProjectDTO() {
-    }
-
-    public ProjectDTO(String projectName, String description, String domain) {
-        this.projectName = projectName;
-        this.description = description;
-        this.domain = domain;
-    }
-
-    public void setProjectId(int id) {
-        this.id = id;
-    }
-
-    public int getProjectId() {
-        return this.id;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getProjectName() {
-        return this.projectName;
-    }
-
-    public void setProjectDomain(String domain) {
-        this.domain = domain;
-    }
-
-    public String getProjectDomain() {
-        return this.domain;
-    }
-
-    public void setProjectDescription(String description) {
-        this.description = description;
-    }
-
-    public String getProjectDescription() {
-        return this.description;
-    }
-
-    public void setEmployees(Set<EmployeeDTO> employees) {
-        this.employees = employees;
-    }
-
-    public Set<EmployeeDTO> getEmployees() {
-        return this.employees;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("\n Project ID          : " + getProjectId())
-                     .append("\n Project Name        : " + getProjectName())
-                     .append("\n Project Domain      : " + getProjectDomain())
-                     .append("\n Project Description : ")
-                     .append(getProjectDescription());
-        return stringBuilder.toString();       
-    }
 }

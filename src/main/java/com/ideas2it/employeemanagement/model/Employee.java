@@ -10,7 +10,22 @@
 
 package com.ideas2it.employeemanagement.model;
 
+import java.time.LocalDate;
 import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.lang.NonNull;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Contains Private variables of employees like
@@ -18,114 +33,35 @@ import java.util.Set;
  *
  * @author IMRAN NAZIR K
  *
- * @version 4.0
+ * @version 6.0
  *
  */
+@Getter
+@Setter
+@Entity
+@NoArgsConstructor
 public class Employee {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employeeId;
-    private long employeeContactNumber;
+	   
+    @NotNull
     private double employeeSalary;
+    
+	@NotNull
+    private String employeeContactNumber;
+	
+	@NotNull
     private String employeeName;
+	
+	@NotNull
     private String employeeMailId;
-    private String employeeDateOfBirth;
-    private Set<Project> projects;
-
-    public Employee() {
-    }
-
-    public Employee(String name, String mailId,
-            long contactNumber, double salary, String birthDate) {
-        this.employeeName = name;
-        this.employeeMailId = mailId;
-        this.employeeContactNumber = contactNumber;
-        this.employeeSalary = salary;
-        this.employeeDateOfBirth = birthDate;
-    }
-
-    public Employee(int id, String name, String mailId,
-            long contactNumber, double salary, String birthDate, Set<Project> projects) {
-        this.employeeId = id;
-        this.employeeName = name;
-        this.employeeMailId = mailId;
-        this.employeeContactNumber = contactNumber;
-        this.employeeSalary = salary;
-        this.employeeDateOfBirth = birthDate;
-        this.projects = projects;     
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public int getEmployeeId() {
-        return this.employeeId;
-    }
-
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
-    }
-
-    public String getEmployeeName() {
-        return this.employeeName;
-    }
-
-    public void setEmployeeMailId(String employeeMailId) {
-        this.employeeMailId = employeeMailId;
-    }
-
-    public String getEmployeeMailId() {
-        return this.employeeMailId;
-    }
-
-    public void setEmployeeContactNumber(long employeeContactNumber) {
-        this.employeeContactNumber = employeeContactNumber;
-    }
-
-    public long getEmployeeContactNumber() {
-        return this.employeeContactNumber;
-    }
-
-    public void setEmployeeSalary(double employeeSalary) {
-        this.employeeSalary = employeeSalary;
-    }
-
-    public double getEmployeeSalary() {
-        return this.employeeSalary;
-    }
-
-    public void setEmployeeDateOfBirth(String employeeDateOfBirth) {
-        this.employeeDateOfBirth = employeeDateOfBirth;
-    } 
-
-    public String getEmployeeDateOfBirth() {
-        return this.employeeDateOfBirth;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
-    }
-
-    public Set<Project> getProjects() {
-        return this.projects;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("\n Employee ID         : ")
-                     .append(getEmployeeId())
-                     .append("\n Name                : ")
-                     .append(getEmployeeName())
-                     .append("\n Employee MailID     : ")
-                     .append(getEmployeeMailId())
-                     .append("\n Contact Number      : ")
-                     .append(getEmployeeContactNumber())
-                     .append("\n Salary              : ")
-                     .append(getEmployeeSalary())
-                     .append("\n Date of Birth       : ")
-                     .append(getEmployeeDateOfBirth());
-        return stringBuilder.toString();
-    }
+	
+    private LocalDate employeeDateOfBirth;
+    
+    @ManyToMany
+    @NonNull
+    @JoinTable(name = "employee_project")
+    private Set<Project> project;
 }

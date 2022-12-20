@@ -10,16 +10,23 @@
 
 package com.ideas2it.employeemanagement.exceptions;
 
+import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * Employee Management System Exception.
+ * Class for Employee Management System Exception.
  *
  * @author IMRAN NAZIR K
  *
- * @version 4.0
+ * @version 6.0
  */
+@Getter
+@Setter
+@AllArgsConstructor
 public class EMSException extends Exception{
 
-    public EMSException(String exception) {
-        super(exception);
-    }
+    private String exceptionMessage;
+    private HttpStatus httpStatus;
 }

@@ -11,237 +11,427 @@
 package com.ideas2it.employeemanagement.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Set;
+import org.slf4j.Logger;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.ideas2it.employeemanagement.dao.EmployeeDAO;
-import com.ideas2it.employeemanagement.dao.impl.EmployeeDAOImpl;
+import com.ideas2it.employeemanagement.constants.Constants;
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
 import com.ideas2it.employeemanagement.exceptions.EMSException;
+import com.ideas2it.employeemanagement.logger.EMSLoggerFactory;
 import com.ideas2it.employeemanagement.mapper.Mapper;
 import com.ideas2it.employeemanagement.model.Employee;
+import com.ideas2it.employeemanagement.repository.EmployeeRepository;
 import com.ideas2it.employeemanagement.service.EmployeeService;
-import com.ideas2it.employeemanagement.service.ProjectService;
 
 /**
- * Validates all input given by users. Stores the employees in the Database.
- * does operations like Create, update, Display, Delete employees.
+ * Validates all input given by users. Stores the employees in the 
+ *      Database.
+ * Does operations like Create, update, Display, Delete employees.
  *
  * @author IMRAN NAZIR K
  *
- * @version 5.0
+ * @version 6.0
  */
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-	
-	@Autowired
-	private ProjectService projectService;
-	
-	@Autowired
-    private EmployeeDAO employeeDao;
-
-    public EmployeeServiceImpl() {
+    
+    private EmployeeRepository employeeRepository;
+    private ProjectServiceImpl projectService;
+    Logger log = EMSLoggerFactory.getFactory(EmployeeService.class);
+    
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository,
+            @Lazy ProjectServiceImpl projectService) {
+        this.employeeRepository = employeeRepository;
+        this.projectService = projectService;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int createEmployee(EmployeeDTO employeeDto) throws EMSException {
-        return employeeDao.createEmployee(Mapper.toEmployee(employeeDto));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<EmployeeDTO> getAllEmployees() throws EMSException {
-        List<EmployeeDTO> employees = new ArrayList<EmployeeDTO>();
-
-        for (Employee employee : employeeDao.getAllEmployees()) {
-            employees.add(Mapper.employeeProjectToDto(employee));
-        }
-        return employees;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public EmployeeDTO getParticularEmployee(int employeeId)
+    public ResponseEntity<EmployeeDTO> createEmployee(EmployeeDTO employeeDto)
             throws EMSException {
-        return Mapper.employeeProjectToDto(
-                employeeDao.getParticularEmployee(employeeId));
-    }
+        log.info("Request got for creating Employee");
+        Employee employee = Mapper.toEmployee(employeeDto);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void deleteAllEmployees() throws EMSException {
-        employeeDao.deleteAllEmployees();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void deleteParticularEmployee(int employeeId) throws EMSException {
-        employeeDao.deleteParticularEmployee(employeeId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateEmployee(EmployeeDTO employee) throws EMSException {
-        employeeDao.updateEmployee(Mapper.dtoToEmployeeProject(employee));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ProjectDTO getParticularProject(int projectId) throws EMSException {
-        return projectService.getParticularProject(projectId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isMailIdExists(String mailId) throws EMSException {
-        boolean isExists = false;
+        if (null != employeeRepository.findByEmployeeMailId
+                (employee.getEmployeeMailId())) {
+            log.info(Constants.EXISTING_MAIL);
+            throw new EMSException(Constants.EXISTING_MAIL,
+                    HttpStatus.BAD_REQUEST);
+        }
         
-        for (EmployeeDTO employee : getAllEmployees()) {
-            if (mailId.equals(employee.getEmployeeMailId())) {
-                isExists = true;
-                break;
-            }
+        if (null != employeeRepository.findByEmployeeContactNumber
+                (employee.getEmployeeContactNumber())) {
+            log.info(Constants.EXISTING_CONTACT_NUMBER);
+            throw new EMSException(Constants.EXISTING_CONTACT_NUMBER,
+                    HttpStatus.BAD_REQUEST);
         }
-        return isExists;
+        log.info(Constants.EMPLOYEE_CREATED);
+        return new ResponseEntity<EmployeeDTO>(Mapper.employeeProjectToDto
+                (employeeRepository.save(employee)), HttpStatus.OK);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isContactNumberExists(long contactNumber)
+    public ResponseEntity<List<EmployeeDTO>> getEmployees()
             throws EMSException {
-        boolean isExists = false;
+        List<EmployeeDTO> employeeDtos = new ArrayList<EmployeeDTO>();
+        List<Employee> employees = employeeRepository.findAll();
 
-        for (EmployeeDTO employee : getAllEmployees()) {
-
-            if (contactNumber == employee.getEmployeeContactNumber()) {
-                isExists = true;
-                break;
+        log.info("Request got to Display Employees");
+        
+        if (!(employees.isEmpty())) {
+            
+            for (Employee employee : employees) {
+                employeeDtos.add(Mapper.employeeProjectToDto(employee));
             }
+        } else {
+            log.info(Constants.NO_EMPLOYEES);
+            throw new EMSException(Constants.NO_EMPLOYEES,
+                    HttpStatus.NOT_FOUND);
         }
-        return isExists;
+        return new ResponseEntity<List<EmployeeDTO>>(employeeDtos,
+                HttpStatus.OK);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isContactNumberExists(long contactNumber, int employeeId) {
-        boolean isPresent = false;
-
-       for (Long phoneNumber : employeeDao
-                .getContactNumber(employeeId)) {
-
-            if (contactNumber == phoneNumber) {
-                isPresent = true;
-                break;
+    public ResponseEntity<EmployeeDTO> getEmployee(int employeeId) 
+            throws EMSException {
+        log.info("Request got for displaying Particular Employee");
+        
+        if (!(employeeRepository.findAll().isEmpty())) {
+            
+            if (employeeRepository.existsById(employeeId)) {
+                return new ResponseEntity<EmployeeDTO>(Mapper.employeeProjectToDto
+                        (employeeRepository.findById(employeeId).get()),
+                        HttpStatus.OK);
             } else {
-                isPresent = false;
+                log.warn(Constants.EMPLOYEE_ID_NOT_FOUND);
+                throw new EMSException(Constants.EMPLOYEE_ID_NOT_FOUND,
+                        HttpStatus.NOT_FOUND);
             }
+        } else {
+            log.info(Constants.NO_EMPLOYEES);
+            throw new EMSException(Constants.NO_EMPLOYEES,
+                    HttpStatus.NO_CONTENT);
         }
-        return isPresent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<String> deleteEmployee(int employeeId)
+            throws EMSException {
+        log.info("Request got to delete particular Employee");
+        
+        if (!(employeeRepository.findAll().isEmpty())) {
+            
+            if (employeeRepository.existsById(employeeId)) {
+                employeeRepository.deleteById(employeeId);
+                log.info(Constants.EMPLOYEE_DELETED);
+                throw new EMSException(Constants.EMPLOYEE_DELETED,
+                        HttpStatus.OK);
+            } else {
+                log.warn(Constants.EMPLOYEE_ID_NOT_FOUND);
+                throw new EMSException(Constants.EMPLOYEE_ID_NOT_FOUND,
+                        HttpStatus.NOT_FOUND);
+            }
+        } else {
+            log.info(Constants.NO_EMPLOYEES);
+            throw new EMSException(Constants.NO_EMPLOYEES,
+                    HttpStatus.NO_CONTENT);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<EmployeeDTO> update(int employeeId,
+            EmployeeDTO employeeDto) throws EMSException {
+        Employee employee = Mapper.toEmployee(employeeDto);
+        
+        log.info("Request got for updating Employee");
+        
+        if (!(employeeRepository.findAll().isEmpty())) {
+
+            if (employeeRepository.existsById(employeeId)) {
+                return updateEmployee(employeeId, employee);
+            } else {
+                log.warn(Constants.EMPLOYEE_ID_NOT_FOUND);
+                throw new EMSException(Constants.EMPLOYEE_ID_NOT_FOUND,
+                        HttpStatus.NOT_FOUND);
+            }
+        } else {
+            log.info(Constants.NO_EMPLOYEES);
+            throw new EMSException(Constants.NO_EMPLOYEES,
+                    HttpStatus.NO_CONTENT);
+        }
     }
     
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     @Override
-    public boolean isMailIdExists(String mailId, int employeeId) {
-        boolean isPresent = false;
+    public ResponseEntity<EmployeeDTO> updateEmployee(int employeeId,
+            Employee employee) throws EMSException {
 
-        for (String mail : employeeDao.getMailId(employeeId)) {
-
-            if (mail.equals(mailId)) {
-                isPresent = true;
-                break;
-            } else {
-                isPresent = false;
-            }
+        if (isMailIdExists(employee.getEmployeeMailId(), employeeId)) {
+            throw new EMSException(Constants.EXISTING_MAIL,
+                    HttpStatus.BAD_REQUEST);
         }
-        return isPresent;
+
+        if (isContactNumberExists(employee.getEmployeeContactNumber(),
+                employeeId)) {
+            throw new EMSException(Constants.EXISTING_CONTACT_NUMBER,
+                    HttpStatus.BAD_REQUEST);
+        }
+        employee.setProject(employeeRepository.findById(employeeId)
+                .get().getProject());
+        employee.setEmployeeId(employeeId);
+        log.info(Constants.EMPLOYEE_UPDATED);
+        return new ResponseEntity<EmployeeDTO>(Mapper.employeeProjectToDto
+                (employeeRepository.save(employee)), HttpStatus.OK);
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isIdExists(int employeeId) throws EMSException {
+    public boolean isMailIdExists(String employeeMailId, int employeeId) {
         boolean isExists = false;
-
-        if (null != employeeDao.getParticularEmployee(employeeId)) {
+        Employee employee = employeeRepository.findByEmployeeMailId
+                (employeeMailId);
+        
+        if (null == employee) {
+            isExists = true;
+        } else if (employee.getEmployeeId() == employeeId){
             isExists = true;
         }
-        return isExists;
+        return !isExists;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<ProjectDTO> getProjects() throws EMSException {
-        return projectService.getAllProjects();
+    public boolean isContactNumberExists(String contactNumber, int employeeId) {
+        boolean isExists = false;
+        Employee employee = employeeRepository
+                .findByEmployeeContactNumber(contactNumber);
+        
+        if (null == employee) {
+            isExists = true;
+        } else if (employee.getEmployeeId() == employeeId) {
+            isExists = true;
+        }
+        return !isExists;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isProjectDbIsEmpty() throws EMSException {
-        return projectService.isDbIsEmpty();
-    }
-    
-    /**
-     * {@inheritDoc}
-     * @throws EMSException 
-     */
-    @Override
-    public boolean isDbIsEmpty() throws EMSException {
-        return getAllEmployees().isEmpty();
+    public ResponseEntity<EmployeeDTO> assignProject(int employeeId,
+            int projectId) throws EMSException {
+        log.info("Request got for Assigning Project");
+        
+        if (!(employeeRepository.findAll().isEmpty())) {
+
+            if (projectService.isProjectsAvailable()) {
+                return assign(employeeId, projectId);
+            } else {
+                log.info(Constants.NO_PROJECTS);
+                throw new EMSException(Constants.NO_PROJECTS,
+                        HttpStatus.NO_CONTENT);
+            }
+        } else {
+            log.info(Constants.NO_EMPLOYEES);
+            throw new EMSException(Constants.NO_EMPLOYEES,
+                    HttpStatus.NO_CONTENT);
+        }
     }
 
-    @Override
-    public boolean isProjectIdExists(int projectId) throws EMSException {
-        return projectService.isIdExists(projectId);
-    }   
-    
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isAlreadyAssigned(int employeeId, int projectId)
+    public ResponseEntity<EmployeeDTO> assign(int employeeId, int projectId)
+            throws EMSException {
+        if (employeeRepository.existsById(employeeId)) {
+            ProjectDTO project = projectService
+                    .getParticularProject(projectId);
+            
+            if (null != project) {
+                return assignProjectToEmployee(employeeId, project);
+            } else {
+                log.warn(Constants.PROJECT_ID_NOT_FOUND);
+                throw new EMSException(Constants.PROJECT_ID_NOT_FOUND,
+                        HttpStatus.NOT_FOUND);
+            }
+        } else {
+            log.warn(Constants.EMPLOYEE_ID_NOT_FOUND);
+            throw new EMSException(Constants.EMPLOYEE_ID_NOT_FOUND,
+                    HttpStatus.NOT_FOUND);
+        }   
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<EmployeeDTO> assignProjectToEmployee(int employeeId,
+            ProjectDTO project)
+            throws EMSException {
+        Set<ProjectDTO> projects = new HashSet<ProjectDTO>();
+        
+        if (isProjectAlreadyAssigned(employeeId, project.getProjectId())) {
+            log.warn(Constants.PROJECT_ALREADY_ASSIGNED);
+            throw new EMSException(Constants.PROJECT_ALREADY_ASSIGNED,
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            EmployeeDTO employee = Mapper.employeeProjectToDto
+                    (employeeRepository.findById(employeeId).get());
+            projects.add(project);
+            employee.setProjects(projects);
+            log.info(Constants.PROJECT_ASSIGNED);
+            return new ResponseEntity<EmployeeDTO>(Mapper.employeeProjectToDto
+                    (employeeRepository.save(Mapper.dtoToEmployeeProject
+                    (employee))), HttpStatus.OK);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isProjectAlreadyAssigned(int employeeId, int projectId)
             throws EMSException {
         boolean isAlreadyAssigned = false;
+        EmployeeDTO employee = Mapper.employeeProjectToDto
+                (employeeRepository.findById(employeeId).get());
 
-        EmployeeDTO employee = getParticularEmployee(employeeId);
+        for (ProjectDTO project : employee.getProjects()) {
 
-        if (!(employee.getProjects().isEmpty())) {
-            for (ProjectDTO project : employee.getProjects()) {
-                if (projectId == project.getProjectId()) {
-                    isAlreadyAssigned = true;
-                    break;
-                }
+            if (projectId == project.getProjectId()) {
+                isAlreadyAssigned = true;
+                break;
             }
         }
         return isAlreadyAssigned;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<EmployeeDTO> unAssignProject(int employeeId,
+            int projectId) throws EMSException {
+        log.info("Request got for Un-Assigning Project");
+        
+        if (!(employeeRepository.findAll().isEmpty())) {
+
+            if (projectService.isProjectsAvailable()) {
+                return unAssign(employeeId, projectId);
+            } else {
+                log.info(Constants.NO_PROJECTS);
+                throw new EMSException(Constants.NO_PROJECTS,
+                        HttpStatus.NO_CONTENT);
+            }
+        } else {
+            log.info(Constants.NO_EMPLOYEES);
+            throw new EMSException(Constants.NO_EMPLOYEES, 
+                    HttpStatus.NO_CONTENT);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<EmployeeDTO> unAssign(int employeeId, int projectId)
+            throws EMSException {
+        if (employeeRepository.existsById(employeeId)) {
+            ProjectDTO project = projectService
+                    .getParticularProject(projectId);
+            if (null != project) {
+               return  unAssignProjectFromEmployee(employeeId, project);
+            } else {
+                log.warn(Constants.PROJECT_ID_NOT_FOUND);
+                throw new EMSException(Constants.PROJECT_ID_NOT_FOUND,
+                        HttpStatus.NOT_FOUND);
+            }
+        } else {
+            log.warn(Constants.EMPLOYEE_ID_NOT_FOUND);
+            throw new EMSException(Constants.EMPLOYEE_ID_NOT_FOUND, 
+                    HttpStatus.NOT_FOUND);
+        }        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<EmployeeDTO> unAssignProjectFromEmployee
+            (int employeeId, ProjectDTO projectDto) throws EMSException {
+        Set<ProjectDTO> projects = new HashSet<ProjectDTO>();
+        
+        if (isProjectAlreadyAssigned(employeeId, projectDto.getProjectId())) {
+            EmployeeDTO employee = Mapper.employeeProjectToDto
+                    (employeeRepository.findById(employeeId).get());
+            projects = employee.getProjects();
+
+            for (ProjectDTO project : projects) {
+
+                if (projectDto .getProjectId() == project.getProjectId()) {
+                    projects.remove(project);
+                    break;
+                }
+            }
+            employee.setProjects(projects);
+            log.info(Constants.PROJECT_UNASSIGNED);
+            return new ResponseEntity<EmployeeDTO>(Mapper.employeeProjectToDto
+                    (employeeRepository.save(Mapper
+                    .dtoToEmployeeProject(employee))), HttpStatus.OK);
+        } else {
+            log.warn(Constants.PROJECT_NOT_ASSIGNED);
+            throw new EMSException
+                (Constants.PROJECT_NOT_ASSIGNED, HttpStatus.BAD_REQUEST);
+        }        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public EmployeeDTO getParticularEmployee(int employeeId) {
+        if (employeeRepository.existsById(employeeId)) {
+            return Mapper.employeeProjectToDto(employeeRepository
+                    .findById(employeeId).get());
+        } else {    
+            return null;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmployeesAvailable() throws EMSException {
+        return !employeeRepository.findAll().isEmpty();
     }
 }

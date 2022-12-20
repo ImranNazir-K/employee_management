@@ -12,39 +12,47 @@ package com.ideas2it.employeemanagement.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.ideas2it.employeemanagement.dto.EmployeeDTO;
 import com.ideas2it.employeemanagement.dto.ProjectDTO;
 import com.ideas2it.employeemanagement.exceptions.EMSException;
 
 /**
- * contains methods to validate all input given by users. Does operations like
- * create, update, display, delete Projects.
+ * Interface for a class that validates all input given by users 
+ *      Does Operations
+ * like create, update, display, delete projects.
  *
  * @author IMRAN NAZIR K
  *
- * @version 5.0
+ * @version 6.0
  */
 public interface ProjectService {
 
     /**
      * Creates project.
      *
-     * @param projectDto as ProjectDTO object.
+     * @param projectDto as ProjectDTO object that contains an
+     *      project to be created.
      *
-     * @return generated projectId as int.
+     * @return the project Created.
      * 
-     * @throws EMSException if error occurred in database.
+     * @throws EMSException exception message of the employee 
+     *      management system.
      */
-    int createProject(ProjectDTO projectDto) throws EMSException;
+    ResponseEntity<ProjectDTO> createProject(ProjectDTO projectDto)
+            throws EMSException;
 
     /**
      * Displays all the projects.
      * 
-     * @return List<ProjectDTO> all the projects as list.
+     * @return all the projects as list from the database as
+     *       List<ProjectDTO>.
      * 
-     * @throws EMSException if error occurred in database.
+     * @throws EMSException exception message of the employee 
+     *      management system.
      */
-    List<ProjectDTO> getAllProjects() throws EMSException;
+    ResponseEntity<List<ProjectDTO>> getProjects() throws EMSException;
 
     /**
      * Displays particular project.
@@ -53,109 +61,172 @@ public interface ProjectService {
      * 
      * @return ProjectDTO object contains that particular project.
      * 
-     * @throws EMSException if error occurred in databases
+     * @throws EMSException exception message of the employee 
+     *      management system.
      */
-    ProjectDTO getParticularProject(int projectId) throws EMSException;
+    ResponseEntity<ProjectDTO> getProject(int projectId) throws EMSException;
 
     /**
      * Deletes particular project.
      * 
-     * @param projectId id of an project as int.
+     * @param projectId of an project as int.
+     *
+     * @return deleted message as String.
      * 
-     * @throws EMSException if error occurred in database
+     * @throws EMSException exception message of the employee 
+     *      management system.
      */
-    void deleteParticularProject(int projectId) throws EMSException;
-
-    /**
-     * Deletes all the projects.
-     * 
-     * @throws EMSException if error occurred in database
-     */
-    void deleteAllProjects() throws EMSException;
+    ResponseEntity<String> deleteProject(int projectId) throws EMSException;
 
     /**
      * updates the project.
      * 
-     * @param projectDto as ProjectDTO object.
+     * @param projectId of an project as int.
+     * @param employeeId of an employee as int.
      * 
-     * @throws EMSException if error occurred in database
+     * @return the updated project.
+     * 
+     * @throws EMSException exception message of the employee 
+     *      management system.
      */
-    void updateProject(ProjectDTO projectDto) throws EMSException;
+    ResponseEntity<ProjectDTO> updateProject(int projectId, 
+            ProjectDTO projectDto) throws EMSException;
 
     /**
-     * Gets the particular employee
+     * checks the whether the projects and employees are available
+     *      to add that employee from that particular
+     *      project. 
      * 
-     * @param employeeId id of an employee as int.
+     * @param projectId of an project as int.
+     * @param employeeId of an employee as int.
      * 
-     * @return EmployeeDTO object contains that particular employee.
+     * @return the updated project.
      * 
-     * @throws EMSException if error occurred in database
+     * @throws EMSException exception message of the employee
+     *      management system.
      */
-    EmployeeDTO getParticularEmployee(int employeeId) throws EMSException;
+     ResponseEntity<ProjectDTO> assignEmployee(int projectId, int employeeId)
+             throws EMSException;
 
     /**
-     * checks whether the id of an project is present in the database.
+     * checks the whether that particular project and employee are
+     *      available to add that employee from that particular
+     *      project.
      * 
-     * @param projectId id of an project as int.s
+     * @param projectId of an project as int.
+     * @param employeeId of an employee as int.
      * 
-     * @return true if the id is present in the database.
+     * @return the updated project.
      * 
-     * @throws EMSException if error occurred in database
+     * @throws EMSException exception message of the employee
+     *      management system.
      */
-    boolean isIdExists(int projectId) throws EMSException;
+     ResponseEntity<ProjectDTO> assign(int projectId, int employeeId)
+            throws EMSException;
+    
+    /**
+     * Adds that specific employee from the project.
+     * 
+     * @param projectId of an project as int.
+     * @param employee contains an employee as EmployeeDTO object.
+     * 
+     * @return the updated project.
+     * 
+     * @throws EMSException exception message of the employee
+     *      management system.
+     */
+     ResponseEntity<ProjectDTO> assignEmployeeToProject(int projectId,
+            EmployeeDTO employee) throws EMSException;
+    
+    /**
+     * checks the whether the projects and employees are available
+     *      to remove that employee from that particular
+     *      project. 
+     * 
+     * @param projectId of an project as int.
+     * @param employeeId of an employee as int.
+     * 
+     * @return the updated project.
+     * 
+     * @throws EMSException exception message of the employee
+     *      management system.
+     */
+     ResponseEntity<ProjectDTO> unAssignEmployee(int employeeId, int projectId)
+             throws EMSException;
+    
 
     /**
-     * Gets all the employees.
+     * checks the whether that particular project and employee are
+     *      available and remove that employee from that particular
+     *      project.
+     *      
+     * @param projectId of an project as int.
+     * @param employeeId of an employee as int.
      * 
-     * @return List<EmployeeDTO> all the employees from the database.
+     * @return the updated project.
      * 
-     * @throws EMSException if error occurred in database.
+     * @throws EMSException exception message of the employee
+     *      management system.
      */
-    List<EmployeeDTO> getEmployees() throws EMSException;
-
+     ResponseEntity<ProjectDTO> unAssign(int projectId, int employeeId)
+            throws EMSException;
     /**
-     * checks the project database whether the database is empty.
+     * Deletes that specific employee from the project.
+     * 
+     * @param projectId of an project as int.
+     * @param employee contains an employee as EmployeeDTO object.
+     * 
+     * @return the updated project.
+     * 
+     * @throws EMSException exception message of the employee
+     *      management system.
+     */
+     ResponseEntity<ProjectDTO> unAssignEmployeeFromProject(int projectId,
+            EmployeeDTO employeeDto) throws EMSException;
+    
+    /**
+     * checks whether the employee is already assigned to that
+     * project or not.
      *
-     * @return true if the database is empty.
+     * @param projectId of an project as int.
+     * @param employeeId of an employee as int.
      * 
-     * @throws EMSException if error occurred in database.
-     */
-    boolean isDbIsEmpty() throws EMSException;
-
-    /**
-     * Checks whether the employee database is empty or not.
+     * @return true if the employee is already assigned.
      * 
-     * @return true if the database is empty.
-     *  
-     * @throws EMSException if error occurred in database.
+     * @throws EMSException exception message of the employee 
+     *      management system.
      */
-    boolean isEmployeeDbIsEmpty() throws EMSException;
-
-
-    /**
-     * checks whether the project is already assigned to that
-     * employee.
-     *
-     * @param employeeId id of an employee as int.
-     * @param projectId id of an project as int.
-     *
-     * @return true if the project is assigned to an employee.
-     * 
-     * @throws EMSException  if error occurred in database.
-     */
-    boolean isAlreadyAssigned(int projectId, int employeeId)
+    boolean isEmployeeAlreadyAssigned(int projectId, int employeeId)
             throws EMSException;
 
+    /**
+     * Checks whether the particular Employee is available are not.
+     * 
+     * @param employeeId
+     * 
+     * @return  true if the Employee is available
+     * 
+     * @throws EMSException exception message of the employee 
+     *      management system.
+     */
+    boolean isEmployeeAvailable(int employeeId) throws EMSException;
 
     /**
-     * checks whether the employee id is present in the database.
-     *
-     * @param employeeId id of an employee as int.
-     *
-     * @return true if the Database contains that particular 
-     * employee Id. 
+     * Gets the particular project for the employee if available.
      * 
-     * @throws EMSException if error occurred in database.
+     * @param projectId id of an project.
+     * 
+     * @return a project as ProjectDTO object if available.
      */
-    boolean isEmployeeIdExists(int employeeId) throws EMSException;
+    ProjectDTO getParticularProject(int projectId);
+    
+    /**
+     * Checks whether the prrjects are available are not.
+     * 
+     * @return true if the projects are available.
+     * 
+     * @throws EMSException exception message of the employee 
+     *      management system.
+     */
+    boolean isProjectsAvailable() throws EMSException;
 }

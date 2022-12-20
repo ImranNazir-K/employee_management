@@ -10,109 +10,50 @@
 
 package com.ideas2it.employeemanagement.dto;
 
+//import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDate;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ideas2it.employeemanagement.constants.Constants;
+
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * Contains Private variables of employees like
- * name, salary, mail, Id, joining date, contact Number.
+ * Contains variables for employees like
+ * name, salary, mail, Id, joining date and contact Number.
  *
  * @author IMRAN NAZIR K
  *
- * @version 4.0
+ * @version 6.0
  */
+@Getter
+@Setter
 public class EmployeeDTO {
 
     private int employeeId;
-    private long employeeContactNumber;
-    private double employeeSalary;
+    
+    @Pattern(regexp = Constants.VALIDATE_EMPLOYEE_CONTACT_NUMBER,
+            message = "Enter a valid Contact Number")
+    private String employeeContactNumber;
+    
+    @Pattern(regexp = Constants.VALIDATE_EMPLOYEE_SALARY,
+            message = "Enter a valid Salary")
+    private String employeeSalary;
+    
+    @Pattern(regexp = Constants.VALIDATE_EMPLOYEE_NAME,
+            message = "Enter a valid Emlpoyee Name")
     private String employeeName;
+    
+    @Email(message = "Enter a valid Employee Mail ID")
     private String employeeMailId;
-    private String employeeDateOfBirth;
+    
+//    @JsonFormat(pattern="yyyy-mm-dd", message = "Enter a valid format ex:yyyy-mm-dd")
+    private LocalDate employeeDateOfBirth;
+    
     private Set<ProjectDTO> projects;
-
-    public EmployeeDTO() {
-    }
-
-    public EmployeeDTO(String name, String mailId,
-            long contactNumber, double salary, String birthDate) {
-        employeeName = name;
-        employeeMailId = mailId;
-        employeeContactNumber = contactNumber;
-        employeeSalary = salary;
-        employeeDateOfBirth = birthDate;
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public int getEmployeeId() {
-        return this.employeeId;
-    }
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
-    }
-
-    public String getEmployeeName() {
-        return this.employeeName;
-    }
-
-    public void setEmployeeMailId(String employeeMailId) {
-        this.employeeMailId = employeeMailId;
-    }
-
-    public String getEmployeeMailId() {
-        return this.employeeMailId;
-    }
-
-    public void setEmployeeContactNumber(long employeeContactNumber) {
-        this.employeeContactNumber = employeeContactNumber;
-    }
-
-    public long getEmployeeContactNumber() {
-        return this.employeeContactNumber;
-    }
-
-    public void setEmployeeSalary(double employeeSalary) {
-        this.employeeSalary = employeeSalary;
-    }
-
-    public double getEmployeeSalary() {
-        return this.employeeSalary;
-    }
-
-    public void setEmployeeDateOfBirth(String employeeDateOfBirth) {
-        this.employeeDateOfBirth = employeeDateOfBirth;
-    } 
-
-    public String getEmployeeDateOfBirth() {
-        return this.employeeDateOfBirth;
-    } 
-
-    public void setProjects(Set<ProjectDTO> projects) {
-        this.projects = projects;
-    }
-
-    public Set<ProjectDTO> getProjects() {
-        return this.projects;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("\n Employee ID         : ")
-                     .append(getEmployeeId())
-                     .append("\n Name                : ")
-                     .append(getEmployeeName())
-                     .append("\n Employee MailID     : ")
-                     .append(getEmployeeMailId())
-                     .append("\n Contact Number      : ")
-                     .append(getEmployeeContactNumber())
-                     .append("\n Salary              : ")
-                     .append(getEmployeeSalary())
-                     .append("\n Date of Birth       : ")
-                     .append(getEmployeeDateOfBirth());
-        return stringBuilder.toString();
-    }
 }
