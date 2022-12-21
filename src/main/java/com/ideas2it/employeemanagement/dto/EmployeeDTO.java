@@ -10,7 +10,6 @@
 
 package com.ideas2it.employeemanagement.dto;
 
-//import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -50,7 +49,6 @@ public class EmployeeDTO {
     @Email(message = "Enter a valid Employee Mail ID")
     private String employeeMailId;
     
-//    @JsonFormat(pattern="yyyy-mm-dd", message = "Enter a valid format ex:yyyy-mm-dd")
     private LocalDate employeeDateOfBirth;
     
     private Set<ProjectDTO> projects;
