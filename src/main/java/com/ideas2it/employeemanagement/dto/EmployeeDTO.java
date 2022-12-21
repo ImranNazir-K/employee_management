@@ -16,8 +16,6 @@ import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ideas2it.employeemanagement.constants.Constants;
 
 import lombok.Getter;

@@ -44,17 +44,24 @@ public class Constants {
     public static final String EMPLOYEE_UNASSIGNED = "Employee "
             + "Un-Assinged Successfully";
     public static final String EMPLOYEE_UPDATED = "Employee Updated Successfully";
-    public static final String EMPLOYEE_NOT_ASSIGNED =  "Employee Not Assigned Try Another employee";
-    public static final String ERROR_IN_ASSIGNING_EMPLOYEE = "Error in Assigning Employee";
-    public static final String ERROR_IN_ASSIGNING_PROJECT = "Error in Assigning Project";
-    public static final String ERROR_IN_UNASSIGNING_EMPLOYEE = "Error in Un-Assigning Employee";
-    public static final String ERROR_IN_UNASSIGNING_PROJECT = "Error in Un-Assigning Project";
-    public static final String EXISTING_CONTACT_NUMBER = "Contact Number Already Exists Try " 
-            + "Another Number";
-    public static final String EXISTING_MAIL = " Mail ID already exists Try Another "
-            + "MailId";
-    public static final String EMPLOYEE_ID_NOT_FOUND = "Employee ID does not not exists";
-    public static final String INVALID_REQUEST = "Invalid request! Redirecting to error Page";
+    public static final String EMPLOYEE_NOT_ASSIGNED =  "Employee Not Assigned "
+    		+ "Try Another employee";
+    public static final String ERROR_IN_ASSIGNING_EMPLOYEE = "Error in "
+    		+ "Assigning Employee";
+    public static final String ERROR_IN_ASSIGNING_PROJECT = "Error in Assigning"
+    		+ " Project";
+    public static final String ERROR_IN_UNASSIGNING_EMPLOYEE = "Error in "
+    		+ " Un-Assigning Employee";
+    public static final String ERROR_IN_UNASSIGNING_PROJECT = "Error in "
+    		+ "Un-Assigning Project";
+    public static final String EXISTING_CONTACT_NUMBER = "Contact Number " 
+            + "Already Exists Try Another Number";
+    public static final String EXISTING_MAIL = " Mail ID already exists Try "
+    		+ "Another MailId";
+    public static final String EMPLOYEE_ID_NOT_FOUND = "Employee ID does not "
+    		+ "not exists";
+    public static final String INVALID_REQUEST = "Invalid request! Redirecting"
+    		+ " to error Page";
     public static final String MAILID_ERROR = "\n---Error Occured while "
             + "Checking Mail ID---\n ";
     public static final String NO_EMPLOYEES = "No Employees Available";
@@ -65,8 +72,10 @@ public class Constants {
             + "Successfully";
     public static final String PROJECT_CREATED = "Project Created Sucessfully";
     public static final String PROJECT_DELETED = "Project Deleted Sucessfully";
-    public static final String PROJECT_ID_NOT_FOUND = "Project ID does not Exists";
-    public static final String PROJECT_NOT_ASSIGNED = "Project Not Assigned Try Another Project";
+    public static final String PROJECT_ID_NOT_FOUND = "Project ID does not"
+    		+ " Exists";
+    public static final String PROJECT_NOT_ASSIGNED = "Project Not Assigned "
+    		+ "Try Another Project";
     public static final String PROJECT_UNASSIGNED = "Project UnAssinged "
             + "Successfully";
     public static final String PROJECT_UPDATED = "Project Updated Successfully";
@@ -74,14 +83,15 @@ public class Constants {
             + " Updating Employee";
     public static final String UPDATE_PROJECT_EXCEPTION = "Error in"
             + " Updating Project";
-    public static final String VALIDATE_EMPLOYEE_CONTACT_NUMBER = "([6-9]{1}[0-9]{9})";
-    public static final String VALIDATE_EMPLOYEE_NAME = "((([A-Za-z]{2,}([ ]?)){1,}))"
-                + "((([.]?)([a-zA-Z]{1})){1,})";
-    public static final String VALIDATE_EMPLOYEE_MAILID = "((([A-Za-z0-9]{1,})([.]?))"
-                + "{1,})([a-z]{0,}?)([@]{1})(([a-z])*)((([.])([a-z]{2,3}))"
-                + "{1,2})";
-    public static final String VALIDATE_EMPLOYEE_SALARY = "([1-9]{1})([0-9]{1,8})"
-                + "((([.])([0-9]{1,2}))?)";
+    public static final String VALIDATE_EMPLOYEE_CONTACT_NUMBER = "([6-9]{1}"
+    		+ "[0-9]{9})";
+    public static final String VALIDATE_EMPLOYEE_NAME = "((([A-Za-z]{2,}"
+    		+ "([ ]?)){1,}))((([.]?)([a-zA-Z]{1})){1,})";
+    public static final String VALIDATE_EMPLOYEE_MAILID = "((([A-Za-z0-9]"
+    		+ "{1,})([.]?)){1,})([a-z]{0,}?)([@]{1})(([a-z])*)((([.])([a-z]"
+    		+ "{2,3})){1,2})";
+    public static final String VALIDATE_EMPLOYEE_SALARY = "([1-9]{1})([0-9]"
+    		+ "{1,8})((([.])([0-9]{1,2}))?)";
     public static final String VALIDATE_PROJECT_DESCRIPTION = "((([A-Za-z]"
                 + "{1,}([ ]?)){1,}))((([.]?)([a-zA-Z]{1})){1,})";
     public static final String VALIDATE_PROJECT_DOMAIN = "((([A-Za-z]{1,}"

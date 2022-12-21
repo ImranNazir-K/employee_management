@@ -10,6 +10,8 @@ package com.ideas2it.employeemanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 /**
  * Employee Management Application class.
@@ -18,7 +20,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * @version 6.0
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+//@SpringBootApplication
 public class EmployeeManagementApplication {
 
 	public static void main(String[] args) {
