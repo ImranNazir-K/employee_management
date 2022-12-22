@@ -14,10 +14,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ideas2it.employeemanagement.constants.Constants;
@@ -40,17 +46,21 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
  * @version 6.0
  */
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService, UserDetailsService {
     
     private EmployeeRepository employeeRepository;
     private ProjectServiceImpl projectService;
-    Logger log = EMSLoggerFactory.getFactory(EmployeeService.class);
+    private PasswordEncoder passwordEncoder;
     
     public EmployeeServiceImpl(EmployeeRepository employeeRepository,
-            @Lazy ProjectServiceImpl projectService) {
+            @Lazy ProjectServiceImpl projectService,
+            @Lazy PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.projectService = projectService;
+        this.passwordEncoder = passwordEncoder;
     }
+    
+    Logger log = EMSLoggerFactory.getFactory(EmployeeService.class);
 
     /**
      * {@inheritDoc}
@@ -74,9 +84,12 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EMSException(Constants.EXISTING_CONTACT_NUMBER,
                     HttpStatus.BAD_REQUEST);
         }
-        log.info(Constants.EMPLOYEE_CREATED);
+        
+        employee.setPassword(passwordEncoder.encode(employee
+        		.getEmployeeContactNumber()));
+		log.info(Constants.EMPLOYEE_CREATED);
         return new ResponseEntity<EmployeeDTO>(Mapper.employeeProjectToDto
-                (employeeRepository.save(employee)), HttpStatus.OK);
+                (employeeRepository.save(employee)), HttpStatus.CREATED);
     }
 
     /**
@@ -229,7 +242,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isContactNumberExists(String contactNumber, int employeeId) {
+    public boolean isContactNumberExists(String contactNumber,
+    		int employeeId) {
         boolean isExists = false;
         Employee employee = employeeRepository
                 .findByEmployeeContactNumber(contactNumber);
@@ -434,4 +448,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     public boolean isEmployeesAvailable() throws EMSException {
         return !employeeRepository.findAll().isEmpty();
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public UserDetails loadUserByUsername(String username)
+			throws UsernameNotFoundException {
+		Employee employee = employeeRepository.findByEmployeeMailId(username);
+		if (null == employee) {
+			throw new UsernameNotFoundException("Username Not Valid");
+		} else {
+			return new User(employee.getEmployeeMailId(),
+					employee.getPassword(), new ArrayList<>());
+		}
+	}
 }

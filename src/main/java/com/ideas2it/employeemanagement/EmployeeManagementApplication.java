@@ -10,7 +10,6 @@ package com.ideas2it.employeemanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 /**
  * Employee Management Application class.
@@ -19,6 +18,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
  *
  * @version 6.0
  */
+
 @SpringBootApplication
 public class EmployeeManagementApplication {
 

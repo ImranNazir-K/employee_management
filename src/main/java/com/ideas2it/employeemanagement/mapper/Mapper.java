@@ -45,7 +45,8 @@ public class Mapper {
         employee.setEmployeeSalary(Double.parseDouble(employeeDto.
                 getEmployeeSalary()));
         employee.setEmployeeName(employeeDto.getEmployeeName().toUpperCase());
-        employee.setEmployeeMailId(employeeDto.getEmployeeMailId().toLowerCase());
+        employee.setEmployeeMailId(employeeDto.getEmployeeMailId
+        		().toLowerCase());
         employee.setEmployeeDateOfBirth(employeeDto.getEmployeeDateOfBirth());
         return employee;
     }

@@ -12,12 +12,9 @@ package com.ideas2it.employeemanagement.dto;
 
 import java.util.Set;
 import javax.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Component;
+import lombok.Data;
 
 import com.ideas2it.employeemanagement.constants.Constants;
-
 
 /**
  * Contains variables for project like name, domain and description.
@@ -26,9 +23,7 @@ import com.ideas2it.employeemanagement.constants.Constants;
  *
  * @version 6.0
  */
-@Component
-@Getter
-@Setter
+@Data
 public class ProjectDTO {
 
     private int projectId;

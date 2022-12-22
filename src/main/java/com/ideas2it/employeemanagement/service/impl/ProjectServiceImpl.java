@@ -46,19 +46,20 @@ public class ProjectServiceImpl implements ProjectService {
 
     private EmployeeServiceImpl employeeService;
     private ProjectRepository projectRepository;
-    Logger log = EMSLoggerFactory.getFactory(ProjectService.class);
-
+    
     public ProjectServiceImpl(ProjectRepository projectRepository,
             @Lazy EmployeeServiceImpl employeeService) {
         this.projectRepository = projectRepository;
         this.employeeService = employeeService;
     }
+    
+    Logger log = EMSLoggerFactory.getFactory(ProjectService.class);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ResponseEntity<ProjectDTO> createProject(@RequestBody @Valid 
+    public ResponseEntity<ProjectDTO> createProject(@RequestBody @Valid
             ProjectDTO projectDto) throws EMSException {
         log.info("Request got for creating a project");
         log.info(Constants.PROJECT_CREATED);

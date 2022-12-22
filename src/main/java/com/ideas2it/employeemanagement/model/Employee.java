@@ -13,6 +13,7 @@ package com.ideas2it.employeemanagement.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -50,13 +51,17 @@ public class Employee {
     private double employeeSalary;
     
 	@NotNull
+	@Column(unique = true)
     private String employeeContactNumber;
 	
 	@NotNull
     private String employeeName;
 	
 	@NotNull
+	@Column(unique = true)
     private String employeeMailId;
+	
+	private String password;
 	
     private LocalDate employeeDateOfBirth;
     

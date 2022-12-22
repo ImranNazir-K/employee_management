@@ -12,13 +12,11 @@ package com.ideas2it.employeemanagement.dto;
 
 import java.time.LocalDate;
 import java.util.Set;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import com.ideas2it.employeemanagement.constants.Constants;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.ideas2it.employeemanagement.constants.Constants;
 
 /**
  * Contains variables for employees like
@@ -28,8 +26,7 @@ import lombok.Setter;
  *
  * @version 6.0
  */
-@Getter
-@Setter
+@Data
 public class EmployeeDTO {
 
     private int employeeId;

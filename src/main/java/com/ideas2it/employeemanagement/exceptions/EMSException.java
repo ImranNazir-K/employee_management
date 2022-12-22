@@ -25,7 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class EMSException extends Exception{
+public class EMSException extends RuntimeException{
 
     private String exceptionMessage;
     private HttpStatus httpStatus;
