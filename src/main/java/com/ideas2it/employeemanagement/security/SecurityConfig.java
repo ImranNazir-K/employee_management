@@ -39,7 +39,7 @@ public class SecurityConfig {
 
     /**
      * Configuration for SecurityFilterChain that filters the
-     * 		HttpMethods request from the client.
+     * HttpMethods request from the client.
      * 
      * @param httpSecurity for security configuration.
      * 

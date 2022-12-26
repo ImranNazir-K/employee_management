@@ -26,7 +26,7 @@ import com.ideas2it.employeemanagement.model.Employee;
  *
  * @author IMRAN NAZIR K
  *
- * @version 5.0
+ * @version 1.0
  */
 public interface EmployeeService {
 
@@ -34,12 +34,12 @@ public interface EmployeeService {
      * Creates employees.
      * 
      * @param employeeDto as EmployeeDTO object that contains an 
-     *      employee to be created.
+     *        employee to be created.
      * 
      * @return the employee created as ResponseEntity.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     ResponseEntity<EmployeeDTO> createEmployee(EmployeeDTO employeeDto)
             throws EMSException;
@@ -48,10 +48,10 @@ public interface EmployeeService {
      * Gets all the Employees from the Database.
      * 
      * @return all the employees as list from the database as
-     *      List<EmployeeDTO>.
+     *         List<EmployeeDTO>.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     ResponseEntity<List<EmployeeDTO>> getEmployees() throws EMSException;
 
@@ -61,10 +61,10 @@ public interface EmployeeService {
      * @param employeeId of an employee as int.
      * 
      * @return EmployeeDTO object contains that particular
-     *      employee.
+     *         employee.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     ResponseEntity<EmployeeDTO> getEmployee(int employeeId) throws EMSException;
 
@@ -87,7 +87,7 @@ public interface EmployeeService {
      * @return the updated employee  as ResponseEntity.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     ResponseEntity<EmployeeDTO> update(int employeeId, EmployeeDTO employee)
             throws EMSException;
@@ -108,7 +108,7 @@ public interface EmployeeService {
     
     /**
      * checks whether the maild Id is available in the list of
-     *      mailIds.
+     * mailIds.
      * 
      * @param employeeMailId of an employee as String.
      * @param employeeId of an employee as int.
@@ -130,7 +130,7 @@ public interface EmployeeService {
 
     /**
      * checks the whether the employees and projects are available to
-     *      Add the project to that particular employee.
+     * Add the project to that particular employee.
      * 
      * @param employeeId of an employee.
      * @param projectId of an projectId.
@@ -138,14 +138,14 @@ public interface EmployeeService {
      * @return the updated employee.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     ResponseEntity<EmployeeDTO> assignProject(int employeeId, int projectId)
             throws EMSException;
     
     /**
      * checks the whether that particular employee and project are 
-     *      available to Add the project to that particular employee.
+     * available to Add the project to that particular employee.
      *      
      * @param employeeId  of an employee as int.
      * @param projectId of an projectId as int.
@@ -153,7 +153,7 @@ public interface EmployeeService {
      * @return the updated employee as ResponseEntity.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     ResponseEntity<EmployeeDTO> assign(int employeeId, int projectId)
             throws EMSException;
@@ -163,20 +163,21 @@ public interface EmployeeService {
      *  
      * @param employeeId of an employee.
      * @param project contains a project as ProjectDTO object.
+     * 
      * @return the updated employee.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     ResponseEntity<EmployeeDTO> assignProjectToEmployee(int employeeId, ProjectDTO project)
             throws EMSException;
 
     /**
      * checks the whether the employees and projects are available to
-     *      remove that project from that particular employee.
+     * remove that project from that particular employee.
      * 
-     * @param employeeId id of an employee.
-     * @param projectId Id id of an projectId.
+     * @param employeeId of an employee.
+     * @param projectId of an projectId.
      * 
      * @return the updated employee.
      * 
@@ -187,15 +188,15 @@ public interface EmployeeService {
 
     /**
      * checks the whether that employee and project are available to
-     *      remove that project from that particular employee.
+     * remove that project from that particular employee.
      * 
-     * @param employeeId employeeId id of an employee.
-     * @param projectId  projectId id of an projectId.
+     * @param employeeId of an employee.
+     * @param projectId of an projectId.
      * 
      * @return the updated employee.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     ResponseEntity<EmployeeDTO> unAssign(int employeeId, int projectId)
             throws EMSException;
@@ -209,14 +210,14 @@ public interface EmployeeService {
      * @return the updated employee.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     ResponseEntity<EmployeeDTO> unAssignProjectFromEmployee(int employeeId,
             ProjectDTO project)
             throws EMSException;
     /**
      * checks whether the project is already assigned to that 
-     *      employee or not.
+     * employee or not.
      *
      * @param employeeId of an employee as int.
      * @param projectId of an project as int.
@@ -224,7 +225,7 @@ public interface EmployeeService {
      * @return true if the project is already assigned.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     boolean isProjectAlreadyAssigned(int employeeId, int projectId)
             throws EMSException;
@@ -235,7 +236,7 @@ public interface EmployeeService {
      * @param employeeId of an employee as int.
      * 
      * @return EmployeeDTO object contains that particular
-     *      employee.
+     *         employee.
      */
     EmployeeDTO getParticularEmployee(int employeeId);
     
@@ -245,7 +246,7 @@ public interface EmployeeService {
      * @return true if the empolyees are available.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     boolean isEmployeesAvailable() throws EMSException;
 }

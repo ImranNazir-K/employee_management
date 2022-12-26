@@ -35,7 +35,7 @@ import com.ideas2it.employeemanagement.service.ProjectService;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
 @RestController
 @RequestMapping("/api/v1/projects")
@@ -51,12 +51,12 @@ public class ProjectController {
      * Creates project.
      *
      * @param projectDto as ProjectDTO object that contains an
-     *      project to be created.
+     *        project to be created.
      *
      * @return the project Created.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @PostMapping
     private ResponseEntity<ProjectDTO> createProject(@RequestBody @Valid
@@ -86,7 +86,7 @@ public class ProjectController {
      * @return ProjectDTO object contains that particular project.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     @GetMapping("/{projectId}")
     private ResponseEntity<ProjectDTO> displayProject(
@@ -99,12 +99,12 @@ public class ProjectController {
      * 
      * @param projectId id of an project as int.
      * @param projectDto as ProjectDTO object that contains an
-     *      project.
+     *        project.
      * 
      * @return the updated project.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @PutMapping("/{projectId}")
     private ResponseEntity<ProjectDTO> updateProject(
@@ -122,7 +122,7 @@ public class ProjectController {
      * @return the updated project.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @PutMapping("/{projectId}/employees/{employeeId}")
     private ResponseEntity<ProjectDTO> assignProject(
@@ -140,7 +140,7 @@ public class ProjectController {
      * @return the updated project.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @DeleteMapping("/{projectId}/employees/{employeeId}")
     private ResponseEntity<ProjectDTO> unAssignEmployee(
@@ -157,8 +157,7 @@ public class ProjectController {
      * @return deleted message as String.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
-
+     *         management system.
      */
     @DeleteMapping("/{projectId}")
     private String deleteParticularProject(

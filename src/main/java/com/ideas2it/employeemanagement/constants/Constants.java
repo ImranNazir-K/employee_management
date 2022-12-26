@@ -15,7 +15,7 @@ package com.ideas2it.employeemanagement.constants;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
 public class Constants {
 
@@ -39,17 +39,20 @@ public class Constants {
             + "Already Assigned Try Another Employee";
     public static final String EMPLOYEE_ASSIGNED = "Employee Assinged "
             + "Successfully";
-    public static final String EMPLOYEE_CREATED = "Employee Created Successfully ";
-    public static final String EMPLOYEE_DELETED = "Employee Deleted Successfully";
+    public static final String EMPLOYEE_CREATED = "Employee Created "
+    		+ "Successfully";
+    public static final String EMPLOYEE_DELETED = "Employee Deleted"
+    		+ " Successfully";
     public static final String EMPLOYEE_UNASSIGNED = "Employee "
             + "Un-Assinged Successfully";
-    public static final String EMPLOYEE_UPDATED = "Employee Updated Successfully";
-    public static final String EMPLOYEE_NOT_ASSIGNED =  "Employee Not Assigned "
-    		+ "Try Another employee";
+    public static final String EMPLOYEE_UPDATED = "Employee Updated "
+    		+ "Successfully";
+    public static final String EMPLOYEE_NOT_ASSIGNED =  "Employee Not Assigned"
+    		+ " Try Another employee";
     public static final String ERROR_IN_ASSIGNING_EMPLOYEE = "Error in "
     		+ "Assigning Employee";
-    public static final String ERROR_IN_ASSIGNING_PROJECT = "Error in Assigning"
-    		+ " Project";
+    public static final String ERROR_IN_ASSIGNING_PROJECT = "Error in "
+    		+ "Assigning Project";
     public static final String ERROR_IN_UNASSIGNING_EMPLOYEE = "Error in "
     		+ " Un-Assigning Employee";
     public static final String ERROR_IN_UNASSIGNING_PROJECT = "Error in "
@@ -60,10 +63,19 @@ public class Constants {
     		+ "Another MailId";
     public static final String EMPLOYEE_ID_NOT_FOUND = "Employee ID does not "
     		+ "not exists";
-    public static final String INVALID_REQUEST = "Invalid request! Redirecting"
-    		+ " to error Page";
-    public static final String MAILID_ERROR = "\n---Error Occured while "
-            + "Checking Mail ID---\n ";
+    public static final String INVALID_CONTACT_NUMBER = "Enter a valid " 
+            + "Contact Number";
+    public static final String INVALID_DATE_OF_BIRTH = "Enter a valid "
+            + "date";
+    public static final String INVALID_MAIL = "Enter valid Mail ID";
+    public static final String INVALID_NAME = "Enter a valid Name";
+    public static final String INVALID_SALARY = "Enter a valid salary";
+    public static final String INVALID_PROJECT_DESCRIPTION = "Enter a "
+            + "valid Description";
+    public static final String INVALID_PROJECT_DOMAIN = "Enter a valid "
+            + "Domain";
+    public static final String INVALID_PROJECT_NAME = "Enter a valid "
+            + "Name";
     public static final String NO_EMPLOYEES = "No Employees Available";
     public static final String NO_PROJECTS = "No Projects Available";
     public static final String PROJECT_ALREADY_ASSIGNED = "Project "

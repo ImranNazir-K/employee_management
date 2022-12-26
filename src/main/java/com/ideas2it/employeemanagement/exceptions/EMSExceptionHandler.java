@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
 @RestControllerAdvice
 public class EMSExceptionHandler {

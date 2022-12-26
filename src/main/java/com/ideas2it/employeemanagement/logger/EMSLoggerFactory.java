@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author IMRAN NAZIR K
  *
- * @version 4.0
+ * @version 1.0
  */
 public class EMSLoggerFactory {
 
@@ -30,7 +30,7 @@ public class EMSLoggerFactory {
      * 
      * @return loggerfactory instance of Logger.
      */
-    public static <T> Logger getFactory(Class<T> className) {
+    public static Logger getFactory(Class<?> className) {
         if (null == loggerFactory) {
           loggerFactory = LoggerFactory.getLogger(className);
         }

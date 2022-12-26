@@ -14,7 +14,8 @@ import java.time.LocalDate;
 import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import com.ideas2it.employeemanagement.constants.Constants;
 
@@ -24,26 +25,27 @@ import com.ideas2it.employeemanagement.constants.Constants;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
-@Data
+@Getter
+@Setter
 public class EmployeeDTO {
 
     private int employeeId;
     
     @Pattern(regexp = Constants.VALIDATE_EMPLOYEE_CONTACT_NUMBER,
-            message = "Enter a valid Contact Number")
+            message = Constants.INVALID_CONTACT_NUMBER)
     private String employeeContactNumber;
     
     @Pattern(regexp = Constants.VALIDATE_EMPLOYEE_SALARY,
-            message = "Enter a valid Salary")
+            message = Constants.INVALID_SALARY)
     private String employeeSalary;
     
     @Pattern(regexp = Constants.VALIDATE_EMPLOYEE_NAME,
-            message = "Enter a valid Emlpoyee Name")
+            message = Constants.INVALID_NAME)
     private String employeeName;
     
-    @Email(message = "Enter a valid Employee Mail ID")
+    @Email(message = Constants.INVALID_MAIL)
     private String employeeMailId;
     
     private LocalDate employeeDateOfBirth;

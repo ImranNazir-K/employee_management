@@ -19,7 +19,7 @@ import com.ideas2it.employeemanagement.model.Project;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
 }

@@ -12,7 +12,8 @@ package com.ideas2it.employeemanagement.dto;
 
 import java.util.Set;
 import javax.validation.constraints.Pattern;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import com.ideas2it.employeemanagement.constants.Constants;
 
@@ -21,23 +22,24 @@ import com.ideas2it.employeemanagement.constants.Constants;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
-@Data
+@Getter
+@Setter
 public class ProjectDTO {
 
     private int projectId;
     
     @Pattern(regexp = Constants.VALIDATE_PROJECT_DESCRIPTION,
-            message = "Enter a valid Description")
+            message = Constants.INVALID_PROJECT_DESCRIPTION)
     private String projectDescription;
     
     @Pattern(regexp = Constants.VALIDATE_PROJECT_DOMAIN,
-            message = "Enter a valid Domain")
+            message = Constants.INVALID_PROJECT_DOMAIN)
     private String projectDomain;
     
     @Pattern(regexp = Constants.VALIDATE_PROJECT_NAME,
-            message = "Enter a valid ProjectName")
+            message = Constants.INVALID_PROJECT_NAME)
     private String projectName;
     
     Set<EmployeeDTO> employees;

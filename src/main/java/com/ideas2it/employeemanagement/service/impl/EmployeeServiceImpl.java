@@ -43,7 +43,7 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
 @Service
 public class EmployeeServiceImpl implements EmployeeService, UserDetailsService {

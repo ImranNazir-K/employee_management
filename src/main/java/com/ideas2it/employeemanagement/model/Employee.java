@@ -34,8 +34,7 @@ import lombok.Setter;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
- *
+ * @version 1.0
  */
 @Getter
 @Setter

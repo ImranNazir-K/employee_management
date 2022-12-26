@@ -39,7 +39,7 @@ import com.ideas2it.employeemanagement.service.ProjectService;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
 @Service
 public class ProjectServiceImpl implements ProjectService {

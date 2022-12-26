@@ -32,7 +32,7 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
 @RestController
 @RequestMapping("/api/v1/employees")
@@ -47,12 +47,12 @@ public class EmployeeController {
      * Creates employee.
      * 
      * @param employeeDto as EmployeeDTO object that contains an 
-     *      employee to be created.
+     *        employee to be created.
      * 
      * @return the employee created.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     @PostMapping
     private ResponseEntity<EmployeeDTO> createEmployee
@@ -64,10 +64,10 @@ public class EmployeeController {
      * Gets all the employees from the Database.
      * 
      * @return all the employees as list from the database as
-     *      List<EmployeeDTO>.
+     *         List<EmployeeDTO>.
      * 
      * @throws EMSException exception message of the employee 
-     *      management system.
+     *         management system.
      */
     @GetMapping
     private ResponseEntity<List<EmployeeDTO>> getEmployees()
@@ -81,10 +81,10 @@ public class EmployeeController {
      * @param employeeId of an employee as int.
      * 
      * @return EmployeeDTO object that contains that particular
-     *      employee.
+     *         employee.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @GetMapping("/{employeeId}")
     private ResponseEntity<EmployeeDTO> displayEmployee
@@ -96,12 +96,12 @@ public class EmployeeController {
      * updates an employee.
      * 
      * @param employeeDto as EmployeeDTO object that contains an
-     *      employee.
+     *        employee.
      * 
      * @return the updated employee.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @PutMapping("/{employeeId}")
     private ResponseEntity<EmployeeDTO> updateEmployee(
@@ -119,7 +119,7 @@ public class EmployeeController {
      * @return the updated employee.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @PutMapping("/{employeeId}/projects/{projectId}")
     private ResponseEntity<EmployeeDTO> assignProject(
@@ -137,7 +137,7 @@ public class EmployeeController {
      * @return the updated employee.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @DeleteMapping("/{employeeId}/projects/{projectId}")
     private ResponseEntity<EmployeeDTO> unAssignProject(
@@ -155,7 +155,7 @@ public class EmployeeController {
      * @return deleted message as String.
      * 
      * @throws EMSException exception message of the employee
-     *      management system.
+     *         management system.
      */
     @DeleteMapping("/{employeeId}")
     private ResponseEntity<String> deleteEmployee(@PathVariable int employeeId)

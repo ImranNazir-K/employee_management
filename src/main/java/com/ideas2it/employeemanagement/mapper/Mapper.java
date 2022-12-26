@@ -24,7 +24,7 @@ import com.ideas2it.employeemanagement.model.Project;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
+ * @version 1.0
  */
 public class Mapper {
 
@@ -32,7 +32,7 @@ public class Mapper {
      * Converts EmployeeDTO object into Employee object.
      *
      * @param employeeDto as EmployeeDTO object that contains an
-     *      employee.
+     *        employee.
      *
      * @return employee as Employee object.
      */
@@ -45,8 +45,8 @@ public class Mapper {
         employee.setEmployeeSalary(Double.parseDouble(employeeDto.
                 getEmployeeSalary()));
         employee.setEmployeeName(employeeDto.getEmployeeName().toUpperCase());
-        employee.setEmployeeMailId(employeeDto.getEmployeeMailId
-        		().toLowerCase());
+        employee.setEmployeeMailId(employeeDto.getEmployeeMailId()
+        		.toLowerCase());
         employee.setEmployeeDateOfBirth(employeeDto.getEmployeeDateOfBirth());
         return employee;
     }
@@ -55,7 +55,7 @@ public class Mapper {
      * Converts EmployeeDTO object into Employee object.
      *
      * @param employee as Employee object that contains an
-     *      employee.
+     *        employee.
      *
      * @return employeeDto as EmployeeDTO object.
      */
@@ -77,7 +77,7 @@ public class Mapper {
      * Converts ProjectDTO object into Project object.
      *
      * @param projectDto as ProjectDTO object that contains an
-     *      project.
+     *        project.
      *
      * @return project as Project object.
      */
@@ -95,7 +95,7 @@ public class Mapper {
      * Converts Project object into ProjectDTO object.
      *
      * @param project as Project object that contains an
-     *      project.
+     *        project.
      *
      * @return projectDto as ProjectDTO object.
      */
@@ -114,7 +114,7 @@ public class Mapper {
      * object into ProjectDTO object.
      *
      * @param employee as Employee object that contains an
-     *      employee.
+     *        employee.
      *
      * @return employeeDto as EmployeeDTO object.
      */
@@ -136,7 +136,7 @@ public class Mapper {
      * ProjectDTO object int Project object.
      *
      * @param employeeDto as EmployeeDTO object that contains an
-     *      employee.
+     *        employee.
      *
      * @return employee as Employee object.
      */
@@ -158,7 +158,7 @@ public class Mapper {
      * object into EmployeeDTO object
      *
      * @param project as Project object that contains an
-     *      project.
+     *        project.
      *
      * @return projectDto as ProjectDTO object. 
      */
@@ -180,7 +180,7 @@ public class Mapper {
      * as Employee object.
      *
      * @param projectDto as ProjectDTO object that contains an
-     *      project.
+     *        project.
      *
      * @return project as Project object.
      */

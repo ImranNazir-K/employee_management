@@ -11,7 +11,6 @@
 package com.ideas2it.employeemanagement.model;
 
 import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,8 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
-import org.springframework.lang.NonNull;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,9 +28,7 @@ import lombok.Setter;
  *
  * @author IMRAN NAZIR K
  *
- * @version 6.0
- *
- * 
+ * @version 1.0
  */
 @Getter
 @Setter
@@ -47,13 +42,14 @@ public class Project {
 	
 	@NotNull
     private String projectDescription;
+	
 	@NotNull
     private String projectDomain;
+	
 	@NotNull
     private String projectName;
 	
 	@ManyToMany
-	@NonNull
 	@JoinTable(name = "employee_project")
 	private Set<Employee> employee;
 }
