@@ -8,6 +8,8 @@
  */
 package com.ideas2it.fooddeliveryapp.controller;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,14 +23,16 @@ import com.ideas2it.fooddeliveryapp.dto.AddressDTO;
 import com.ideas2it.fooddeliveryapp.service.AddressService;
 
 /**
- * This is controller class for address entity and
- * provides methods for CRUD operations.
+ * Controller class for the Food Delivery Application that does
+ * CRUD operations for Address.
  *
  * @author Govindaraj
  * @version 1.0
+ * @since 04/01/2023
+ *
  */
 @RestController
-@RequestMapping("api/v1/address")
+@RequestMapping("/api/v1/addresses")
 public class AddressController {
 
     private final AddressService addressService;
@@ -38,24 +42,22 @@ public class AddressController {
     }
 
     /**
-     * It takes a AddressDTO object as a request body and calls
-     * create function in address service if address is added
-     * it return user object else it throws exception.
+     * Creates a address that clients made as request.
      *
-     * @param addressDto The address object is to be added.
-     * @return give address object as response.
+     * @param addressDto as AddressDTO instance consists address.
+     * @return addressDto which was created.
      */
-    @PostMapping()
-    public AddressDTO createAddress(@RequestBody AddressDTO addressDto) {
+    @PostMapping
+    public AddressDTO createAddress(@Valid @RequestBody AddressDTO addressDto) {
         return addressService.createAddress(addressDto);
     }
 
     /**
-     * It fetches address by id and returns a fetched address,
-     * if address is not present, it will throw error message (Address not found)
+     * Gets particular address the client requested.
      *
-     * @param id The id of the address to be fetched.
-     * @return address detail as response.
+     * @param id of an address as int.
+     * @return addressDto as AddressDTO instance that
+     * consists address.
      */
     @GetMapping("/{id}")
     public AddressDTO getAddressById(@PathVariable int id) {
@@ -63,26 +65,22 @@ public class AddressController {
     }
 
     /**
-     * It takes a AddressDTO object as a parameter, calls the updateAddress
-     * function in the addressService class, and returns
-     * updated object else throws error message.
+     * Updates the Address.
      *
-     * @param addressDto The address object need to be updated.
-     * @return updated address object as response.
+     * @param addressDto The AddressDTO object.
+     * @return updated addressDto object.
      */
-    @PutMapping()
-    public AddressDTO updateAddress(@RequestBody AddressDTO addressDto) {
+    @PutMapping
+    public AddressDTO updateAddress(@Valid @RequestBody AddressDTO
+            addressDto) {
         return addressService.updateAddress(addressDto);
     }
 
     /**
-     * It deletes address from the database and
-     * returns boolean true if deletes else throws error message(id not found).
+     * Deletes address by id.
      *
-     * Note: address's deleted status update into true.
-     *
-     * @param id The id of the address to be deleted.
-     * @return boolean as response.
+     * @param id The id of the address.
+     * @return true if deleted.
      */
     @DeleteMapping("/{id}")
     public boolean deleteUserById(@PathVariable int id) {

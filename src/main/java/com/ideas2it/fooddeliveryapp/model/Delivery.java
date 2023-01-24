@@ -11,8 +11,6 @@ package com.ideas2it.fooddeliveryapp.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,27 +18,36 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-import com.ideas2it.fooddeliveryapp.util.DeliveryStatus;
-
+/**
+ * Delivery entity class.
+ *
+ * @author M Mohamed Riyas
+ * @version 1.0
+ * @since 04/01/2023
+ */
 @Entity
 @Table(name = "delivery")
 public class Delivery {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
     @JoinColumn(name = "pickup_location")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     private Address pickupLocation;
+
     @JoinColumn(name = "drop_location")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     private Address dropLocation;
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
     private User user;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "order_detail_id")
     private OrderDetail orderDetail;
 
     public int getId() {
@@ -65,14 +72,6 @@ public class Delivery {
 
     public void setDropLocation(Address dropLocation) {
         this.dropLocation = dropLocation;
-    }
-
-    public DeliveryStatus getDeliveryStatus() {
-        return deliveryStatus;
-    }
-
-    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
     }
 
     public User getUser() {

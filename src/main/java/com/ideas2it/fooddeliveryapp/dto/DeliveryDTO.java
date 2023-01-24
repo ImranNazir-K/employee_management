@@ -8,22 +8,32 @@
  */
 package com.ideas2it.fooddeliveryapp.dto;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
 
-import com.ideas2it.fooddeliveryapp.model.Address;
-import com.ideas2it.fooddeliveryapp.model.OrderDetail;
-import com.ideas2it.fooddeliveryapp.model.User;
-import com.ideas2it.fooddeliveryapp.util.DeliveryStatus;
+import com.ideas2it.fooddeliveryapp.constant.FoodConstant;
 
+/**
+ * Data Transfer Object for the Delivery.
+ *
+ * @author M Mohamed Riyas
+ * @version 1.0
+ * @since 04/01/2023
+ */
 public class DeliveryDTO {
+
     private int id;
-    private Address pickupLocation;
-    private Address dropLocation;
-    @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus;
-    private User user;
-    private OrderDetail orderDetail;
+
+    @NotNull(message = FoodConstant.PICKUP_LOCATION_NOT_NULL)
+    private AddressDTO pickupLocation;
+
+    @NotNull(message = FoodConstant.DROP_LOCATION_NOT_NULL)
+    private AddressDTO dropLocation;
+
+    @NotNull(message = FoodConstant.USER_NOT_NULL)
+    private UserResponseDTO userDTO;
+
+    @NotNull(message = FoodConstant.ORDER_NOT_NULL)
+    private OrderDetailDTO orderDetailDTO;
 
     public int getId() {
         return id;
@@ -33,43 +43,35 @@ public class DeliveryDTO {
         this.id = id;
     }
 
-    public Address getPickupLocation() {
+    public AddressDTO getPickupLocation() {
         return pickupLocation;
     }
 
-    public void setPickupLocation(Address pickupLocation) {
+    public void setPickupLocation(AddressDTO pickupLocation) {
         this.pickupLocation = pickupLocation;
     }
 
-    public Address getDropLocation() {
+    public AddressDTO getDropLocation() {
         return dropLocation;
     }
 
-    public void setDropLocation(Address dropLocation) {
+    public void setDropLocation(AddressDTO dropLocation) {
         this.dropLocation = dropLocation;
     }
 
-    public DeliveryStatus getDeliveryStatus() {
-        return deliveryStatus;
+    public UserResponseDTO getUser() {
+        return userDTO;
     }
 
-    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
+    public void setUser(UserResponseDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
-    public User getUser() {
-        return user;
+    public OrderDetailDTO getOrderDetail() {
+        return orderDetailDTO;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public OrderDetail getOrderDetail() {
-        return orderDetail;
-    }
-
-    public void setOrderDetail(OrderDetail orderDetail) {
-        this.orderDetail = orderDetail;
+    public void setOrderDetail(OrderDetailDTO orderDetailDTO) {
+        this.orderDetailDTO = orderDetailDTO;
     }
 }

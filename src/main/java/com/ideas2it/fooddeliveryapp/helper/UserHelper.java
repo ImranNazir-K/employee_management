@@ -14,17 +14,19 @@ import org.modelmapper.ModelMapper;
 
 import com.ideas2it.fooddeliveryapp.dto.AddressDTO;
 import com.ideas2it.fooddeliveryapp.dto.UserDTO;
+import com.ideas2it.fooddeliveryapp.dto.UserResponseDTO;
 import com.ideas2it.fooddeliveryapp.model.Address;
 import com.ideas2it.fooddeliveryapp.model.User;
 
 /**
- * This is UserHelper class for user module
- * provides methods for converting entity object DTO and DTO to entity.
+ * Converts entity to DTO object and DTO object to entity.
  *
  * @author Govindaraj
  * @version 1.0
+ * @since 04/01/2023
  */
 public class UserHelper {
+
     private static final ModelMapper mapper = new ModelMapper();
 
     /**
@@ -34,18 +36,17 @@ public class UserHelper {
      * @return user as User object
      */
     public static User toUser(UserDTO userDto) {
-        User user = mapper.map(userDto, User.class);
-        return user;
+        return mapper.map(userDto, User.class);
     }
 
     /**
      * Converts List of User into List of UserDTO.
      *
-     * @param users List of user.
+     * @param userDTOS List of user.
      * @return List of UserDto.
      */
-    public static List<UserDTO> toUserDtoList(List<User> users) {
-        return users.stream().map(user -> mapper.map(user,
+    public static List<UserDTO> toUserDtos(List<User> userDTOS) {
+        return userDTOS.stream().map(user -> mapper.map(user,
                 UserDTO.class)).toList();
     }
 
@@ -58,11 +59,32 @@ public class UserHelper {
     public static UserDTO toUserDto(User user) {
         return mapper.map(user, UserDTO.class);
     }
-    
+
+    /**
+     * Converts UserDTO object into UserResponse object.
+     *
+     * @param userDto as user response object.
+     * @return converted userResponseDto object.
+     */
+    public static UserResponseDTO toUserResponseDTO(UserDTO userDto) {
+        return mapper.map(userDto, UserResponseDTO.class);
+    }
+
+    /**
+     * Converts List<UserDTO> object into List<UserResponseDTO>.
+     *
+     * @param userDTOS List of UserDTO.
+     * @return Converted List of UserResponse DTO.
+     */
+    public static List<UserResponseDTO> toUserResponseDTOS(List<UserDTO> userDTOS) {
+        return userDTOS.stream().map(userDTO -> mapper.map(userDTO,
+                UserResponseDTO.class)).toList();
+    }
+
     /**
      * Converts AddressDto object into Address object.
      *
-     * @param addressDto as AddressDto object
+     * @param addressDto as AddressDto object.
      * @return converted address object.
      */
     public static Address toAddress(AddressDTO addressDto) {
@@ -72,10 +94,10 @@ public class UserHelper {
     /**
      * Converts Address object to AddressDto object.
      *
-     * @param address as Address object.
+     * @param addressDto as Address object.
      * @return converted addressDto object.
      */
-    public static AddressDTO toAddressDto(Address address) {
-        return mapper.map(address, AddressDTO.class);
+    public static AddressDTO toAddressDto(Address addressDto) {
+        return mapper.map(addressDto, AddressDTO.class);
     }
 }

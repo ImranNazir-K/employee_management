@@ -24,10 +24,13 @@ import com.ideas2it.fooddeliveryapp.util.Rating;
 import com.ideas2it.fooddeliveryapp.util.Experience;
 
 /**
- * Contains Review fields as rating,review in private
+ * Review Entity class that consists of variables like id as auto
+ * generated, rating, experience, feedback, isDeleted, user and
+ * restaurant with getters and setters.
  *
  * @author Sakthi Annamalai
  * @version 1.0
+ * @since 04/01/2023
  */
 @Entity
 @Table(name = "review")
@@ -35,17 +38,27 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "rating")
     private Rating rating;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "experience")
     private Experience experience;
+
     @Column(name = "feedback")
     private String feedback;
+
     @Column(name = "is_deleted")
     private boolean isDeleted;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
@@ -82,6 +95,14 @@ public class Review {
         this.feedback = feedback;
     }
 
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        isDeleted = isDeleted;
+    }
+
     public Restaurant getRestaurant() {
         return restaurant;
     }
@@ -90,11 +111,11 @@ public class Review {
         this.restaurant = restaurant;
     }
 
-    public boolean getIsDeleted() {
-        return isDeleted;
+    public User getUser() {
+        return user;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
-        isDeleted = isDeleted;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

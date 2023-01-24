@@ -8,42 +8,24 @@
  */
 package com.ideas2it.fooddeliveryapp.service;
 
-import java.util.List;
-
 import com.ideas2it.fooddeliveryapp.dto.OrderItemDTO;
-import com.ideas2it.fooddeliveryapp.model.OrderItem;
 
 /**
- * @author IMRAN NAZIR K
+ * Interface for OrderItemServiceImpl class to perform CRUD
+ * operations for OrderItem.
+ *
+ * @author Imran Nazir K
  * @version 1.0
+ * @since 04/01/2023
  */
 public interface OrderItemService {
 
     /**
-     * @param orderItemDto
-     * @return
+     * Creates an orderItem.
+     *
+     * @param orderItemDto as OrderItemDTO object that consists
+     *                     an orderItem.
+     * @return orderDto as OrderItemDTO object that was created.
      */
     OrderItemDTO createOrderItems(OrderItemDTO orderItemDto);
-
-    /**
-     * @return
-     */
-    List<OrderItemDTO> getOrderItems();
-
-    /**
-     * @return
-     */
-    OrderItemDTO getOrderItemById(int orderItemId);
-
-    /**
-     * @param orderItemDto
-     * @return
-     */
-    OrderItemDTO updateOrderItems(OrderItemDTO orderItemDto);
-
-    /**
-     * @param orderItem
-     * @return
-     */
-    float calculateAmount(OrderItem orderItem);
 }

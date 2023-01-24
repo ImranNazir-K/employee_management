@@ -12,12 +12,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ideas2it.fooddeliveryapp.model.Payment;
 
-
 /**
  * Repository for Payment that extends JpaRepository.
  *
- * @author IMRAN NAZIR K
+ * @author Imran Nazir K
  * @version 1.0
+ * @since 04/01/2023
  */
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 }

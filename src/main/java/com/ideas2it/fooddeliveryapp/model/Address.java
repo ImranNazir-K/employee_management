@@ -16,11 +16,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 /**
- * This class represents address DTO and consists private
- * variable's id, door_no, street_name, city, landmark, pin_code.
+ * Address Entity class that consists of variables like id as auto
+ * generated id, door_no, street_name, city, landmark, pin_code
+ * with getters and setters.
  *
  * @author Govindaraj
  * @version 1.0
+ * @since 04/01/2023
  */
 @Entity
 @Table(name = "address")
@@ -30,16 +32,21 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
     @Column(name = "door_no")
     private String doorNo;
+
     @Column(name = "street_name")
     private String streetName;
+
+    @Column(name = "area")
+    private String area;
     @Column(name = "city")
     private String city;
-    @Column(name = "landmark")
-    private String landMark;
+
     @Column(name = "pin_code")
-    private int pinCode;
+    private String pinCode;
+
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
@@ -75,27 +82,27 @@ public class Address {
         this.city = city;
     }
 
-    public String getLandMark() {
-        return landMark;
-    }
-
-    public void setLandMark(String landMark) {
-        this.landMark = landMark;
-    }
-
-    public int getPinCode() {
+    public String getPinCode() {
         return pinCode;
     }
 
-    public void setPinCode(int pinCode) {
+    public void setPinCode(String pinCode) {
         this.pinCode = pinCode;
     }
 
-    public boolean isDeleted() {
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void getSetDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

@@ -10,25 +10,31 @@ package com.ideas2it.fooddeliveryapp.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.ideas2it.fooddeliveryapp.constant.RestaurantReviewConstant;
-import com.ideas2it.fooddeliveryapp.exception.NotFoundException;
+import com.ideas2it.fooddeliveryapp.constant.RestaurantConstant;
 import com.ideas2it.fooddeliveryapp.dto.ReviewDTO;
-import com.ideas2it.fooddeliveryapp.helper.RestaurantReviewHelper;
+import com.ideas2it.fooddeliveryapp.exception.NotFoundException;
+import com.ideas2it.fooddeliveryapp.helper.RestaurantHelper;
 import com.ideas2it.fooddeliveryapp.model.Review;
 import com.ideas2it.fooddeliveryapp.repository.ReviewRepository;
 import com.ideas2it.fooddeliveryapp.service.ReviewService;
 
 /**
- * This class is a service class that implements
- * the ReviewService interface
+ * Service class for review that implements ReviewService
+ * to perform CRUD operations.
  *
  * @author Sakthi Annamalai
  * @version 1.0
+ * @since 04/01/2023
  */
 @Service
 public class ReviewServiceImpl implements ReviewService {
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(RestaurantServiceImpl.class);
 
     private final ReviewRepository reviewRepository;
 
@@ -41,9 +47,10 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     public ReviewDTO createReview(ReviewDTO reviewDto) {
-        Review review = RestaurantReviewHelper.toReview(reviewDto);
-        return RestaurantReviewHelper.toReviewDto(reviewRepository.
-                save(review));
+        Review review = reviewRepository.save(RestaurantHelper
+                .toReview(reviewDto));
+        logger.info("Review Created");
+        return RestaurantHelper.toReviewDto(review);
     }
 
     /**
@@ -51,7 +58,7 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     public List<ReviewDTO> getReviews() {
-        return RestaurantReviewHelper.toReviewDtos(reviewRepository.findAll());
+        return RestaurantHelper.toReviewDtos(reviewRepository.findAll());
     }
 
     /**
@@ -60,10 +67,15 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewDTO getReviewById(int id) {
         Review review = reviewRepository.findById(id)
-                .filter(reviewObject -> reviewObject.getIsDeleted() == false)
-                .orElseThrow(() -> new NotFoundException(
-                        RestaurantReviewConstant.RESTAURANT_NOT_FOUND));
-        return RestaurantReviewHelper.toReviewDto(review);
+                .filter(reviewObject -> !reviewObject.getIsDeleted())
+                .orElseThrow(() -> {
+                    logger.warn("Restaurant id not found");
+                    throw new NotFoundException(RestaurantConstant
+                            .RESTAURANT_NOT_FOUND);
+                });
+
+        logger.info("Gets the particular review");
+        return RestaurantHelper.toReviewDto(review);
     }
 
     /**
@@ -71,9 +83,10 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     public ReviewDTO updateReview(ReviewDTO reviewDto) {
-        Review review = RestaurantReviewHelper.toReview(reviewDto);
-        return RestaurantReviewHelper.toReviewDto(reviewRepository.
-                save(review));
+        Review review = reviewRepository.save(RestaurantHelper
+                .toReview(reviewDto));
+        logger.info("Review Updated");
+        return RestaurantHelper.toReviewDto(review);
     }
 
     /**
@@ -81,15 +94,21 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     public boolean deleteReview(int id) {
-        boolean isDeleted = false;
-
         if (reviewRepository.existsById(id)) {
             reviewRepository.deleteById(id);
-            isDeleted = true;
+            logger.info("Review Deleted");
+            return true;
         } else {
-            throw new RuntimeException(RestaurantReviewConstant.
-                    REVIEW_NOT_FOUND);
+            throw new NotFoundException(RestaurantConstant.REVIEW_NOT_FOUND);
         }
-        return isDeleted;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    @Override
+    public List<ReviewDTO> getReviewsByRestaurantId(int id) {
+        return RestaurantHelper.toReviewDtos(reviewRepository
+                .findAllByRestaurantId(id));
     }
 }

@@ -15,28 +15,41 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import org.hibernate.annotations.ColumnDefault;
 
+/**
+ * Food entity class.
+ *
+ * @author M Mohamed Riyas
+ * @version 1.0
+ * @since 04/01/2023
+ */
 @Entity
 @Table(name = "food")
 public class Food {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
     @Column(name = "name")
     private String name;
-    @Column(name = "is_available", insertable = true)
-    @ColumnDefault("true")
+
+    @Column(name = "is_available", insertable = false)
     private Boolean isAvailable;
+
     @Column(name = "price")
     private float price;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "cuisine")
     private String cuisine;
+
     @Column(name = "category")
     private String category;
+
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
@@ -102,19 +115,5 @@ public class Food {
 
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
-    }
-
-    @Override
-    public String toString() {
-        return "Food{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isAvailable=" + isAvailable +
-                ", price=" + price +
-                ", description='" + description + '\'' +
-                ", cuisine='" + cuisine + '\'' +
-                ", category='" + category + '\'' +
-                ", isDeleted=" + isDeleted +
-                '}';
     }
 }

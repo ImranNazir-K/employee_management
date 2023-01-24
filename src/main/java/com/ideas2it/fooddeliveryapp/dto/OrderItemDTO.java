@@ -8,39 +8,31 @@
  */
 package com.ideas2it.fooddeliveryapp.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-import com.ideas2it.fooddeliveryapp.constant.OrderPaymentConstant;
+import com.ideas2it.fooddeliveryapp.constant.OrderConstant;
 
 /**
- * @author IMRAN NAZIR K
+ * Data Transfer Object class for OrderItem that consists of fields
+ * like id, quantity, amount and FoodDTO with getters and setters.
+ *
+ * @author Imran Nazir K
  * @version 1.0
+ * @since 04/01/2023
  */
 public class OrderItemDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Pattern(regexp = OrderPaymentConstant.QUANTITY_REGEX,
-            message = OrderPaymentConstant.INVALID_QUANTITY)
-    @NotNull(message = OrderPaymentConstant.NOT_NULL_QUANTITY)
+    @Pattern(regexp = OrderConstant.QUANTITY_REGEX,
+            message = OrderConstant.INVALID_QUANTITY)
+    @NotNull(message = OrderConstant.NOT_NULL_QUANTITY)
     private String quantity;
 
-    @Pattern(regexp = OrderPaymentConstant.AMOUNT_REGEX,
-            message = OrderPaymentConstant.INVALID_AMOUNT)
-    @NotNull(message = OrderPaymentConstant.NOT_NULL_AMOUNT)
     private String amount;
 
-    @OneToOne
-    @JoinColumn(name = "food_id")
-    @NotNull
+    @NotNull(message = OrderConstant.NOT_NULL_FOOD)
     private FoodDTO food;
 
     public int getId() {
@@ -73,15 +65,5 @@ public class OrderItemDTO {
 
     public void setFood(FoodDTO food) {
         this.food = food;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderItemDTO{" +
-                "id=" + id +
-                ", quantity='" + quantity + '\'' +
-                ", amount='" + amount + '\'' +
-                ", food=" + food +
-                '}';
     }
 }

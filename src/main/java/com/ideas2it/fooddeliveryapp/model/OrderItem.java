@@ -16,12 +16,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 /**
- * @author IMRAN NAZIR K
+ * OrderItem Entity that consists of fields like id as auto generated
+ * int, quantity as int, amount as float and Food as Food entity with
+ * setters and getters.
+ *
+ * @author Imran Nazir K
  * @version 1.0
+ * @since 04/01/2023
  */
 @Entity
+@Table(name = "order_item")
 public class OrderItem {
 
     @Id
@@ -69,15 +76,5 @@ public class OrderItem {
 
     public void setFood(Food food) {
         this.food = food;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderItem{" +
-                "id=" + id +
-                ", quantity=" + quantity +
-                ", amount=" + amount +
-                ", food=" + food +
-                '}';
     }
 }

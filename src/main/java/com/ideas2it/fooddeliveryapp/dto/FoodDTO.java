@@ -13,23 +13,37 @@ import jakarta.validation.constraints.Pattern;
 
 import com.ideas2it.fooddeliveryapp.constant.FoodConstant;
 
+/**
+ * Data Transfer Object for Food.
+ *
+ * @author M Mohamed Riyas
+ * @version 1.0
+ * @since 04/01/2023
+ */
 public class FoodDTO {
+
     private int id;
-    @NotNull(message = "Name cannot be null")
+
+    @NotNull(message = FoodConstant.NAME_NOT_NULL)
     @Pattern(regexp = FoodConstant.FOOD_NAME_REGEX,
-            message = "Invalid Food Name Format!")
+            message = FoodConstant.INVALID_NAME)
     private String name;
+
     private Boolean isAvailable;
-    @NotNull(message = "Price cannot be null")
+
+    @NotNull(message = FoodConstant.PRICE_NOT_NULL)
     private float price;
+
     @Pattern(regexp = FoodConstant.DESCRIPTION_REGEX,
-            message = "Invalid Description (or) Maximum characters reached(100)!")
+            message = FoodConstant.INVALID_DESCRIPTION)
     private String description;
+
     @Pattern(regexp = FoodConstant.CUISINE_CATEGORY_REGEX,
-            message = "Invalid Cuisine Name (or) Maximum characters reached(50)!")
+            message = FoodConstant.INVALID_CUISINE)
     private String cuisine;
+
     @Pattern(regexp = FoodConstant.CUISINE_CATEGORY_REGEX,
-            message = "Invalid Category Name (or) Maximum characters reached(50)!")
+            message = FoodConstant.INVALID_CATEGORY)
     private String category;
 
     public int getId() {
@@ -86,18 +100,5 @@ public class FoodDTO {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    @Override
-    public String toString() {
-        return "FoodDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isAvailable=" + isAvailable +
-                ", price=" + price +
-                ", description='" + description + '\'' +
-                ", cuisine='" + cuisine + '\'' +
-                ", category='" + category + '\'' +
-                '}';
     }
 }

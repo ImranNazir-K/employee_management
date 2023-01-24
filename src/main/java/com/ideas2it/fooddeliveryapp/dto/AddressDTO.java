@@ -14,36 +14,42 @@ import jakarta.validation.constraints.Pattern;
 import com.ideas2it.fooddeliveryapp.constant.UserConstant;
 
 /**
- * This class represents address DTO and consists private
- * variable's id, door_no, street_name, city, landmark, pin_code.
+ * Data Transfer Object class for Address that consists of
+ * fields like id, door_no, street_name, city, area, pin_code
+ * with getters and setters.
  *
  * @author Govindaraj
  * @version 1.0
+ * @since 04/01/2023
  */
 public class AddressDTO {
+
     private int id;
-    @NotNull(message = "Null value not allowed for door_no")
-    @Pattern(regexp = UserConstant.DOOR_NO_REGEX,message = UserConstant
-            .DOOR_NO_ERROR)
+
+    @NotNull(message = UserConstant.DOOR_NOT_NULL)
+    @Pattern(regexp = UserConstant.DOOR_NO_REGEX, message = UserConstant
+            .INVALID_DOOR_NO)
     private String doorNo;
-    @NotNull(message = "Null value not allowed for street name")
-    @Pattern(regexp = UserConstant.NAME_REGEX,message = UserConstant
-            .ADDRESS_ERROR)
+
+    @NotNull(message = UserConstant.STREET_NOT_NULL)
+    @Pattern(regexp = UserConstant.TEXT_REGEX, message = UserConstant
+            .INVALID_STREET_NAME)
     private String streetName;
-    @NotNull(message = "Null value not allowed for city")
-    @Pattern(regexp = UserConstant.NAME_REGEX,message = UserConstant
-            .ADDRESS_ERROR)
+
+    @NotNull(message = UserConstant.AREA_NOT_NULL)
+    @Pattern(regexp = UserConstant.TEXT_REGEX, message = UserConstant
+            .INVALID_AREA)
+    private String area;
+
+    @NotNull(message = UserConstant.CITY_NOT_NULL)
+    @Pattern(regexp = UserConstant.TEXT_REGEX, message = UserConstant
+            .INVALID_CITY)
     private String city;
 
-    @NotNull(message = "Null value not allowed for landmark")
-    @Pattern(regexp = UserConstant.NAME_REGEX,message = UserConstant
-            .ADDRESS_ERROR)
-    private String landMark;
-
-    @NotNull(message = "Null value not allowed for pin code")
+    @NotNull(message = UserConstant.PIN_CODE_NOT_NULL)
     @Pattern(regexp = UserConstant.PIN_CODE_REGEX, message = UserConstant
-            .PIN_CODE_ERROR)
-    private int pinCode;
+            .INVALID_PIN_CODE)
+    private String pinCode;
 
     public int getId() {
         return id;
@@ -69,6 +75,14 @@ public class AddressDTO {
         this.streetName = streetName;
     }
 
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     public String getCity() {
         return city;
     }
@@ -77,19 +91,11 @@ public class AddressDTO {
         this.city = city;
     }
 
-    public String getLandMark() {
-        return landMark;
-    }
-
-    public void setLandMark(String landMark) {
-        this.landMark = landMark;
-    }
-
-    public int getPinCode() {
+    public String getPinCode() {
         return pinCode;
     }
 
-    public void setPinCode(int pinCode) {
+    public void setPinCode(String pinCode) {
         this.pinCode = pinCode;
     }
 }

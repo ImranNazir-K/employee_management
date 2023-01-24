@@ -10,30 +10,41 @@ package com.ideas2it.fooddeliveryapp.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.ideas2it.fooddeliveryapp.constant.FoodConstant;
 import com.ideas2it.fooddeliveryapp.dto.DeliveryDTO;
+import com.ideas2it.fooddeliveryapp.dto.OrderDetailDTO;
 import com.ideas2it.fooddeliveryapp.exception.NotFoundException;
 import com.ideas2it.fooddeliveryapp.helper.FoodHelper;
 import com.ideas2it.fooddeliveryapp.model.Delivery;
 import com.ideas2it.fooddeliveryapp.repository.DeliveryRepository;
 import com.ideas2it.fooddeliveryapp.service.DeliveryService;
+import com.ideas2it.fooddeliveryapp.service.OrderDetailService;
 
 /**
- * Implementation of DeliveryService class for Delivery entity
+ * Implementation class of DeliveryService interface for Delivery
+ * entity.
  *
  * @author M Mohamed Riyas
- *
  * @version 1.0
+ * @since 04/01/2023
  */
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
 
-    private final DeliveryRepository deliveryRepository;
+    private static final Logger logger = LoggerFactory
+            .getLogger(DeliveryServiceImpl.class);
 
-    public DeliveryServiceImpl(DeliveryRepository deliveryRepository) {
+    private final DeliveryRepository deliveryRepository;
+    private final OrderDetailService orderDetailService;
+
+    public DeliveryServiceImpl(DeliveryRepository deliveryRepository,
+            OrderDetailService orderDetailService) {
         this.deliveryRepository = deliveryRepository;
+        this.orderDetailService = orderDetailService;
     }
 
     /**
@@ -41,14 +52,16 @@ public class DeliveryServiceImpl implements DeliveryService {
      */
     @Override
     public DeliveryDTO createDelivery(DeliveryDTO deliveryDTO) {
-        Delivery delivery = FoodHelper.toDelivery(deliveryDTO);
-        deliveryRepository.save(delivery);
+        Delivery delivery = deliveryRepository.save(FoodHelper
+                .toDelivery(deliveryDTO));
+        logger.info("Delivery Created");
         return FoodHelper.toDeliveryDto(delivery);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<DeliveryDTO> getDeliveries() {
         List<Delivery> deliveries = deliveryRepository.findAll();
         return FoodHelper.toDeliveryDtos(deliveries);
@@ -57,19 +70,41 @@ public class DeliveryServiceImpl implements DeliveryService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public DeliveryDTO getDeliveryById(int id) {
         Delivery delivery = deliveryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(
-                        FoodConstant.DELIVERY_NOT_FOUND));
+                .orElseThrow(() -> {
+                    logger.warn(FoodConstant.DELIVERY_NOT_FOUND);
+                    throw new NotFoundException(FoodConstant.DELIVERY_NOT_FOUND);
+                });
+
         return FoodHelper.toDeliveryDto(delivery);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public DeliveryDTO updateDelivery(DeliveryDTO deliveryDTO) {
-        Delivery delivery = FoodHelper.toDelivery(deliveryDTO);
-        deliveryRepository.save(delivery);
+        Delivery delivery = deliveryRepository.save(FoodHelper
+                .toDelivery(deliveryDTO));
+        logger.info("Delivery updated");
         return FoodHelper.toDeliveryDto(delivery);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<OrderDetailDTO> getActiveOrdersToDeliver() {
+        return orderDetailService.getActiveOrdersToDeliver();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Delivery> getDeliveriesByUserId(int userId) {
+        return deliveryRepository.findAllByUserId(userId);
     }
 }

@@ -2,42 +2,46 @@ package com.ideas2it.fooddeliveryapp.service;
 
 import com.ideas2it.fooddeliveryapp.dto.AddressDTO;
 
-import java.util.List;
+/**
+ * Interface for AddressServiceImpl class to perform CRUD
+ * operations for Address.
+ *
+ * @author Govindaraj
+ * @version 1.0
+ * @since 04/01/2023
+ */
 public interface AddressService {
 
     /**
-     * It takes an addressDTO as input and saves the
-     * address object to the database
+     * Creates address.
      *
-     * @param addressDto This is the object that is passed from the controller.
-     * @return address object if successfully inserted in database.
+     * @param addressDto The address object.
+     * @return AddressDTO object which was created.
      */
     AddressDTO createAddress(AddressDTO addressDto);
 
-
     /**
-     * Get a details of individual address from databases
-     * if address aren't exist, it will pass user not found message.
+     * Get address by its id if address doesn't exist, it will
+     * throw NotFoundException.
      *
-     * @param id gives a addressId to get particular address details
-     * @return addressDTO gives a response as a address DTO details
+     * @param id the id of the address.
+     * @return a AddressDTO object.
      */
     AddressDTO getAddressById(int id);
 
     /**
-     * Updates the user details in the database.
+     * Updates a address.
      *
-     * @param addressDto send a updated user details to update on database
-     * @return addressDTO gives a response as a address DTO details
+     * @param addressDto AddressDTO object.
+     * @return AddressDTO which was updated.
      */
     AddressDTO updateAddress(AddressDTO addressDto);
 
     /**
-     * It deletes the address of the user if the address
-     * is present in the user's address list
+     * Deletes the address by its id.
      *
-     * @param id This is reference for address object.
-     * @return A string - deleted message as response statement
+     * @param id The id of the address to be deleted.
+     * @return true if address deleted.
      */
     boolean deleteAddressById(int id);
 }

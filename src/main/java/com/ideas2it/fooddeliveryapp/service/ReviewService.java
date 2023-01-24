@@ -13,55 +13,61 @@ import java.util.List;
 import com.ideas2it.fooddeliveryapp.dto.ReviewDTO;
 
 /**
- * This interface is for ReviewServiceImpl
+ * Interface for ReviewServiceImpl to perform CRUD
+ * operations for review.
  *
  * @author Sakthi Annamalai
  * @version 1.0
+ * @since 04/01/2023
  */
 public interface ReviewService {
 
-
     /**
-     * Creates a new review for a restaurant.
+     * Creates review for a restaurant.
      *
-     * @param reviewDto The review object that
-     *                  needs to be created.
-     * @return ReviewDTO
+     * @param reviewDto The review object that needs to be created.
+     * @return A ReviewDTO object.
      */
     ReviewDTO createReview(ReviewDTO reviewDto);
 
-
     /**
-     * Gets all reviews.
+     * Gets all reviews if no reviews are found it return empty list.
      *
      * @return A list of ReviewDTO objects.
      */
     List<ReviewDTO> getReviews();
 
-
     /**
-     * Gets a review by its id.
+     * Gets a review by its id if not found it throws
+     * NotFoundException.
      *
-     * @param id The id of the review you want to get.
+     * @param id The id of the review.
      * @return A ReviewDTO object.
      */
     ReviewDTO getReviewById(int id);
 
     /**
-     * Update a review.
+     * Updates a review.
      *
-     * @param reviewDto The review object that
-     *                  needs to be updated.
-     * @return ReviewDTO
+     * @param reviewDto The reviewDto object.
+     * @return A ReviewDTO object.
      */
     ReviewDTO updateReview(ReviewDTO reviewDto);
 
-
     /**
-     * Delete a review by id.
+     * Deletes a review by id if not found it throws
+     * NotFoundException.
      *
-     * @param id The id of the review you want to delete.
-     * @return A string.
+     * @param id The id of the review.
+     * @return true if review deleted.
      */
     boolean deleteReview(int id);
+
+    /**
+     * Get all reviews for a restaurant.
+     *
+     * @param id The id of the restaurant.
+     * @return A list of Review for a restaurant.
+     */
+    List<ReviewDTO> getReviewsByRestaurantId(int id);
 }

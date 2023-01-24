@@ -16,18 +16,19 @@ import com.ideas2it.fooddeliveryapp.model.Address;
 
 /**
  * Interface extends jpaRepository which provides
- * methods deals with CRUD operations.
+ * methods for CRUD operations.
  *
  * @author - Govindaraj
  * @version - 1.0
+ * @since 04/01/2023
  */
 public interface AddressRepository extends JpaRepository<Address, Integer> {
 
     /**
-     * Deletes a specific object by using its id and
-     * updates isDeleted into true.
+     * Deletes a specific address by using its id and
+     * updates isDeleted to true.
      *
-     * @param id for object reference.
+     * @param id the address id as int.
      */
     @Modifying
     @Query("UPDATE Address a SET isDeleted = true WHERE a.id = :id")

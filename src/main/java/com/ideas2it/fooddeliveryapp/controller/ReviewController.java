@@ -8,9 +8,9 @@
  */
 package com.ideas2it.fooddeliveryapp.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,15 +24,18 @@ import com.ideas2it.fooddeliveryapp.dto.ReviewDTO;
 import com.ideas2it.fooddeliveryapp.service.ReviewService;
 
 /**
- * This class is a controller class for the review in food
- * delivery app
+ * Controller class for Handling the incoming requests to validate
+ * the user input for performing crud operations for Review.
+ *
  *
  * @author Sakthi Annamalai
  * @version 1.0
+ * @since 04/01/2023
  */
 @RestController
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
+
     private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
@@ -40,32 +43,33 @@ public class ReviewController {
     }
 
     /**
-     * Creates review
+     * Creates review for restaurant.
      *
-     * @param reviewDto This is the object that will be passed
-     *                  in the request body.
-     * @return ReviewDTO
+     * @param reviewDto  The reviewDto object that will be
+     *                   created.
+     * @return A ReviewDTO object which was created.
      */
-    @PostMapping()
+    @PostMapping
     public ReviewDTO createReview(@RequestBody @Valid ReviewDTO reviewDto) {
         return reviewService.createReview(reviewDto);
     }
 
     /**
-     * Gets a list of all the reviews
+     * Gets all reviews if no reviews are found it return empty list.
      *
-     * @return A list of ReviewDTOs
+     * @return A list of ReviewDTO objects.
      */
-    @GetMapping()
+    @GetMapping
     public List<ReviewDTO> getReviews() {
         return reviewService.getReviews();
     }
 
     /**
-     * Takes in an id, and returns a ReviewDTO
+     * Gets a review by its id if not found it throws
+     * NotFoundException.
      *
      * @param id The id of the review you want to get.
-     * @return A ReviewDTO object
+     * @return A ReviewDTO object.
      */
     @GetMapping("/{id}")
     public ReviewDTO getReviewById(@PathVariable int id) {
@@ -73,10 +77,10 @@ public class ReviewController {
     }
 
     /**
-     * updates a review.
+     * Updates a review.
      *
-     * @param reviewDto The object that will be updated.
-     * @return ReviewDTO
+     * @param reviewDto The reviewDto object that will be updated.
+     * @return A ReviewDTO object which was updated.
      */
     @PutMapping
     public ReviewDTO updateReview(@RequestBody @Valid ReviewDTO reviewDto) {
@@ -84,14 +88,14 @@ public class ReviewController {
     }
 
     /**
-     * Deletes a review
+     * Deletes a review by id if not found it throws
+     * NotFoundException.
      *
-     * @param id The id of the review you want to delete.
-     * @return A string
+     * @param id The id of the review.
+     * @return true if review was deleted.
      */
     @DeleteMapping("/{id}")
     public boolean deleteReview(@PathVariable int id) {
         return reviewService.deleteReview(id);
     }
 }
-

@@ -8,9 +8,9 @@
  */
 package com.ideas2it.fooddeliveryapp.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,16 +20,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ideas2it.fooddeliveryapp.dto.OrderDetailDTO;
 import com.ideas2it.fooddeliveryapp.dto.RestaurantDTO;
+import com.ideas2it.fooddeliveryapp.dto.ReviewDTO;
 import com.ideas2it.fooddeliveryapp.service.RestaurantService;
 
 /**
- * This class is a controller class for the restaurant in food
- * delivery app
- * Performs operations like create, Display, Update, Delete
+ * Controller class for Handling the incoming requests to validate
+ * the user input for performing crud operations for Restaurant.
  *
  * @author Sakthi Annamalai
  * @version 1.0
+ * @since 04/01/2023
  */
 @RestController
 @RequestMapping("/api/v1/restaurants")
@@ -42,32 +44,37 @@ public class RestaurantController {
     }
 
     /**
-     * Creates restaurant
+     * Creates a restaurant before it Checks If a restaurant is found
+     * with the same phone number or email, it throws a
+     * DuplicateFoundException.
      *
-     * @param restaurantDto The object that will be created.
-     * @return A RestaurantDTO object
+     * @param restaurantDto The restaurantDto object that will be
+     *                      created.
+     * @return A RestaurantDTO object which was created.
      */
-    @PostMapping()
+    @PostMapping
     public RestaurantDTO createRestaurant(@RequestBody @Valid RestaurantDTO
             restaurantDto) {
         return restaurantService.createRestaurant(restaurantDto);
     }
 
     /**
-     * It returns a list of all restaurants.
+     * Gets all the restaurants if no restaurants are found it return
+     * empty list.
      *
-     * @return A list of RestaurantDTO objects
+     * @return A list of RestaurantDTO objects.
      */
-    @GetMapping()
+    @GetMapping
     public List<RestaurantDTO> getRestaurants() {
         return restaurantService.getRestaurants();
     }
 
     /**
-     * It takes in an id, and returns a restaurantDTO
+     * Gets a restaurant by its id and if not found it throws
+     * NotFoundException.
      *
-     * @param id The id of the restaurant to be retrieved.
-     * @return A RestaurantDTO object
+     * @param id The id of the restaurant.
+     * @return A RestaurantDTO object.
      */
     @GetMapping("/{id}")
     public RestaurantDTO getRestaurantById(@PathVariable int id) {
@@ -75,11 +82,12 @@ public class RestaurantController {
     }
 
     /**
-     * Its takes in a RestaurantDTO object, and returns
-     * a RestaurantDTO object
+     * Updates a restaurant before it Checks if phone number or email
+     * is available for a restaurant. If no restaurant is found it
+     * updates or else it throws DuplicateFoundException.
      *
      * @param restaurantDto The object that will be updated.
-     * @return A RestaurantDTO object
+     * @return A RestaurantDTO object which was updated.
      */
     @PutMapping
     public RestaurantDTO updateRestaurant(@RequestBody @Valid RestaurantDTO
@@ -88,13 +96,84 @@ public class RestaurantController {
     }
 
     /**
-     * It deletes a restaurant by id.
+     * Deletes a restaurant by id if not found it throws
+     * NotFoundException.
      *
      * @param id The id of the restaurant to be deleted.
-     * @return A string
+     * @return true if restaurant was deleted.
      */
     @DeleteMapping("/{id}")
     public boolean deleteRestaurant(@PathVariable int id) {
         return restaurantService.deleteRestaurant(id);
+    }
+
+    /**
+     * Gets a list of restaurants in a given area.
+     *
+     * @param areaName The name of the area.
+     * @return A list of RestaurantDTO objects.
+     */
+    @GetMapping("/addresses/{areaName}")
+    public List<RestaurantDTO> getRestaurantsByArea(@PathVariable String
+            areaName) {
+        return restaurantService.getRestaurantsByArea(areaName);
+    }
+
+    /**
+     * Gets all restaurants that serve a given cuisine.
+     *
+     * @param cuisineName The name of the cuisine.
+     * @return A list of restaurants that have the cuisineName.
+     */
+    @GetMapping("/foods/{cuisineName}")
+    public List<RestaurantDTO> getRestaurantsByCuisine(@PathVariable String
+            cuisineName) {
+        return restaurantService.getRestaurantsByCuisine(cuisineName);
+    }
+
+    /**
+     * Gets all reviews for a restaurant.
+     *
+     * @param id The id of the restaurant.
+     * @return A list of reviews for a restaurant.
+     */
+    @GetMapping("/{id}/reviews")
+    public List<ReviewDTO> getReviewByRestaurantId(@PathVariable int id) {
+        return restaurantService.getReviewsByRestaurantId(id);
+    }
+
+    /**
+     * Gets all orders by restaurant.
+     *
+     * @param id The id of the restaurant.
+     * @return List of OrderDetailDTO objects.
+     */
+    @GetMapping("/{id}/orders")
+    public List<OrderDetailDTO> getAllOrdersByRestaurantId(@PathVariable int
+            id) {
+        return restaurantService.getAllOrdersByRestaurantId(id);
+    }
+
+    /**
+     * Gets all active orders for a restaurant.
+     *
+     * @param id The id of the restaurant.
+     * @return List of OrderDetailDTO objects.
+     */
+    @GetMapping("/{id}/activeorders")
+    public List<OrderDetailDTO> getActiveOrdersByRestaurantId(@PathVariable int
+            id) {
+        return restaurantService.getActiveOrdersByRestaurantId(id);
+    }
+
+    /**
+     * Accepts an order.
+     *
+     * @param orderId The id of the order.
+     * @return List of OrderDetailDTO objects.
+     */
+    @GetMapping("/orders/{orderId}")
+    public OrderDetailDTO acceptOrder(@PathVariable int orderId) {
+        return restaurantService.acceptOrder(orderId);
     }
 }

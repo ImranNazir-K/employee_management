@@ -11,48 +11,64 @@ package com.ideas2it.fooddeliveryapp.service;
 import java.util.List;
 
 import com.ideas2it.fooddeliveryapp.dto.DeliveryDTO;
-
+import com.ideas2it.fooddeliveryapp.dto.OrderDetailDTO;
+import com.ideas2it.fooddeliveryapp.model.Delivery;
 
 /**
- * Service class for Delivery entity
+ * Interface for DeliveryServiceImpl class to perform CRUD
+ * operations for Delivery.
  *
  * @author M Mohamed Riyas
- *
  * @version 1.0
+ * @since 04/01/2023
  */
 public interface DeliveryService {
 
     /**
-     * Inserts delivery into record
+     * Creates delivery.
      *
-     * @param deliveryDTO DTO object of delivery entity
-     *
-     * @return DTO object of delivery entity
+     * @param deliveryDTO Object of DeliveryDTO.
+     * @return The created DeliveryDTO object.
      */
     DeliveryDTO createDelivery(DeliveryDTO deliveryDTO);
 
     /**
-     * Gets all deliveries from the record
+     * Gets all deliveries.
      *
-     * @return List of all deliveries from the records as DTO objects
+     * @return List of deliveries as DeliveryDTO objects.
      */
     List<DeliveryDTO> getDeliveries();
 
     /**
-     * Gets particular delivery from the record by id
+     * Gets particular delivery by the given id or throws NotFound
+     * exception if the id is not found.
      *
-     * @param id id of delivery to be fetched
-     *
-     * @return DTO object of delivery entity
+     * @param id The id of delivery.
+     * @return DeliveryDTO object.
      */
     DeliveryDTO getDeliveryById(int id);
 
     /**
-     * Updates delivery details from the record
+     * Updates delivery details.
      *
-     * @param deliveryDTO DTO object of delivery entity
-     *
-     * @return updated DTO object of delivery entity
+     * @param deliveryDTO Object of DeliveryDTO.
+     * @return The updated DeliveryDTO object.
      */
     DeliveryDTO updateDelivery(DeliveryDTO deliveryDTO);
+
+    /**
+     * Gets all the deliveries of a particular user.
+     *
+     * @param userId The id of the user
+     * @return List of deliveries as Delivery objects.
+     */
+    List<Delivery> getDeliveriesByUserId(int userId);
+
+    /**
+     * Gets all the Order Details as OrderDetailDTO objects that are
+     * ready to be delivered.
+     *
+     * @return List of OrderDetailDTO objects.
+     */
+    List<OrderDetailDTO> getActiveOrdersToDeliver();
 }

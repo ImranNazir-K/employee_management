@@ -13,7 +13,9 @@ package com.ideas2it.fooddeliveryapp.util;
  *
  * @author Govindaraj
  * @version 1.0
+ * @since 04/01/2023
  */
 public enum Gender {
-    MALE,FEMALE,male,female,others,OTHERS
+
+    MALE, FEMALE, OTHERS
 }

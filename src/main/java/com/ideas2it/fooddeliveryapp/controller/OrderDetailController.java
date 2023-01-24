@@ -14,24 +14,23 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ideas2it.fooddeliveryapp.dto.OrderDetailDTO;
-import com.ideas2it.fooddeliveryapp.exception.NotFoundException;
 import com.ideas2it.fooddeliveryapp.service.OrderDetailService;
 
 /**
- * Class as controller for the Food Delivery Application that does
- * CRUD operations for orders.
+ * Controller class for Handling  the incoming requests to validate
+ * the user input for performing crud operations for OrderDetail.
  *
- * @author IMRAN NAZIR K
+ * @author Imran Nazir K
  * @version 1.0
+ * @since 04/01/2023
  */
 @RestController
-@RequestMapping("api/v1/orderdetails")
+@RequestMapping("/api/v1/orderdetails")
 public class OrderDetailController {
 
     private final OrderDetailService orderDetailService;
@@ -41,7 +40,7 @@ public class OrderDetailController {
     }
 
     /**
-     * creates an order that clients made as request.
+     * Creates an order detail.
      *
      * @param orderDetailDto as OrderDTO instance consists an order.
      * @return orderDto which was created.
@@ -55,33 +54,36 @@ public class OrderDetailController {
     /**
      * Gets all the orders that are available.
      *
-     * @return List<OrderDTO> list of orders.
+     * @return list of orders as List<OrderDTO>.
      */
     @GetMapping
-    public List<OrderDetailDTO> getOrderDetails() {
-        return orderDetailService.getOrderDetails();
+    public List<OrderDetailDTO> getOrders() {
+        return orderDetailService.getOrders();
     }
 
     /**
-     * Gets that particular order the client requested.
+     * Gets all the orderDetails of a user by id if no Order
+     * Details are found for that user returns empty List.
      *
-     * @param orderId of an order as int.
-     * @return orderDto as OrderDTO instance that consists an order.
+     * @param userId of a user as int.
+     * @return List<OrderDetailDto> contains all the orderDetails.
      */
-    @GetMapping("/{orderId}")
-    public OrderDetailDTO getOrderDetailById(@PathVariable int orderId) {
-        return orderDetailService.getOrderDetailById(orderId);
+    @GetMapping("/users/{userId}")
+    public List<OrderDetailDTO> getOrdersByUserId(@PathVariable int
+            userId) {
+        return orderDetailService.getOrdersByUserId(userId);
     }
 
     /**
-     * updates the particular order the client requested.
+     * Gets all the orders with payments of a user by id if no Order
+     * Details are found for that user returns empty List.
      *
-     * @param orderDetailDto as OrderDTO instance consists an order.
-     * @return orderDto as OrderDTO instance which was updated.
+     * @param userId the id of a user as int.
+     * @return List<OrderDetailDto> contains all the orderDetails.
      */
-    @PutMapping
-    public OrderDetailDTO updateOrder(@RequestBody @Valid OrderDetailDTO
-            orderDetailDto) throws NotFoundException {
-        return orderDetailService.updateOrder(orderDetailDto);
+    @GetMapping("/{orderId}/users/{userId}")
+    public OrderDetailDTO getOrderById(@PathVariable int orderId,
+            @PathVariable int userId) {
+        return orderDetailService.getOrderByUserId(orderId, userId);
     }
 }

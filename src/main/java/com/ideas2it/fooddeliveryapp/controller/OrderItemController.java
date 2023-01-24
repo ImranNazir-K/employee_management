@@ -8,12 +8,7 @@
  */
 package com.ideas2it.fooddeliveryapp.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,11 +17,15 @@ import com.ideas2it.fooddeliveryapp.dto.OrderItemDTO;
 import com.ideas2it.fooddeliveryapp.service.OrderItemService;
 
 /**
- * @author IMRAN NAZIR K
+ * Controller class for Handling  the incoming requests to validate
+ * the user input for performing crud operations for OrderItem.
+ *
+ * @author Imran Nazir K
  * @version 1.0
+ * @since 04/01/2023
  */
 @RestController
-@RequestMapping("api/v1/orderitems")
+@RequestMapping("/api/v1/orderitems")
 public class OrderItemController {
 
     private OrderItemService orderItemService;
@@ -36,36 +35,15 @@ public class OrderItemController {
     }
 
     /**
-     * @param orderItemDto
-     * @return
+     * Creates an orderItem that clients made as request.
+     *
+     * @param orderItemDto as OrderItemDTO instance consists an
+     *                     orderItem.
+     * @return orderItemDto which was created.
      */
     @PostMapping
-    public OrderItemDTO createOrderItem(@RequestBody OrderItemDTO orderItemDto) {
+    public OrderItemDTO createOrderItem(@RequestBody OrderItemDTO
+            orderItemDto) {
         return orderItemService.createOrderItems(orderItemDto);
-    }
-
-    /**
-     * @return
-     */
-    @GetMapping
-    public List<OrderItemDTO> getOrderItems() {
-        return orderItemService.getOrderItems();
-    }
-
-    /**
-     * @return
-     */
-    @GetMapping("/{orderItemId}")
-    public OrderItemDTO getOrderItemById(@PathVariable int orderItemId) {
-        return orderItemService.getOrderItemById(orderItemId);
-    }
-
-    /**
-     * @param orderItemDto
-     * @return
-     */
-    @PutMapping
-    public OrderItemDTO updateOrderItem(@RequestBody OrderItemDTO orderItemDto) {
-        return orderItemService.updateOrderItems(orderItemDto);
     }
 }

@@ -9,9 +9,13 @@
 package com.ideas2it.fooddeliveryapp.util;
 
 /**
- * Creates enum called Experience in
- * food delivery app.
+ * Enum for Experience
+ *
+ * @author Sakthi Annamalai
+ * @version 1.0
+ * @since 04/01/2023
  */
 public enum Experience {
-    DINING,DELIVERY
+
+    DINING, DELIVERY
 }

@@ -2,51 +2,110 @@ package com.ideas2it.fooddeliveryapp.service;
 
 import java.util.List;
 
+import com.ideas2it.fooddeliveryapp.dto.JwtRequestDTO;
 import com.ideas2it.fooddeliveryapp.dto.UserDTO;
+import com.ideas2it.fooddeliveryapp.dto.UserResponseDTO;
 
+/**
+ * Interface for UserServiceImpl class to perform CRUD
+ * operations for User.
+ *
+ * @author Govindaraj
+ * @version 1.0
+ * @since 04/01/2023
+ */
 public interface UserService {
 
     /**
-     * Customer or Delivery person details store in the database
-     * before that check the user emailId and phone number must be unique in database.
-     * if emailId and phone already exist in table, it will show error message.
-
-     * @param userDto pass user details to store the user in the databases
-     * @return userDto  after store in database to give a response as user details.
+     * Creates user by checking the emailId and phoneNumber to avoid
+     * duplication if found it throws DuplicateFoundException.
+     *
+     * @param userDto the user object.
+     * @return userResponseDto object which was created.
      */
-    UserDTO createUser(UserDTO userDto);
+    UserResponseDTO createUser(UserDTO userDto);
 
     /**
-     * Get a details of individual user from databases
-     * if user aren't exist, it will pass user not found message.
+     * Gets a user by its id and if not found it throws
+     * NotFoundException.
      *
-     * @param id gives a userId to get particular user details
-     * @return userDTO gives a response as a user DTO details
+     * @param id The id of user.
+     * @return userResponseDTO object.
      */
-    UserDTO getUserById(int id);
+    UserResponseDTO getUserById(int id);
 
     /**
-     * Get details of all user details in databases
+     * Gets all the users as list if no users are found it return
+     * empty list.
      *
-     * @return list of user  gives a response of all user details.
+     * @return list of userResponseDto object.
      */
-    List<UserDTO> getAllUser();
+    List<UserResponseDTO> getAllUser();
 
     /**
-     * Updates the user details in the database.
-     * if user update the emailId and phone number,
-     * it checks emailId and phone number shouldn't already exist.
+     * Updates user by checking the emailId and phoneNumber to avoid
+     * duplication if found it throws DuplicateFoundException.
      *
-     * @param userDto send a updated user details to update on database
-     * @return userDTO gives a response as a user DTO details
+     * @param userDto the UserDTO object.
+     * @return A UserResponseDTO which was updated.
      */
-    UserDTO updateUser(UserDTO userDto);
+    UserResponseDTO updateUser(UserDTO userDto);
 
     /**
-     * delete the  user details in the database.
+     * Deletes a user by id.
      *
-     * @param id gives a userId to get particular user details
-     * @return userDTO gives a response as a user DTO details
+     * @param id The id of the user to delete.
+     * @return true if user delete.
      */
     boolean deleteUserById(int id);
+
+    /**
+     * Checks whether the contact is already exist for other user
+     * to avoid duplication, if found it throws
+     * DuplicateFoundException.
+     *
+     * @param phoneNumber for redundancy validation.
+     */
+    void isPhoneNumberExists(String phoneNumber);
+
+    /**
+     * Checks whether the email is already exist for other user to
+     * avoid duplication, if found it throws
+     * DuplicateFoundException.
+     *
+     * @param email for redundancy validation.
+     */
+    void isEmailExists(String email);
+
+    /**
+     * Checks whether the email is already exist for other user to
+     * avoid duplication while updating user, if found throws
+     * DuplicateFoundException.
+     *
+     * @param id    of the user.
+     * @param email for redundancy validation.
+     * @return true if contact is exist else false.
+     */
+    boolean isEmailAlreadyExists(int id, String email);
+
+    /**
+     * Checks whether the contact is already exist for other user
+     * to avoid duplication while updating user, if found throws
+     * DuplicateFoundException.
+     *
+     * @param id          of the user.
+     * @param phoneNumber phoneNumber for validation.
+     * @return true if contact is exist else false.
+     */
+    boolean isPhoneNumberAlreadyExists(int id, String phoneNumber);
+
+    /**
+     * JwtRequest object as input, validate it,
+     * and returns a JwtResponseDTO object.
+     *
+     * @param jwtRequest request object.
+     *                   that contains the username and password.
+     * @return String JWT token .
+     */
+    String generateToken(JwtRequestDTO jwtRequest);
 }

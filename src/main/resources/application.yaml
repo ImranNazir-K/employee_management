@@ -1,14 +1,23 @@
 spring:
   datasource:
-    #    url: jdbc:mysql://localhost:3306/food_delivery_app
-    url: jdbc:mysql://localhost:3306/test
+    url: jdbc:mysql://localhost:3306/food_delivery_app
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: thor
+    password: foodapp@Ideas2it
+
   jpa:
     properties:
       hibernate:
         format_sql: 'true'
-    hibernate:
-      ddl-auto: update
     show-sql: 'true'
+
+logging:
+  logback:
+    rollingpolicy:
+      max-file-size: 10mb
+  level:
+    root: info
+  file:
+    name: logs/app.log
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} %p %C %L : %m%n'

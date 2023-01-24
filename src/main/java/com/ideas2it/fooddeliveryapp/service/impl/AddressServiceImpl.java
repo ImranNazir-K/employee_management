@@ -8,6 +8,8 @@
  */
 package com.ideas2it.fooddeliveryapp.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.ideas2it.fooddeliveryapp.constant.UserConstant;
@@ -19,15 +21,18 @@ import com.ideas2it.fooddeliveryapp.repository.AddressRepository;
 import com.ideas2it.fooddeliveryapp.service.AddressService;
 
 /**
- * This class is a service class that implements the
- * AddressService interface and provides methods
- * for CRUD operations.
+ * Service class for Address that implements AddressService
+ * to perform CRUD operations.
  *
  * @author Govindaraj
  * @version 1.0
+ * @since 04/01/2023
  */
 @Service
 public class AddressServiceImpl implements AddressService {
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(AddressServiceImpl.class);
     private final AddressRepository addressRepository;
 
     public AddressServiceImpl(AddressRepository addressRepository) {
@@ -39,8 +44,9 @@ public class AddressServiceImpl implements AddressService {
      */
     @Override
     public AddressDTO createAddress(AddressDTO addressDto) {
-        Address address = UserHelper.toAddress(addressDto);
-        return UserHelper.toAddressDto(addressRepository.save(address));
+        Address address = addressRepository.save(UserHelper.toAddress
+                (addressDto));
+        return UserHelper.toAddressDto(address);
     }
 
     /**
@@ -49,8 +55,11 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressDTO getAddressById(int id) {
         Address address = addressRepository.findById(id)
-                .filter(addressObject -> addressObject.isDeleted() == false)
-                .orElseThrow(()-> new NotFoundException(UserConstant.ID_ERROR));
+                .filter(addressObject -> !addressObject.getIsDeleted())
+                .orElseThrow(() -> {
+                    logger.warn(UserConstant.INVALID_ID);
+                    throw new NotFoundException(UserConstant.INVALID_ID);
+                });
         return UserHelper.toAddressDto(address);
     }
 
@@ -58,9 +67,10 @@ public class AddressServiceImpl implements AddressService {
      * {@inheritDoc}
      */
     @Override
-    public AddressDTO updateAddress( AddressDTO addressDto) {
-        return UserHelper.toAddressDto(addressRepository.save(UserHelper
-                .toAddress(addressDto)));
+    public AddressDTO updateAddress(AddressDTO addressDto) {
+        Address address = addressRepository.save(UserHelper
+                .toAddress(addressDto));
+        return UserHelper.toAddressDto(address);
     }
 
     /**
@@ -68,14 +78,14 @@ public class AddressServiceImpl implements AddressService {
      */
     @Override
     public boolean deleteAddressById(int id) {
-        boolean isDelete;
+        boolean isDelete = false;
 
-        if(addressRepository.existsById(id)) {
+        if (addressRepository.existsById(id)) {
             addressRepository.deleteById(id);
-            isDelete = true;
+            return !isDelete;
         } else {
-            throw new NotFoundException("Invalid Exception");
+            logger.warn(UserConstant.INVALID_ID);
+            throw new NotFoundException(UserConstant.INVALID_ID);
         }
-        return isDelete;
     }
 }

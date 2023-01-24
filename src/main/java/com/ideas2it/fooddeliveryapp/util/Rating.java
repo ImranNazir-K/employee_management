@@ -9,9 +9,13 @@
 package com.ideas2it.fooddeliveryapp.util;
 
 /**
- * Creates enum called Rating in
- * food delivery app.
+ * Enum for Rating
+ *
+ * @author Sakthi Annamalai
+ * @version 1.0
+ * @since 04/01/2023
  */
 public enum Rating {
+
     WORST, POOR, AVERAGE, GOOD, EXCELLENT
 }

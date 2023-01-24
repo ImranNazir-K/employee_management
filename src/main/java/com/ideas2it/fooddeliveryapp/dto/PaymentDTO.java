@@ -11,41 +11,31 @@ package com.ideas2it.fooddeliveryapp.dto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
-import com.ideas2it.fooddeliveryapp.constant.OrderPaymentConstant;
+import com.ideas2it.fooddeliveryapp.constant.OrderConstant;
 import com.ideas2it.fooddeliveryapp.util.PaymentMode;
 import com.ideas2it.fooddeliveryapp.util.PaymentStatus;
 
 /**
- * Data Transfer Object for the class Payment that consists of
- * variables like id, paymentMode, paymentType, totalAmount,
- * date and orderDto with setters and getters.
+ * Data Transfer Object class for Payment that consists of
+ * fields like id, paymentMode, paymentType, totalAmount, subTotal,
+ * discount, createdDate and OrderDTO with setters and getters.
  *
- * @author IMRAN NAZIR K
+ * @author Imran Nazir K
  * @version 1.0
+ * @since 04/01/2023
  */
 public class PaymentDTO {
 
     private int id;
 
-    private float subTotal;
-
-    private String discount;
-
-    private float grandTotal;
-
     @Enumerated(EnumType.STRING)
-    @NotNull(message = OrderPaymentConstant.NOT_NULL_AMOUNT)
+    @NotNull(message = OrderConstant.NOT_NULL_PAYMENT_MODE)
     private PaymentMode paymentMode;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = OrderPaymentConstant.NOT_NULL_PAYMENT)
+    @NotNull(message = OrderConstant.NOT_NULL_PAYMENT_STATUS)
     private PaymentStatus paymentStatus;
-
-    private LocalDateTime createdDate;
-
-    private OrderDetailDTO order;
 
     public int getId() {
         return id;
@@ -53,14 +43,6 @@ public class PaymentDTO {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
     }
 
     public PaymentMode getPaymentMode() {
@@ -77,37 +59,5 @@ public class PaymentDTO {
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
-    }
-
-    public OrderDetailDTO getOrder() {
-        return order;
-    }
-
-    public void setOrder(OrderDetailDTO order) {
-        this.order = order;
-    }
-
-    public float getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(float subTotal) {
-        this.subTotal = subTotal;
-    }
-
-    public float getGrandTotal() {
-        return grandTotal;
-    }
-
-    public void setGrandTotal(float grandTotal) {
-        this.grandTotal = grandTotal;
-    }
-
-    public String getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(String discount) {
-        this.discount = discount;
     }
 }

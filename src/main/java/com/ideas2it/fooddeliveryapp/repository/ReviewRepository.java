@@ -17,29 +17,39 @@ import org.springframework.data.jpa.repository.Query;
 import com.ideas2it.fooddeliveryapp.model.Review;
 
 /**
- * This interface extends JpaRepository for restaurant
+ * Repository for Review that extends JpaRepository and provides
+ * additional custom methods to perform CRUD operations.
  *
  * @author Sakthi Annamalai
  * @version 1.0
+ * @since 04/01/2023
  */
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     /**
-     * This function will return a list of all reviews
-     * that are not active
+     * Gets all reviews where isDeleted field is false.
      *
-     * @return A list of all reviews that are not active.
+     * @return A list of all Review.
      */
     @Query("SELECT r FROM Review r WHERE r.isDeleted = false")
     List<Review> findAll();
 
+
     /**
-     * Set the isActive field to true for the Review
-     * with the given id.
+     * Deletes the particular review by updating the isDeleted
+     * field as true.
      *
      * @param id the id of the review to be deleted
      */
     @Modifying
     @Query("UPDATE Review r SET r.isDeleted = true WHERE r.id = :id")
     void deleteById(int id);
+
+    /**
+     * Find all reviews for a restaurant with the given id.
+     *
+     * @param id The id of the restaurant.
+     * @return A list of Review for a restaurant.
+     */
+    List<Review> findAllByRestaurantId(int id);
 }

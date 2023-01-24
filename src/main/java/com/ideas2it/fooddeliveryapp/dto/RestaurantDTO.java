@@ -12,36 +12,43 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
 
-import com.ideas2it.fooddeliveryapp.constant.RestaurantReviewConstant;
+import com.ideas2it.fooddeliveryapp.constant.RestaurantConstant;
 
 /**
- * Contains Restaurant fields as name,phone number,
- * id,emailId,description in private.
+ * Data Transfer Object for the class Restaurant that consists of
+ * variables like id, name, phone number, email, description, address
+ * and food with setters and getters.
  *
  * @author Sakthi Annamalai
  * @version 1.0
+ * @since 04/01/2023
  */
 public class RestaurantDTO {
 
     private int id;
-    @NotNull(message = RestaurantReviewConstant.NAME_NOTNULL)
-    @Pattern(regexp = RestaurantReviewConstant.RESTAURANT_NAME_REGEX,
-            message = RestaurantReviewConstant.INVALID_NAME)
+
+    @NotNull(message = RestaurantConstant.RESTAURANT_NAME_NOT_NULL)
+    @Pattern(regexp = RestaurantConstant.RESTAURANT_NAME_REGEX,
+            message = RestaurantConstant.INVALID_NAME)
     private String name;
-    @NotNull(message = RestaurantReviewConstant.PHONENUMBER_NOTNULL)
-    @Pattern(regexp = RestaurantReviewConstant.PHONENUMBER_REGEX,
-            message = RestaurantReviewConstant.
-                    INVALID_PHONENUMBER)
+
+    @NotNull(message = RestaurantConstant.PHONE_NUMBER_NOT_NULL)
+    @Pattern(regexp = RestaurantConstant.PHONE_NUMBER_REGEX,
+             message = RestaurantConstant.INVALID_PHONE_NUMBER)
     private String phoneNumber;
-    @NotNull(message = RestaurantReviewConstant.EMAIL_NOTNULL)
-    @Pattern(regexp = RestaurantReviewConstant.EMAIL_REGEX,
-            message = RestaurantReviewConstant.INVALID_EMAIL)
+
+    @NotNull(message = RestaurantConstant.EMAIL_NOT_NULL)
+    @Pattern(regexp = RestaurantConstant.EMAIL_REGEX,
+             message = RestaurantConstant.INVALID_EMAIL)
     private String email;
-    @Pattern(regexp = RestaurantReviewConstant.DESCRIPTION_REGEX,
-            message = RestaurantReviewConstant.
-                    INVALID_DESCRIPTION)
+
+    @Pattern(regexp = RestaurantConstant.DESCRIPTION_REGEX,
+             message = RestaurantConstant.INVALID_DESCRIPTION)
     private String description;
-    private List<ReviewDTO> review;
+
+    private AddressDTO address;
+
+    private List<FoodDTO> foods;
 
     public int getId() {
         return id;
@@ -83,11 +90,19 @@ public class RestaurantDTO {
         this.description = description;
     }
 
-    public List<ReviewDTO> getReview() {
-        return review;
+    public AddressDTO getAddress() {
+        return address;
     }
 
-    public void setReview(List<ReviewDTO> review) {
-        this.review = review;
+    public void setAddress(AddressDTO address) {
+        this.address = address;
+    }
+
+    public List<FoodDTO> getFoods() {
+        return foods;
+    }
+
+    public void setFoods(List<FoodDTO> foods) {
+        this.foods = foods;
     }
 }

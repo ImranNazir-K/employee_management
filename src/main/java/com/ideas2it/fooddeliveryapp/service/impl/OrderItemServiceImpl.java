@@ -8,24 +8,29 @@
  */
 package com.ideas2it.fooddeliveryapp.service.impl;
 
-import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.ideas2it.fooddeliveryapp.constant.OrderPaymentConstant;
 import com.ideas2it.fooddeliveryapp.dto.OrderItemDTO;
-import com.ideas2it.fooddeliveryapp.exception.NotFoundException;
-import com.ideas2it.fooddeliveryapp.helper.OrderPaymentHelper;
+import com.ideas2it.fooddeliveryapp.helper.OrderHelper;
 import com.ideas2it.fooddeliveryapp.model.OrderItem;
 import com.ideas2it.fooddeliveryapp.repository.OrderItemRepository;
 import com.ideas2it.fooddeliveryapp.service.OrderItemService;
 
 /**
- * @author IMRAN NAZIR K
+ * Service class for OrderItem that implements OrderItemService
+ * interface to perform CRUD operations for OrderItem.
+ *
+ * @author Imran Nazir K
  * @version 1.0
+ * @since 04/01/2023
  */
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(OrderItemServiceImpl.class);
 
     private final OrderItemRepository orderItemRepository;
 
@@ -38,50 +43,9 @@ public class OrderItemServiceImpl implements OrderItemService {
      */
     @Override
     public OrderItemDTO createOrderItems(OrderItemDTO orderItemDto) {
-        OrderItem orderItem = OrderPaymentHelper.toOrderItem(orderItemDto);
-        orderItem.setAmount(calculateAmount(orderItem));
-        return OrderPaymentHelper.toOrderItemDto(orderItemRepository
-                .save(orderItem));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<OrderItemDTO> getOrderItems() {
-        return OrderPaymentHelper.toOrderItemDtos(orderItemRepository
-                .findAll());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public OrderItemDTO getOrderItemById(int orderItemId) {
-        OrderItem orderItem = orderItemRepository.findById(orderItemId)
-                .orElseThrow(() -> new NotFoundException(OrderPaymentConstant
-                        .ORDER_ITEM_NOT_FOUND));
-        return OrderPaymentHelper.toOrderItemDto(orderItem);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public OrderItemDTO updateOrderItems(OrderItemDTO orderItemDto) {
-        OrderItem orderItem = orderItemRepository.findById(orderItemDto.getId())
-                .orElseThrow(() -> new NotFoundException(OrderPaymentConstant
-                        .ORDER_ITEM_NOT_FOUND));
-        OrderItem order = OrderPaymentHelper.toOrderItem(orderItemDto);
-        return OrderPaymentHelper.toOrderItemDto(order);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public float calculateAmount(OrderItem orderItem) {
-        return orderItem.getFood().getPrice() * orderItem.getQuantity();
+        OrderItem orderItem = orderItemRepository
+                .save(OrderHelper.toOrderItem(orderItemDto));
+        logger.info("Order Items Created");
+        return OrderHelper.toOrderItemDto(orderItem);
     }
 }

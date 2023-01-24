@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * Exception Handler class for the Food Delivery Application.
  *
- * @author
+ * @author Sakthi Annamalai
  * @version 1.0
+ * @since 04/01/2023
  */
 @RestControllerAdvice
 public class FoodDeliveryExceptionHandler {
@@ -32,23 +33,40 @@ public class FoodDeliveryExceptionHandler {
      * String.
      */
     @ExceptionHandler(value = NotFoundException.class)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public String notFoundException(NotFoundException notFoundException) {
         return notFoundException.getException();
     }
 
     /**
-     * Handles the MethodArgumentNotValidException thrown when the
-     * input given by client mismatches the pattern given.
+     * Handles the DuplicateFoundException thrown when the
+     * request object contains duplicate or redundant value
+     * attribute.
+     *
+     * @param duplicateFoundException instance for
+     *                                DuplicateFoundException.
+     * @return Exception message that to be shown to client
+     * as String.
+     */
+    @ExceptionHandler(value = DuplicateFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
+    public String duplicateFoundException(DuplicateFoundException
+            duplicateFoundException) {
+        return duplicateFoundException.getException();
+    }
+
+    /**
+     * Handles the MethodArgumentNotValidException which is thrown
+     * when the input given by client mismatches the pattern given
+     * or when the field is null.
      *
      * @param exception instance for MethodArgumentNotValidException.
      * @return Exception message that to be shown to client as String.
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public String methodArgumentNotValidException
-    (MethodArgumentNotValidException exception) {
-        return exception.getBindingResult().getFieldError()
-                .getDefaultMessage();
+    public String methodArgumentNotValidException(MethodArgumentNotValidException
+            exception) {
+        return exception.getBindingResult().getFieldError().getDefaultMessage();
     }
 }

@@ -14,6 +14,7 @@ package com.ideas2it.fooddeliveryapp.exception;
  *
  * @author IMRAN NAZIR K
  * @version 1.0
+ * @since 04/01/2023
  */
 public class NotFoundException extends RuntimeException {
 

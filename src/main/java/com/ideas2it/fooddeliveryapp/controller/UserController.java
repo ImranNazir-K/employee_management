@@ -8,8 +8,8 @@
  */
 package com.ideas2it.fooddeliveryapp.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,20 +20,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ideas2it.fooddeliveryapp.dto.AddressDTO;
+import com.ideas2it.fooddeliveryapp.dto.JwtRequestDTO;
 import com.ideas2it.fooddeliveryapp.dto.UserDTO;
+import com.ideas2it.fooddeliveryapp.dto.UserResponseDTO;
 import com.ideas2it.fooddeliveryapp.service.UserService;
 
 /**
- * This is controller class for user entity and
- * provides methods for CRUD operations.
+ * Controller class for the Food Delivery Application that does
+ * CRUD operations for User.
  *
  * @author Govindaraj
  * @version 1.0
+ * @since 04/01/2023
  */
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -41,66 +44,74 @@ public class UserController {
     }
 
     /**
-     * It takes a UserDTO object as a request body and calls
-     * create function in user service if user is created
-     * it return user object else it throws exception.
+     * Creates user by checking the emailId and phoneNumber to avoid
+     * duplication if found it throws DuplicateFoundException.
      *
-     * @param userDto The user object is to be added.
-     * @return give user object as response.
+     * @param userDto as UserDTO instance consists a user.
+     * @return userResponseDto which was created else throws exception.
      */
-    @PostMapping()
-    public UserDTO createUser(@RequestBody UserDTO userDto) {
-        Set<AddressDTO> address = userDto.getAddressList();
+    @PostMapping
+    public UserResponseDTO createUser(@Valid @RequestBody UserDTO userDto) {
         return userService.createUser(userDto);
     }
 
     /**
-     * It fetches user by id and returns a fetched user detail,
-     * if user is not present, it will throw error message (User not found)
+     * Gets a user by its id and if not found it throws
+     * NotFoundException.
      *
-     * @param id The id of the user to be fetched.
-     * @return user detail as response.
+     * @param id the id of a user.
+     * @return UserResponseDTO instance that consists a user.
      */
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable int id) {
+    public UserResponseDTO getUserById(@PathVariable int id) {
         return userService.getUserById(id);
     }
 
     /**
-     * It returns a list of all users.
-     * if user table is empty, it will show empty list of user.
+     * Gets all the users that are available else returns empty list.
      *
-     * @return list of user details.
+     * @return List<UserResponseDTO> list of user details.
      */
-    @GetMapping()
-    public List<UserDTO> getAllUser() {
+    @GetMapping
+    public List<UserResponseDTO> getUsers() {
         return userService.getAllUser();
     }
 
     /**
-     * It takes a UserDTO object as a parameter, calls the updateUser
-     * function in the userService class, and returns
-     * updated object else throws error message.
+     * Updates user by checking the emailId and phoneNumber to avoid
+     * duplication if found it throws DuplicateFoundException.
      *
-     * @param userDto The user object need to be updated.
-     * @return updated user object as response.
+     * @param userDto The userDto object.
+     * @return updated userResponseDto object.
      */
-    @PutMapping()
-    public UserDTO updateUser(@RequestBody UserDTO userDto) {
+    @PutMapping
+    public UserResponseDTO updateUser(@Valid @RequestBody UserDTO userDto) {
         return userService.updateUser(userDto);
     }
 
     /**
-     * It deletes user from the database and
-     * returns boolean true if deletes else throws error message(id not found).
-     * <p>
-     * Note: user's deleted status update into true.
+     * Deletes user by id.
      *
-     * @param id The id of the user to be deleted.
-     * @return boolean as response.
+     * @param id The id of the user.
+     * @return true if deleted.
      */
     @DeleteMapping("/{id}")
     public boolean deleteUserById(@PathVariable int id) {
         return userService.deleteUserById(id);
+    }
+
+    /**
+     * Builds a Json web token for the user. The json web token is
+     * build by setting the claims and digitally signed with
+     * algorithm and a secret by compacting it into a URL-safe
+     * JWT String.
+     *
+     * @param jwtRequest as JwtRequestDTO object contains
+     *                   username and password.
+     * @return A compact URL-safe JWT string.
+     */
+    @PostMapping("/authenticate")
+    public String authenticate(@Valid @RequestBody JwtRequestDTO jwtRequest) {
+        return userService.generateToken((jwtRequest));
     }
 }
