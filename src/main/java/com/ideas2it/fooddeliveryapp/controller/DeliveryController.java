@@ -54,7 +54,7 @@ public class DeliveryController {
     }
 
     /**
-     * Gets all the deliveries as list of deliveries if
+     * Gets all the deliveries as list if
      * it not soft deleted.
      *
      * @return List of all deliveries as DeliveryDTO objects.
@@ -88,7 +88,7 @@ public class DeliveryController {
     }
 
     /**
-     * Gets all the Order Details as OrderDetailDTO objects that are
+     * Gets all the Order Details as list that are
      * ready to be delivered.
      *
      * @return List of OrderDetailDTO objects.

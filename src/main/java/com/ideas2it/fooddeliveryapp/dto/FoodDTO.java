@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Pattern;
 import com.ideas2it.fooddeliveryapp.constant.FoodConstant;
 
 /**
- * Data Transfer Object for Food.
+ * Data Transfer Object class for Food.
  *
  * @author M Mohamed Riyas
  * @version 1.0

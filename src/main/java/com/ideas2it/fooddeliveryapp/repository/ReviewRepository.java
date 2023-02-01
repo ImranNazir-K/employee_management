@@ -18,7 +18,7 @@ import com.ideas2it.fooddeliveryapp.model.Review;
 
 /**
  * Repository for Review that extends JpaRepository and provides
- * additional custom methods to perform CRUD operations.
+ * additional custom methods to performs CRUD operations.
  *
  * @author Sakthi Annamalai
  * @version 1.0

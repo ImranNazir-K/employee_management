@@ -29,7 +29,6 @@ import com.ideas2it.fooddeliveryapp.service.AddressService;
  * @author Govindaraj
  * @version 1.0
  * @since 04/01/2023
- *
  */
 @RestController
 @RequestMapping("/api/v1/addresses")
@@ -83,7 +82,7 @@ public class AddressController {
      * @return true if deleted.
      */
     @DeleteMapping("/{id}")
-    public boolean deleteUserById(@PathVariable int id) {
+    public boolean deleteAddressById(@PathVariable int id) {
         return addressService.deleteAddressById(id);
     }
 }

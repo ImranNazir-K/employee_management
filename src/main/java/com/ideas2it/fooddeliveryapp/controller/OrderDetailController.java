@@ -22,7 +22,7 @@ import com.ideas2it.fooddeliveryapp.dto.OrderDetailDTO;
 import com.ideas2it.fooddeliveryapp.service.OrderDetailService;
 
 /**
- * Controller class for Handling  the incoming requests to validate
+ * Controller class for Handling the incoming requests to validate
  * the user input for performing crud operations for OrderDetail.
  *
  * @author Imran Nazir K
@@ -40,10 +40,13 @@ public class OrderDetailController {
     }
 
     /**
-     * Creates an order detail.
+     * Creates a OrderDetail by calculating subTotal, grandTotal and
+     * discount for the order and sets those attributes in the
+     * OrderDetail object before creating a OrderDetails.
      *
-     * @param orderDetailDto as OrderDTO instance consists an order.
-     * @return orderDto which was created.
+     * @param orderDetailDto as OrderDetailDTO object that consists
+     *                       an orderDetail.
+     * @return order as OrderDetailDTO object that was created.
      */
     @PostMapping
     public OrderDetailDTO createOrder(@RequestBody @Valid OrderDetailDTO
@@ -52,20 +55,22 @@ public class OrderDetailController {
     }
 
     /**
-     * Gets all the orders that are available.
+     * Gets all the orders if no Order Details are found returns
+     * empty List.
      *
-     * @return list of orders as List<OrderDTO>.
+     * @return List<OrderDetailDTO> consists all the orderDetails.
      */
     @GetMapping
     public List<OrderDetailDTO> getOrders() {
+        List<OrderDetailDTO> orders = orderDetailService.getOrders();
         return orderDetailService.getOrders();
     }
 
     /**
-     * Gets all the orderDetails of a user by id if no Order
+     * Gets all the orders of a user by id if no Order
      * Details are found for that user returns empty List.
      *
-     * @param userId of a user as int.
+     * @param userId the id of a user as int.
      * @return List<OrderDetailDto> contains all the orderDetails.
      */
     @GetMapping("/users/{userId}")
@@ -75,14 +80,14 @@ public class OrderDetailController {
     }
 
     /**
-     * Gets all the orders with payments of a user by id if no Order
-     * Details are found for that user returns empty List.
+     * Gets the particular order of a user by orderId.
      *
-     * @param userId the id of a user as int.
-     * @return List<OrderDetailDto> contains all the orderDetails.
+     * @param orderId the id of a orderDetail as int.
+     * @param userId  the id of a user as int.
+     * @return OrderDetail object that contains an order.
      */
     @GetMapping("/{orderId}/users/{userId}")
-    public OrderDetailDTO getOrderById(@PathVariable int orderId,
+    public OrderDetailDTO getOrderByUserId(@PathVariable int orderId,
             @PathVariable int userId) {
         return orderDetailService.getOrderByUserId(orderId, userId);
     }

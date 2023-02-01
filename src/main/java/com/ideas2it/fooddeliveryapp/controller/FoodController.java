@@ -100,8 +100,8 @@ public class FoodController {
     }
 
     /**
-     * Gets all the restaurants as list of restaurants containing
-     * the given food name, if it is soft deleted.
+     * Gets all the restaurants as list containing the given
+     * food name, if it is soft deleted.
      *
      * @param foodName Name of the food.
      * @return List of restaurants containing the given food.
@@ -113,7 +113,7 @@ public class FoodController {
     }
 
     /**
-     * Gets all the foods as list of foods of a particular
+     * Gets all the foods as list of a particular
      * category in a particular restaurant, if it is not
      * soft deleted.
      *
@@ -128,7 +128,7 @@ public class FoodController {
     }
 
     /**
-     * Gets all the foods as list of foods of a particular cuisine
+     * Gets all the foods as list of a particular cuisine
      * in a particular restaurant.
      *
      * @param restaurantId The id of the restaurant.

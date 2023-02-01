@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import com.ideas2it.fooddeliveryapp.constant.FoodConstant;
 
 /**
- * Data Transfer Object for the Delivery.
+ * Data Transfer Object class for the Delivery.
  *
  * @author M Mohamed Riyas
  * @version 1.0

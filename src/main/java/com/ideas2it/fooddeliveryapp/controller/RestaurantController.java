@@ -138,7 +138,7 @@ public class RestaurantController {
      * @return A list of reviews for a restaurant.
      */
     @GetMapping("/{id}/reviews")
-    public List<ReviewDTO> getReviewByRestaurantId(@PathVariable int id) {
+    public List<ReviewDTO> getReviewsByRestaurantId(@PathVariable int id) {
         return restaurantService.getReviewsByRestaurantId(id);
     }
 

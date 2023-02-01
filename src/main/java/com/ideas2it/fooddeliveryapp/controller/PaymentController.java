@@ -36,9 +36,10 @@ public class PaymentController {
     }
 
     /**
-     * Gets all the payments which are available.
+     * Gets all the payments. if no Payments are found returns empty
+     * List.
      *
-     * @return list of payments as List<PaymentDTO>.
+     * @return List<PaymentDTO> consists all the payments.
      */
     @GetMapping
     public List<PaymentDTO> getPayments() {

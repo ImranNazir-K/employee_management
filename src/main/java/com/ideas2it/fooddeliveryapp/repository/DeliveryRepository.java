@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ideas2it.fooddeliveryapp.dto.DeliveryDTO;
 import com.ideas2it.fooddeliveryapp.model.Delivery;
 
 /**

@@ -53,7 +53,7 @@ public class Restaurant {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id")
     private Address address;
 

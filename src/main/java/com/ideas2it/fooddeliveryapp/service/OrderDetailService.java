@@ -55,7 +55,7 @@ public interface OrderDetailService {
     List<OrderDetailDTO> getOrders();
 
     /**
-     * Gets all the orders with payments of a user by id if no Order
+     * Gets all the orders of a user by id if no Order
      * Details are found for that user returns empty List.
      *
      * @param userId the id of a user as int.
@@ -64,7 +64,7 @@ public interface OrderDetailService {
     List<OrderDetailDTO> getOrdersByUserId(int userId);
 
     /**
-     * Gets the particular order of a user ny orderId.
+     * Gets the particular order of a user by orderId.
      *
      * @param orderId the id of a orderDetail as int.
      * @param userId  the id of a user as int.

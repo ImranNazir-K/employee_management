@@ -9,7 +9,6 @@
 package com.ideas2it.fooddeliveryapp.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,8 +72,9 @@ public class FoodServiceImpl implements FoodService {
         Food food = foodRepository.findById(id)
                 .filter(foodObject -> !foodObject.getIsDeleted())
                 .orElseThrow(() -> {
-                logger.warn(FoodConstant.FOOD_NOT_FOUND);
-                throw new NotFoundException(FoodConstant.FOOD_NOT_FOUND);});
+                    logger.warn(FoodConstant.FOOD_NOT_FOUND);
+                    throw new NotFoundException(FoodConstant.FOOD_NOT_FOUND);
+                });
         return FoodHelper.toFoodDto(food);
     }
 

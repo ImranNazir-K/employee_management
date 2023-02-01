@@ -14,7 +14,7 @@ spring:
 logging:
   logback:
     rollingpolicy:
-      max-file-size: 10mb
+      max-file-size: 2mb
   level:
     root: info
   file:

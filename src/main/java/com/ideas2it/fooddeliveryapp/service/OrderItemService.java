@@ -21,11 +21,11 @@ import com.ideas2it.fooddeliveryapp.dto.OrderItemDTO;
 public interface OrderItemService {
 
     /**
-     * Creates an orderItem.
+     * Creates an orderItem that clients made as request.
      *
-     * @param orderItemDto as OrderItemDTO object that consists
-     *                     an orderItem.
-     * @return orderDto as OrderItemDTO object that was created.
+     * @param orderItemDto as OrderItemDTO instance consists an
+     *                     orderItem.
+     * @return orderItemDto which was created.
      */
     OrderItemDTO createOrderItems(OrderItemDTO orderItemDto);
 }
